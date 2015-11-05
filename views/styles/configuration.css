@@ -1,0 +1,11 @@
+label.sociallymap_label {
+	clear: both;
+	max-width: 500px;
+	height: 50px;
+	padding: 10px;
+	display: block;
+}
+
+label.sociallymap_label > * {
+	float: right;
+}
