@@ -9,3 +9,13 @@ label.sociallymap_label {
 label.sociallymap_label > * {
 	float: right;
 }
+
+.sociallymap_tab-area {
+	border: 1px solid grey;
+}
+
+.sociallymap_tab-area > li {
+	width: 50%;
+	display: inline-block;
+	background: red;
+}

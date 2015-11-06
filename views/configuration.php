@@ -3,6 +3,20 @@
 
 <h1>Configuration du plugin sociallymap </h1>
 
+<ul class="subsubsub">
+	<li>
+	 	<a href="?page=sociallymap-configuration">
+	 		Configuration générale
+	 	</a>
+	</li> 
+	|
+	<li>
+		<a href="?page=sociallymap-rss">
+		Mes RSS
+		</a>
+	</li>
+</ul>
+
 <form method="post" action="options.php">
 	<?php settings_fields('sociallymap_publisher_settings') ?>
 	<label class="sociallymap_label">
@@ -24,9 +38,26 @@
 	</label>
 
 	<label class="sociallymap_label">
-		Activer la publication
-		<input type="checkbox" name="sociallymap_publisher_isActive"
-		<?php if("on" === get_option('sociallymap_publisher_isActive')) echo "checked" ?> >
+		Publier comme brouillon
+		<input type="checkbox" name="sociallymap_publisher_isDraft"
+		<?php if("on" === get_option('sociallymap_publisher_isDraft')) echo "checked" ?> >
+	</label>
+
+
+	<label class="sociallymap_label">
+		Mobile 
+		<select>
+			<option>Fenêtre modale</option>
+			<option>Externe</option>
+		</select>
+	</label>
+
+	<label class="sociallymap_label">
+		Bureau (résolution grande) 
+		<select>
+			<option>Fenêtre modale</option>
+			<option>Externe</option>
+		</select>
 	</label>
 
 	<?php submit_button('Valider la configuration'); ?>
