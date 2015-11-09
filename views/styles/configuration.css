@@ -39,13 +39,16 @@ label.sociallymap_label > * {
 .sociallymap_valid-submit {
 }
 
-.button + .button-danger {
+.button-primary + .danger {
 	background: #d22;
 	color: white;
-	border: 1px solid black;
+	border: 1px solid #a77;
+	box-shadow: inset 0 1px 0 rgba(230,130,100,.5),0 1px 0 rgba(0,0,0,.15);
 }
 
-.button + .button-danger:hover {
+.button-primary + .danger:hover {
 	background: #c22;
 	color: white;
+	box-shadow: inset 0px 1px 5px rgba(230,130,100,.5);
+	border-color: #a44;
 }

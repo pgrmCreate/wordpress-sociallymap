@@ -16,28 +16,32 @@
 							<input id="cb-select-all-1" type="checkbox">
 						</td>
 
-						<th scope="col" id="username" class="manage-column column-username column-primary sortable desc">
+						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
+						colspan="6">
 							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=login&amp;order=asc">
 								<span>RSS</span>
 								<span class="sorting-indicator"></span>
 							</a>
 						</th>
 
-						<th scope="col" id="name" class="manage-column column-name sortable desc">
+						<th scope="col" id="category" class="manage-column column-name sortable desc"
+						colspan="2">
 							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=name&amp;order=asc">
 								<span>Catégorie</span>
 								<span class="sorting-indicator"></span>
 							</a>
 						</th>
 
-						<th scope="col" id="email" class="manage-column column-email sortable desc">
+						<th scope="col" id="author" class="manage-column column-email sortable desc"
+						colspan="2">
 							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
 								<span>Auteur</span>
 								<span class="sorting-indicator"></span>
 							</a>
 						</th>
 
-						<th scope="col" id="email" class="manage-column column-email sortable desc">
+						<th scope="col" id="action" class="manage-column column-email sortable desc"
+						colspan="2">
 							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
 								<span>Action</span>
 								<span class="sorting-indicator"></span>
@@ -50,33 +54,33 @@
 						$listRSS = get_option('sociallymap_addRSS_listingRSS');
 						foreach ($listRSS as $key => $value) {
 						?>
-							<tr id="user-1">
-								<th scope="row" class="check-column">
+							<tr id="user-1" >
+								<th scope="row" class="check-column" colspan="0">
 									<label class="screen-reader-text" for="user_1">Select root</label>
 									<input type="checkbox" name="users[]" id="user_1" class="administrator" value="1">
 								</th>
 						
-								<th>
+								<th colspan="6">
 									<b>
 										#<?php echo $value['id']; ?>
 									</b>
 									<?php echo $value['link']; ?>
 								</th>
 
-								<th>
+								<th colspan="2">
 									<?php echo $value['category']; ?>
 								</th>			
 
-								<th>
+								<th colspan="2">
 									<?php echo $value['author']; ?>
 								</th>
 
-								<th>
+								<th colspan="2">
 									<button class="button button-primary">
 										<i class="dashicons-before dashicons-welcome-write-blog sociallymap-icon-button"></i>
 									</button>
 									
-									<button class="button button-danger" type="submit" name="submit"
+									<button class="button button-primary danger" type="submit" name="submit"
 									value="<?php echo $value['id']; ?>">
 										<i class="dashicons-before dashicons-dismiss sociallymap-icon-button"></i>
 									</button>

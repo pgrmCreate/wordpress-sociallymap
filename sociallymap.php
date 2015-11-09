@@ -97,11 +97,16 @@ class Sociallymap_Plugin
         // ACTION RSS : delete
         if($_POST['sociallymap_updateRSS']) {
             $array_of_options = get_option('sociallymap_addRSS_listingRSS');
-            unset($array_of_options[$_POST['submit']]);
+            $idRemoving = $_POST['submit'];
+
+            foreach ($array_of_options as $key => $value) {
+                if($key == $idRemoving) {
+                    unset($array_of_options[$key]);
+                }
+            }
+
             update_option('sociallymap_addRSS_listingRSS', $array_of_options); 
         }
-
-
 
         // ACTION RSS : post
 		if($_POST['sociallymap_addRSS_valid']) {
@@ -109,10 +114,21 @@ class Sociallymap_Plugin
 
 			if(get_option('sociallymap_addRSS_listingRSS')) {
 				$array_of_options = get_option('sociallymap_addRSS_listingRSS');
+                $idPick = 0;
+                foreach ($array_of_options as $value) {
+                    foreach ($value as $key => $value) {
+                        if($key === "id" && $idPick <= $value) {
+                            $idPick = $value + 1;
+                        }
+                    }
+                }
 			}
+            else {
+                $idPick = 0;
+            }
 
 			$array_of_options[] = [
-            'id' => count(get_option('sociallymap_addRSS_listingRSS')),
+            'id' => $idPick,
 			'link' => $_POST['sociallymap_addRSS_value'],
 			'category' => $_POST['sociallymap_publisher_categorie'],
 			'author' => wp_get_current_user()->user_nicename
