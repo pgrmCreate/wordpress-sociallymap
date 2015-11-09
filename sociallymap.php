@@ -34,7 +34,8 @@ class Sociallymap_Plugin
 	    register_setting('sociallymap_publisher_settings', 'sociallymap_publisher_isDraft');
 	    register_setting('sociallymap_publisher_addRSS', 'sociallymap_addRSS_valid');
 	    register_setting('sociallymap_publisher_addRSS', 'sociallymap_addRSS_value');
-	    register_setting('sociallymap_publisher_addRSS', 'sociallymap_addRSS_listingRSS');
+        register_setting('sociallymap_publisher_addRSS', 'sociallymap_addRSS_listingRSS');
+	    register_setting('sociallymap_publisher_deleteRSS', 'sociallymap_updateRSS');
 	}
 
 	public function checkFluxRSS() {
@@ -93,9 +94,16 @@ class Sociallymap_Plugin
 		// $array_of_options = [];
 		// update_option('sociallymap_addRSS_listingRSS', $array_of_options);
 
-        echo("QQQQQQQQQQQQQQQQQQQQQ");
-        echo(wp_get_current_user()->user_nicename);
+        // ACTION RSS : delete
+        if($_POST['sociallymap_updateRSS']) {
+            $array_of_options = get_option('sociallymap_addRSS_listingRSS');
+            unset($array_of_options[$_POST['submit']]);
+            update_option('sociallymap_addRSS_listingRSS', $array_of_options); 
+        }
 
+
+
+        // ACTION RSS : post
 		if($_POST['sociallymap_addRSS_valid']) {
 			$array_of_options = [];
 
@@ -104,6 +112,7 @@ class Sociallymap_Plugin
 			}
 
 			$array_of_options[] = [
+            'id' => count(get_option('sociallymap_addRSS_listingRSS')),
 			'link' => $_POST['sociallymap_addRSS_value'],
 			'category' => $_POST['sociallymap_publisher_categorie'],
 			'author' => wp_get_current_user()->user_nicename
