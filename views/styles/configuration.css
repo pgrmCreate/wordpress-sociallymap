@@ -1,6 +1,6 @@
 label.sociallymap_label {
 	clear: both;
-	max-width: 500px;
+	max-width: 600px;
 	height: 50px;
 	padding: 10px;
 	display: block;
@@ -10,12 +10,42 @@ label.sociallymap_label > * {
 	float: right;
 }
 
-.sociallymap_tab-area {
-	border: 1px solid grey;
-}
-
 .sociallymap_tab-area > li {
 	width: 50%;
 	display: inline-block;
 	background: red;
+}
+
+.subsubsub {
+	float: none;
+}
+
+.sociallymap_formRSS {
+	background: white;
+	border: 1px solid #cdc;
+	padding: 10px;
+	margin-top: 15px;
+}
+
+.sociallymap_formRSS_newFlux {
+	min-width: 400px;
+	padding: 5px;
+}
+
+.sociallymap-icon-button:before {
+	padding-top: 3px;
+}
+
+.sociallymap_valid-submit {
+}
+
+.button + .button-danger {
+	background: #d22;
+	color: white;
+	border: 1px solid black;
+}
+
+.button + .button-danger:hover {
+	background: #c22;
+	color: white;
 }
