@@ -1,6 +1,7 @@
 label.sociallymap_label {
 	clear: both;
-	max-width: 600px;
+	max-width: 800px;
+	width: calc(100% - 10px);
 	height: 50px;
 	padding: 10px;
 	display: block;
@@ -8,6 +9,11 @@ label.sociallymap_label {
 
 label.sociallymap_label > * {
 	float: right;
+	width: calc(50%);
+}
+
+label.sociallymap_label > [type="checkbox"] {
+	max-width: 15px;
 }
 
 .sociallymap_tab-area > li {
@@ -28,7 +34,7 @@ label.sociallymap_label > * {
 }
 
 .sociallymap_formRSS_newFlux {
-	min-width: 400px;
+	max-width: 600px;
 	padding: 5px;
 }
 
@@ -39,14 +45,14 @@ label.sociallymap_label > * {
 .sociallymap_valid-submit {
 }
 
-.button-primary + .danger {
+.wp-core-ui .danger {
 	background: #d22;
 	color: white;
 	border: 1px solid #a77;
 	box-shadow: inset 0 1px 0 rgba(230,130,100,.5),0 1px 0 rgba(0,0,0,.15);
 }
 
-.button-primary + .danger:hover {
+.wp-core-ui .danger:hover {
 	background: #c22;
 	color: white;
 	box-shadow: inset 0px 1px 5px rgba(230,130,100,.5);

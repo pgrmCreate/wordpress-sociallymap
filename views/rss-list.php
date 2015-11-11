@@ -1,3 +1,18 @@
+<?php	
+	$entitiesCollection = new EntityCollection();
+	$loaderRequest = $entitiesCollection->all();
+	$listRSS = [];
+	$entity = new Entity();
+
+	foreach ($loaderRequest as $datas) {
+		foreach ($datas as $key => $value) {
+			if($key == "id") {
+				$listRSS[] = $entity->getById($value);
+			}
+		}
+	}
+?>
+
 <div class="wrap">
 	<h1>
 		Mes RSS
@@ -7,19 +22,18 @@
 	<div class="sociallymap_containRSS">
 		<table class="wp-list-table widefat fixed striped users">
 			<form method="post">
-				<?php settings_fields('sociallymap_publisher_deleteRSS') ?>
-				<input type="hidden" name="sociallymap_updateRSS" value="1"/>
-				<thead>
+				<input type="hidden" name="sociallymap_deleteRSS" value="1"/>
+				<tdead>
 					<tr>
-						<td id="cb" class="manage-column column-cb check-column">
+						<th id="cb" class="manage-column column-cb check-column">
 							<label class="screen-reader-text" for="cb-select-all-1">Select All</label>
 							<input id="cb-select-all-1" type="checkbox">
-						</td>
+						</th>
 
 						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
-						colspan="6">
+						colspan="4">
 							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=login&amp;order=asc">
-								<span>RSS</span>
+								<span>Nom du flux RSS</span>
 								<span class="sorting-indicator"></span>
 							</a>
 						</th>
@@ -48,43 +62,44 @@
 							</a>
 						</th>	
 					</tr>
-				</thead>
+				</tdead>
 				<tbody id="the-list" data-wp-lists="list:user">
 					<?php
-						$listRSS = get_option('sociallymap_addRSS_listingRSS');
 						foreach ($listRSS as $key => $value) {
 						?>
-							<tr id="user-1" >
-								<th scope="row" class="check-column" colspan="0">
+							<tr>
+								<td scope="row" class="check-column" colspan="0">
 									<label class="screen-reader-text" for="user_1">Select root</label>
-									<input type="checkbox" name="users[]" id="user_1" class="administrator" value="1">
-								</th>
+									<input type="checkbox" name="users[]" class="administrator" value="1">
+								</td>
 						
-								<th colspan="6">
+								<td colspan="4">
 									<b>
-										#<?php echo $value['id']; ?>
+										# <?php echo $value->id; ?>
 									</b>
-									<?php echo $value['link']; ?>
-								</th>
+									<?php echo $value->name; ?>
+								</td>
 
-								<th colspan="2">
-									<?php echo $value['category']; ?>
-								</th>			
+								<td colspan="2">
+									<?php echo (get_the_category_by_ID($value->options[0]->value)); ?>
+								</td>			
 
-								<th colspan="2">
-									<?php echo $value['author']; ?>
-								</th>
+								<td colspan="2">
+									<?php echo (get_user_by('id', $value->author_id)->user_nicename); ?>
+								</td>
 
-								<th colspan="2">
-									<button class="button button-primary">
+								<td colspan="2">
+									<a href="?page=sociallymap-rss-edit&id=<?php echo $value->id; ?>">
+										<button class="button button-primary" type="button">
 										<i class="dashicons-before dashicons-welcome-write-blog sociallymap-icon-button"></i>
-									</button>
+										</button>
+									</a>
 									
 									<button class="button button-primary danger" type="submit" name="submit"
-									value="<?php echo $value['id']; ?>">
+									value="<?php echo $value->id; ?>">
 										<i class="dashicons-before dashicons-dismiss sociallymap-icon-button"></i>
 									</button>
-								</th>
+								</td>
 							</tr>
 						<?php
 						}
