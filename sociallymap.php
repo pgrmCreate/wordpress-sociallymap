@@ -12,6 +12,7 @@ License: GPL2
 require_once(plugin_dir_path( __FILE__ ).'publisherWidget.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/templater.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/db-builder.php');
+require_once(plugin_dir_path( __FILE__ ).'tools/publisher.php');
 require_once(plugin_dir_path( __FILE__ ).'models/EntityCollection.php');
 require_once(plugin_dir_path( __FILE__ ).'models/Entity.php');
 require_once(plugin_dir_path( __FILE__ ).'models/Option.php');
@@ -31,10 +32,11 @@ class Sociallymap_Plugin
         $builder = new DbBuilder();
         $builder->dbInitialisation();
 
-        if(array_key_exists('sociallymap_postRSS', $_POST) || 
+        if(array_key_exists('sociallymap_postRSS', $_POST)      || 
             array_key_exists('sociallymap_deleteRSS',  $_POST)  || 
-            array_key_exists('sociallymap_updateRSS',  $_POST) ){
-                add_action('admin_menu', [$this, 'entityManager'] );
+            array_key_exists('sociallymap_updateRSS',  $_POST)  ||
+            array_key_exists('sociallymap_updateConfig',  $_POST) ) {
+                add_action('admin_menu', [$this, 'entityManager']);
         }
 
         add_action('admin_menu', [$this, 'add_admin_menu'] );
