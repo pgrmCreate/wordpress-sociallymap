@@ -6,7 +6,10 @@
 <div class="wrap">
 	<h1>
 		Ajouter une nouvelle entité
-		<a href="?page=sociallymap-rss-list" class="page-title-action">Voir la liste des entités</a>
+		<a href="?page=sociallymap-rss-list" class="page-title-action">
+			<i class="dashicons-before dashicons-list-view sociallymap-icon-link"></i>
+			Voir la liste des entités
+		</a>
 	</h1>
 	<form method="post" class="sociallymap_formRSS">
 		<input type="hidden" name="sociallymap_postRSS" value="1"/>
@@ -22,7 +25,7 @@
 			<select name="sociallymap_category">
 				<?php foreach (get_categories() as $key => $value) { ?>	
 					<option value="<?php echo get_cat_ID($value->name);?>"
-					<?php if($value->name === $default_value->category) echo "selected" ?> >
+					<?php if($value->cat_ID === $default_value->category) echo "selected" ?> >
 					<?php echo $value->name;?></option>
 				<?php } ?>
 			</select>

@@ -3,7 +3,6 @@
 	$editingEntity = $data['data'];
 ?>
 
-
 <div class="wrap">
 	<h1>
 		Editer une nouvelle entité
@@ -26,37 +25,34 @@
 					<?php echo $value->name;?></option>
 					<?php } ?>
 				</select>
-			</label>
+		</label>
 
-			<label class="sociallymap_label">
-				Active
-				<input name="sociallymap_activate" <?php if($editingEntity->activate) echo ('checked');?>
-				class="sociallymap_formRSS_newFlux" type="checkbox" value="1">
-			</label>
+		<label class="sociallymap_label">
+			Active
+			<input name="sociallymap_activate" <?php if($editingEntity->activate) echo ('checked');?>
+			class="sociallymap_formRSS_newFlux" type="checkbox" value="1">
+		</label>
 
-			<label class="sociallymap_label">
-				Mobile
-				<select name="sociallymap_modal_mobile">
-					<option value="1" <?php if($editingEntity->options[1]->value == 1) echo ('selected');?> >
-						Fenêtre modale
-					</option>
-					<option value="0" <?php if($editingEntity->options[1]->value == 0) echo ('selected');?> >
-						Externe
-					</option>
-				</select>
-			</label>
+		<label class="sociallymap_label">
+			Publier dans les brouillons
+			<input name="sociallymap_publish_type" <?php if($editingEntity->options[2]->value == "draft") echo ('checked');?>
+			class="sociallymap_formRSS_newFlux" type="checkbox" value="draft">
+		</label>
 
-			<label class="sociallymap_label">
-				Bureau (résolution grande) 
-				<select name="sociallymap_modal_desktop">
-					<option value="1" <?php if($editingEntity->options[2]->value == 1) echo ('selected');?> >
-						Fenêtre modale
-					</option>
-					<option value="0" <?php if($editingEntity->options[2]->value == 0) echo ('selected');?> >
-						Externe
-					</option>
-				</select>
-			</label>		
+		<label class="sociallymap_label">
+			Ouverture du lien
+			<select name="sociallymap_display_type">
+				<option value="modal" <?php if($editingEntity->options[1]->value == 'modal') echo ('selected');?> >
+					Fenêtre modale
+				</option>
+				<option value="tab" <?php if($editingEntity->options[1]->value == 'tab') echo ('selected');?> >
+					Nouvel onglet
+				</option>	
+				<option value="page" <?php if($editingEntity->options[1]->value == 'page') echo ('selected');?> >
+					Même page
+				</option>
+			</select>
+		</label>		
 
 			<p class="submit sociallymap_valid-submit">
 				<button type="submit" name="submit" id="submit" class="button button-primary">

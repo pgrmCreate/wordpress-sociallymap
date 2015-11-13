@@ -27,8 +27,7 @@ class ConfigOption {
 					'default_value' => $value,	// string
 				], [ 
 					'id' => $key
-				], ['%d'],	// value1
-				['%d']
+				]
 			);
 		}
 		

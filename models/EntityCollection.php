@@ -14,7 +14,6 @@ class EntityCollection
 
 		$config = new ConfigOption();
 		$this->configOptions = $config->getConfig();
-		print_r($this->configOptions);
 	}
 
 	public function add($data) {
@@ -31,26 +30,20 @@ class EntityCollection
 		$entityID = $entity->save($dataEntity);
 
 		$dataOption = [
-			'option_id'  => 1,
-			'value' => $data['category']
+			'option_id' => 1,
+			'value'     => $data['category']
 		];
 		$option->save($dataOption, $entityID);
 
 		$dataOption = [
-			'option_id'  => 2,
-			'value' => $data['modal_mobile']
-		];
-		$option->save($dataOption, $entityID);
-	
-		$dataOption = [
-			'option_id'  => 3,
-			'value' => $data['modal_desktop']
+			'option_id' => 2,
+			'value'     => $data['display_type']
 		];
 		$option->save($dataOption, $entityID);
 
 		$dataOption = [
-			'option_id'  => 4,
-			'value' => 0 // Draft todo ($data['draft'])
+			'option_id' => 3,
+			'value'     => $data['publish_type']
 		];
 		$option->save($dataOption, $entityID);
 	}
@@ -68,10 +61,10 @@ class EntityCollection
 		$entity->update($dataEntity);
 
 		$optionsEntity = [
-			'idSource'      => $data['id'],
-			'category'      => $data['category'],
-			'modal_mobile'  => $data['modal_mobile'],
-			'modal_desktop' => $data['modal_desktop'],
+			'idSource'     => $data['id'],
+			'category'     => $data['category'],
+			'publish_type'     => $data['publish_type'],
+			'display_type' =>  $data['display_type'],
 		];
 		$option->update($optionsEntity);
 	}

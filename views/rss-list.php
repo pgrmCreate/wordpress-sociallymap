@@ -6,7 +6,10 @@
 <div class="wrap">
 	<h1>
 		Mes RSS
-		<a href="?page=sociallymap-rss-add" class="page-title-action">Ajouter une entité</a>
+		<a href="?page=sociallymap-rss-add" class="page-title-action">
+			<i class="dashicons-before dashicons-plus-alt sociallymap-icon-link"></i>
+			Ajouter une entité
+		</a>
 	</h1>
 
 	<div class="sociallymap_containRSS">

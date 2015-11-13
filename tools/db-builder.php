@@ -28,6 +28,7 @@
 	              activate boolean,
 	              author_id varchar(255),
 	              name varchar(255),
+	              last_published_message datetime,
 	              UNIQUE KEY id (id)
 	            ) $charset_collate;";
 
@@ -49,20 +50,15 @@
 	            'default_value' => 0,
 	            ], ['%s', '%d']);
 
-	            $this->wpdb->insert($this->table_options,[
-	            'label' => 'modal_mobile',
-	            'default_value' => true,
-	            ], ['%s', '%d']);
+	           	$this->wpdb->insert($this->table_options,[
+	            'label' => 'display_type',
+	            'default_value' => 'tab',
+	            ], ['%s', '%s']);
 
 	           	$this->wpdb->insert($this->table_options,[
-	            'label' => 'modal_desktop',
-	            'default_value' => true,
-	            ], ['%s', '%d']);
-
-	           	$this->wpdb->insert($this->table_options,[
-	            'label' => 'draft',
-	            'default_value' => false,
-	            ], ['%s', '%d']);
+	            'label' => 'publish_type',
+	            'default_value' => 'draft',
+	            ], ['%s', '%s']);
 	        }
 
 	        if($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity_options'") != $this->table_entity_options) {

@@ -12,6 +12,7 @@ License: GPL2
 require_once(plugin_dir_path( __FILE__ ).'tools/templater.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/db-builder.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/publisher.php');
+require_once(plugin_dir_path( __FILE__ ).'tools/Requester.php');
 require_once(plugin_dir_path( __FILE__ ).'models/EntityCollection.php');
 require_once(plugin_dir_path( __FILE__ ).'models/Entity.php');
 require_once(plugin_dir_path( __FILE__ ).'models/Option.php');
@@ -33,13 +34,17 @@ class Sociallymap_Plugin
         $builder->dbInitialisation();
 
         if(array_key_exists('sociallymap_postRSS', $_POST)      || 
-            array_key_exists('sociallymap_deleteRSS',  $_POST)  || 
-            array_key_exists('sociallymap_updateRSS',  $_POST)  ||
-            array_key_exists('sociallymap_updateConfig',  $_POST) ) {
+            array_key_exists('sociallymap_deleteRSS', $_POST)  || 
+            array_key_exists('sociallymap_updateRSS', $_POST)  ||
+            array_key_exists('sociallymap_updateConfig', $_POST) ) {
                 add_action('admin_menu', [$this, 'entityManager']);
         }
 
         add_action('admin_menu', [$this, 'add_admin_menu'] );
+        add_action('init', [$this, 'rootingMapping'] );
+
+        // Route for sociallymap
+        add_action('parse_request', [$this, 'manageMessages']);
     }
 
     public function add_admin_menu()
@@ -61,6 +66,56 @@ class Sociallymap_Plugin
 
         add_submenu_page('sociallymap-publisher', 'Ajouter une entité', 'Ajouter une entité',
         'manage_options', 'sociallymap-rss-add', [$this, 'addEntities_html'] );         
+    }
+
+    public function rootingMapping () {
+        add_filter( 'rewrite_rules_array','my_insert_rewrite_rules' );
+        add_filter( 'query_vars','my_insert_query_vars' );
+        add_action( 'wp_loaded','my_flush_rules' );
+
+        // flush_rules() if our rules are not yet included
+        function my_flush_rules(){
+            $rules = get_option( 'rewrite_rules' );
+
+            if ( ! isset( $rules['sociallymap/sm/getMessage'] ) ) {
+                global $wp_rewrite;
+                $wp_rewrite->flush_rules();
+            }
+        }
+
+            // Adding a new rule
+        function my_insert_rewrite_rules( $rules )
+        {
+            $newrules = array();
+            $newrules['sociallymap/sm/getMessage'] = 'index.php?sociallymap=$matches[1]&sm=$matches[2]&getMessage=$matches[3]';
+            return $newrules + $rules;
+        }
+
+        // Adding the id var so that WP recognizes it
+        function my_insert_query_vars( $vars )
+        {
+            array_push($vars, 'id', 'token');
+            return $vars;
+        }
+    }
+
+    public function manageMessages($wp) {
+        $actions  = $wp->matched_rule;
+
+        if(isset($_GET['id'])) $entityId = $_GET['id'];
+        if(isset($_GET['token'])) $token = $_GET['token'];
+
+        if($actions === "sociallymap/sm/getMessage" && isset($entityId) && isset($token)) {
+            $curl = new Requester();
+            $publisher = new Publisher();
+            $jsonData = $curl->launch();
+            
+            print_r($jsonData);
+            foreach ($jsonData as $key => $value) {
+                // $publisher->publish($value['linkTitle'], $value['linkSummary']);
+            }
+        }
+
     }
 
     public function configuration_html()
@@ -120,6 +175,8 @@ class Sociallymap_Plugin
     public function entityManager () 
     {
         $entityCollection = new EntityCollection();
+        $entityOption = new ConfigOption();
+        $config = $entityOption->getConfig();
 
         // ACTION ENTITY : delete
         if(array_key_exists('sociallymap_deleteRSS', $_POST) && $_POST['sociallymap_deleteRSS']) {
@@ -130,13 +187,14 @@ class Sociallymap_Plugin
         // ACTION ENTITY : update
         if(array_key_exists('sociallymap_updateRSS', $_POST) && $_POST['sociallymap_updateRSS']) {
             if(!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
-            if(!isset($_POST['sociallymap_draft'])) $_POST['sociallymap_draft'] = 0;
-                $data = [
+            if(!isset($_POST['sociallymap_publish_type'])) $_POST['sociallymap_publish_type'] = 'publish';
+
+            $data = [
                 'name'          => $_POST['sociallymap_label'],
                 'category'      => $_POST['sociallymap_category'],
                 'activate'      => $_POST['sociallymap_activate'],
-                'modal_mobile'  => $_POST['sociallymap_modal_mobile'],
-                'modal_desktop' => $_POST['sociallymap_modal_desktop'],
+                'display_type'  => $_POST['sociallymap_display_type'],
+                'publish_type'  => $_POST['sociallymap_publish_type'],
                 'id'            => $_GET['id'],
             ];
 
@@ -146,19 +204,18 @@ class Sociallymap_Plugin
         // ACTION ENTITY : post
         if(array_key_exists('sociallymap_postRSS', $_POST) && $_POST['sociallymap_postRSS']) {
             if(!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
-            if(!isset($_POST['sociallymap_draft'])) $_POST['sociallymap_draft'] = 0;
+            if(!isset($_POST['sociallymap_publish_type'])) $_POST['sociallymap_publish_type'] = 'publish';
 
-            $defaultValue_modal_mobile = 1;
-            $defaultValue_modal_desktop = 1;
+            $defaultValue_display_type = 1;
 
             $data = [
                 'name'          => $_POST['sociallymap_name'],
                 'category'      => $_POST['sociallymap_category'],
                 'activate'      => $_POST['sociallymap_activate'],
-                'draft'         => $_POST['sociallymap_draft'],
-                'modal_mobile'  => $defaultValue_modal_mobile,
-                'modal_desktop' => $defaultValue_modal_desktop,
+                'publish_type'  => $config[2]->default_value,
+                'display_type'  => $config[1]->default_value,
             ];
+
             $entityCollection->add($data);
         }
 
@@ -167,9 +224,8 @@ class Sociallymap_Plugin
             if(!isset($_POST['sociallymap_draft'])) $_POST['sociallymap_draft'] = 0;
             $data = [
                 1 => $_POST['sociallymap_category'],
-                2 => $_POST['sociallymap_modal_mobile'],
-                3 => $_POST['sociallymap_modal_desktop'],
-                4 => $_POST['sociallymap_draft'],
+                2 => $_POST['sociallymap_display_type'],
+                3 => $_POST['sociallymap_draft'],
             ];
             $currentConfig = new ConfigOption;
             $currentConfig->save($data);

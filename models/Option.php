@@ -37,7 +37,7 @@ class Option
 			'entity_id'  => $idSource,
 			'options_id' => $data['option_id'],
 			'value'      => $data['value'],
-			], ['%d', '%d', '%d']);
+			]);
 	}
 
 	public function update($data) {
@@ -56,31 +56,30 @@ class Option
 			);
 		}
 
-		// UPDATE ISMODAL [MOBILE]
-		if(isset($data['modal_mobile'])) {
+		// UPDATE WINDOWS
+		if(isset($data['display_type'])) {
 			$wpdb->update( 
 				$this->table, [ 
-					'value' => $data['modal_mobile'],	// string
+					'value' => $data['display_type'],	// string
 				], [ 
 					'entity_id' => $data['idSource'],
 					'options_id' => 2
-				], ['%d'],	// value1
-				['%d']
+				]
 			);
 		}
 
-		// UPDATE ISMODAL [DESKTOP]
-		if(isset($data['modal_desktop'])) {
+		// UPDATE PUBLISH MODE
+		if(isset($data['publish_type'])) {
 			$wpdb->update( 
 				$this->table, [ 
-					'value' => $data['modal_desktop'],	// string
+					'value' => $data['publish_type'],	// string
 				], [ 
 					'entity_id' => $data['idSource'],
 					'options_id' => 3
-				], ['%d'],	// value1
-				['%d']
+				]
 			);
 		}
+
 	}
 
 }

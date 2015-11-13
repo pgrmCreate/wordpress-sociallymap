@@ -42,6 +42,11 @@ label.sociallymap_label > [type="checkbox"] {
 	padding-top: 3px;
 }
 
+.sociallymap-icon-link:before {
+	padding-top: 10px;
+	font-size: 17px;
+}
+
 .sociallymap_valid-submit {
 }
 
