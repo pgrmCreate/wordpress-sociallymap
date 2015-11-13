@@ -1,16 +1,6 @@
-<?php	
-	$entitiesCollection = new EntityCollection();
-	$loaderRequest = $entitiesCollection->all();
-	$listRSS = [];
-	$entity = new Entity();
-
-	foreach ($loaderRequest as $datas) {
-		foreach ($datas as $key => $value) {
-			if($key == "id") {
-				$listRSS[] = $entity->getById($value);
-			}
-		}
-	}
+<?php
+	$data = get_query_var('data');
+	$listRss = $data['data'];
 ?>
 
 <div class="wrap">
@@ -65,7 +55,7 @@
 				</tdead>
 				<tbody id="the-list" data-wp-lists="list:user">
 					<?php
-						foreach ($listRSS as $key => $value) {
+						foreach ($listRss as $key => $value) {
 						?>
 							<tr>
 								<td scope="row" class="check-column" colspan="0">

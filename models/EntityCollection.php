@@ -4,16 +4,17 @@ class EntityCollection
 {
 	private $table_entity;
 	private $table_options;
-	private $table_options_list;
+	private $configOptions;
 	private $default_value;
 
 	function __construct() {
 		global $wpdb;
 		$this->table_entity       = $wpdb->prefix.'sm_entities';
 		$this->table_options      = $wpdb->prefix.'sm_entity_options';
-		$this->table_options_list = $wpdb->prefix.'sm_options';
 
-		$this->default_value = $wpdb->get_results("SELECT * FROM $this->table_options_list");
+		$config = new ConfigOption();
+		$this->configOptions = $config->getConfig();
+		print_r($this->configOptions);
 	}
 
 	public function add($data) {
@@ -40,10 +41,16 @@ class EntityCollection
 			'value' => $data['modal_mobile']
 		];
 		$option->save($dataOption, $entityID);
-
+	
 		$dataOption = [
 			'option_id'  => 3,
 			'value' => $data['modal_desktop']
+		];
+		$option->save($dataOption, $entityID);
+
+		$dataOption = [
+			'option_id'  => 4,
+			'value' => 0 // Draft todo ($data['draft'])
 		];
 		$option->save($dataOption, $entityID);
 	}

@@ -1,7 +1,8 @@
 <?php
-$entity = new Entity;
-$editingEntity = $entity->getById($_GET['id']);
+	$data = get_query_var('data');
+	$editingEntity = $data['data'];
 ?>
+
 
 <div class="wrap">
 	<h1>
@@ -13,12 +14,12 @@ $editingEntity = $entity->getById($_GET['id']);
 
 		<label class="sociallymap_label">
 			Nom du lien RSS
-			<input name="sm_label" value="<?php echo($editingEntity->name); ?>" class="sociallymap_formRSS_newFlux">
+			<input name="sociallymap_label" value="<?php echo($editingEntity->name); ?>" class="sociallymap_formRSS_newFlux">
 		</label>		
 
 		<label class="sociallymap_label">
 			Catégorie cible de la publication
-			<select name="sm_category">
+			<select name="sociallymap_category">
 				<?php foreach (get_categories() as $key => $value) { ?>	
 				<option value="<?php echo $value->cat_ID; ?>"
 					<?php if($editingEntity->options[0]->value === $value->cat_ID) echo "selected" ?> >
@@ -28,14 +29,14 @@ $editingEntity = $entity->getById($_GET['id']);
 			</label>
 
 			<label class="sociallymap_label">
-				Publier en tant que brouillon
-				<input name="sm_active" <?php if($editingEntity->activate) echo ('checked');?>
+				Active
+				<input name="sociallymap_activate" <?php if($editingEntity->activate) echo ('checked');?>
 				class="sociallymap_formRSS_newFlux" type="checkbox" value="1">
 			</label>
 
 			<label class="sociallymap_label">
 				Mobile
-				<select name="sm_modal_mobile">
+				<select name="sociallymap_modal_mobile">
 					<option value="1" <?php if($editingEntity->options[1]->value == 1) echo ('selected');?> >
 						Fenêtre modale
 					</option>
@@ -47,7 +48,7 @@ $editingEntity = $entity->getById($_GET['id']);
 
 			<label class="sociallymap_label">
 				Bureau (résolution grande) 
-				<select name="sm_modal_desktop">
+				<select name="sociallymap_modal_desktop">
 					<option value="1" <?php if($editingEntity->options[2]->value == 1) echo ('selected');?> >
 						Fenêtre modale
 					</option>

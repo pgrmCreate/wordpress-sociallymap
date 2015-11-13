@@ -9,13 +9,13 @@ Author URI: http://alhena-conseil.com/
 License: GPL2
 */
 
-require_once(plugin_dir_path( __FILE__ ).'publisherWidget.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/templater.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/db-builder.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/publisher.php');
 require_once(plugin_dir_path( __FILE__ ).'models/EntityCollection.php');
 require_once(plugin_dir_path( __FILE__ ).'models/Entity.php');
 require_once(plugin_dir_path( __FILE__ ).'models/Option.php');
+require_once(plugin_dir_path( __FILE__ ).'models/ConfigOption.php');
 
 class Sociallymap_Plugin
 {
@@ -65,27 +65,56 @@ class Sociallymap_Plugin
 
     public function configuration_html()
     {
-        $this->templater->loadBlank('configuration.php');
+        $this->templater->load('configuration.php');
     }
 
     public function documentation_html ()
     {
-        $this->templater->loadBlank('documentation.php');
+        return $this->templater->load('documentation.php');
     }
 
     public function myEntities_html ()
     {
-        $this->templater->load('rss-list.php');
+        $entitiesCollection = new EntityCollection();
+        $loaderRequest = $entitiesCollection->all();
+        $listRSS = [];
+        $entity = new Entity();
+
+        foreach ($loaderRequest as $datas) {
+            foreach ($datas as $key => $value) {
+                if($key == "id") {
+                    $listRSS[] = $entity->getById($value);
+                }
+            }
+        }
+
+        $this->templater->load('rss-list.php', $listRSS);
+        $messages = file_get_contents(plugin_dir_path( __FILE__ ).'messages.json');
+        $json_a = json_decode($messages, true);
+        $publisher = new Publisher();
     }
 
     public function addEntities_html ()
     {
-        $this->templater->load('rss-add.php');
+        $config = new ConfigOption();
+        $configs = $config->getConfig();
+        $data = new stdClass();
+
+        foreach ($configs as $key => $value) {
+            if($value->id == 1) {
+                $data->category =  $value->default_value;
+            }
+        }
+
+        $this->templater->load('rss-add.php', $data);
     }
 
     public function edit_html ()
     {
-        $this->templater->load('rss-edit.php');
+        $entity = new Entity;
+        $editingEntity = $entity->getById($_GET['id']);
+
+        $this->templater->load('rss-edit.php', $editingEntity);
     }
 
     public function entityManager () 
@@ -100,14 +129,15 @@ class Sociallymap_Plugin
 
         // ACTION ENTITY : update
         if(array_key_exists('sociallymap_updateRSS', $_POST) && $_POST['sociallymap_updateRSS']) {
-            if(!isset($_POST['sm_active'])) $_POST['sm_active'] = 0;
+            if(!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
+            if(!isset($_POST['sociallymap_draft'])) $_POST['sociallymap_draft'] = 0;
                 $data = [
-                'name'     => $_POST['sm_label'],
-                'category' => $_POST['sm_category'],
-                'activate' => $_POST['sm_active'],
-                'modal_mobile' => $_POST['sm_modal_mobile'],
-                'modal_desktop' => $_POST['sm_modal_desktop'],
-                'id'       => $_GET['id'],
+                'name'          => $_POST['sociallymap_label'],
+                'category'      => $_POST['sociallymap_category'],
+                'activate'      => $_POST['sociallymap_activate'],
+                'modal_mobile'  => $_POST['sociallymap_modal_mobile'],
+                'modal_desktop' => $_POST['sociallymap_modal_desktop'],
+                'id'            => $_GET['id'],
             ];
 
             $entityCollection->update($data);
@@ -115,15 +145,34 @@ class Sociallymap_Plugin
 
         // ACTION ENTITY : post
         if(array_key_exists('sociallymap_postRSS', $_POST) && $_POST['sociallymap_postRSS']) {
-            print_r($_POST);
+            if(!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
+            if(!isset($_POST['sociallymap_draft'])) $_POST['sociallymap_draft'] = 0;
+
+            $defaultValue_modal_mobile = 1;
+            $defaultValue_modal_desktop = 1;
+
             $data = [
-                'name'     => $_POST['sociallymap_name'],
-                'category' => $_POST['sociallymap_category'],
-                'activate' => $_POST['sociallymap_activate'],
-                'modal_mobile' => $_POST['sociallymap_modal_mobile'],
-                'modal_desktop' => $_POST['sociallymap_modal_desktop'],
+                'name'          => $_POST['sociallymap_name'],
+                'category'      => $_POST['sociallymap_category'],
+                'activate'      => $_POST['sociallymap_activate'],
+                'draft'         => $_POST['sociallymap_draft'],
+                'modal_mobile'  => $defaultValue_modal_mobile,
+                'modal_desktop' => $defaultValue_modal_desktop,
             ];
             $entityCollection->add($data);
+        }
+
+        // ACTION CONFIG : update
+        if(array_key_exists('sociallymap_updateConfig', $_POST) && $_POST['sociallymap_updateConfig']) {
+            if(!isset($_POST['sociallymap_draft'])) $_POST['sociallymap_draft'] = 0;
+            $data = [
+                1 => $_POST['sociallymap_category'],
+                2 => $_POST['sociallymap_modal_mobile'],
+                3 => $_POST['sociallymap_modal_desktop'],
+                4 => $_POST['sociallymap_draft'],
+            ];
+            $currentConfig = new ConfigOption;
+            $currentConfig->save($data);
         }
 
         $linkToList = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';

@@ -22,8 +22,8 @@ class Entity
 
 	public function getById ($id) {
 		global $wpdb;
-		$entityRequest = 'SELECT * FROM '.$this->table.' WHERE id='.$id;
 		
+		$entityRequest = 'SELECT * FROM '.$this->table.' WHERE id='.$id;
 		$entity = $wpdb->get_row($entityRequest);
 
 		$optionsRequest = 'SELECT options_id, value FROM '.$wpdb->prefix.'sm_entity_options WHERE entity_id = '.$id;

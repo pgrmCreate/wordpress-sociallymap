@@ -58,6 +58,11 @@
 	            'label' => 'modal_desktop',
 	            'default_value' => true,
 	            ], ['%s', '%d']);
+
+	           	$this->wpdb->insert($this->table_options,[
+	            'label' => 'draft',
+	            'default_value' => false,
+	            ], ['%s', '%d']);
 	        }
 
 	        if($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity_options'") != $this->table_entity_options) {
