@@ -44,28 +44,28 @@ class Sociallymap_Plugin
         add_action('init', [$this, 'rootingMapping'] );
 
         // Route for sociallymap
-        add_action('parse_request', [$this, 'manageMessages']);
+        add_action('parse_request', [$this, 'manageMessages'] );
     }
 
     public function add_admin_menu()
     {
         add_menu_page( 'Sociallymap publisher', 'Sociallymap', 'manage',
-        'sociallymap-publisher', [$this, 'documentation_html'], 'dashicons-networking');
+        'sociallymap-publisher', [$this, 'documentation_html'], 'dashicons-rss');
 
         add_submenu_page('sociallymap-publisher', 'Documentation', 'Documentation',
-        'manage_options', 'sociallymap-documentation', [$this, 'documentation_html'] );
+        'manage_options', 'sociallymap-documentation', [$this, 'documentationHtml'] );
 
         add_submenu_page('sociallymap-publisher', 'Configuration', 'Configuration',
-        'manage_options', 'sociallymap-configuration', [$this, 'configuration_html'] ); 
+        'manage_options', 'sociallymap-configuration', [$this, 'configurationHtml'] ); 
 
         add_submenu_page('sociallymap-publisher', 'Mes entités', 'Mes entités',
-        'manage_options', 'sociallymap-rss-list', [$this, 'myEntities_html'] );
+        'manage_options', 'sociallymap-rss-list', [$this, 'myEntitiesHtml'] );
 
         add_submenu_page(null, 'edit entity', 'Editer lien',
-        'manage_options', 'sociallymap-rss-edit', [$this, 'edit_html'] ); 
+        'manage_options', 'sociallymap-rss-edit', [$this, 'editHtml'] ); 
 
         add_submenu_page('sociallymap-publisher', 'Ajouter une entité', 'Ajouter une entité',
-        'manage_options', 'sociallymap-rss-add', [$this, 'addEntities_html'] );         
+        'manage_options', 'sociallymap-rss-add', [$this, 'addEntitiesHtml'] );         
     }
 
     public function rootingMapping () {
@@ -106,29 +106,36 @@ class Sociallymap_Plugin
         if(isset($_GET['token'])) $token = $_GET['token'];
 
         if($actions === "sociallymap/sm/getMessage" && isset($entityId) && isset($token)) {
-            $curl = new Requester();
+            $curl      = new Requester();
             $publisher = new Publisher();
-            $jsonData = $curl->launch();
-            
-            print_r($jsonData);
+            $config = new ConfigOption();
+
+            $configs = $config->getConfig();
+            $jsonData  = $curl->launch();
+
+            $readmore = $this->templater->loadReadMore($jsonData[0]['linkUrl'], $jsonData[0]['id']);
+
             foreach ($jsonData as $key => $value) {
-                // $publisher->publish($value['linkTitle'], $value['linkSummary']);
+                $title = $value['linkTitle'];
+                if($key == 1) {
+                    $contentArticle = $value['linkSummary'].$readmore;
+                    $publisher->publish($title, $contentArticle , $configs[0]->default_value, $configs[2]->default_value);
+                }
             }
         }
-
     }
 
-    public function configuration_html()
+    public function configurationHtml()
     {
-        $this->templater->load('configuration.php');
+        echo $this->templater->loadAdminPage('configuration.php');
     }
 
-    public function documentation_html ()
+    public function documentationHtml ()
     {
-        return $this->templater->load('documentation.php');
+        echo $this->templater->loadAdminPage('documentation.php');
     }
 
-    public function myEntities_html ()
+    public function myEntitiesHtml ()
     {
         $entitiesCollection = new EntityCollection();
         $loaderRequest = $entitiesCollection->all();
@@ -143,13 +150,13 @@ class Sociallymap_Plugin
             }
         }
 
-        $this->templater->load('rss-list.php', $listRSS);
+        echo $this->templater->loadAdminPage('rss-list.php', $listRSS);
         $messages = file_get_contents(plugin_dir_path( __FILE__ ).'messages.json');
         $json_a = json_decode($messages, true);
         $publisher = new Publisher();
     }
 
-    public function addEntities_html ()
+    public function addEntitiesHtml ()
     {
         $config = new ConfigOption();
         $configs = $config->getConfig();
@@ -161,15 +168,15 @@ class Sociallymap_Plugin
             }
         }
 
-        $this->templater->load('rss-add.php', $data);
+        echo $this->templater->loadAdminPage('rss-add.php', $data);
     }
 
-    public function edit_html ()
+    public function editHtml ()
     {
         $entity = new Entity;
         $editingEntity = $entity->getById($_GET['id']);
 
-        $this->templater->load('rss-edit.php', $editingEntity);
+        echo $this->templater->loadAdminPage('rss-edit.php', $editingEntity);
     }
 
     public function entityManager () 
@@ -201,12 +208,11 @@ class Sociallymap_Plugin
             $entityCollection->update($data);
         }
 
+
         // ACTION ENTITY : post
         if(array_key_exists('sociallymap_postRSS', $_POST) && $_POST['sociallymap_postRSS']) {
             if(!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
             if(!isset($_POST['sociallymap_publish_type'])) $_POST['sociallymap_publish_type'] = 'publish';
-
-            $defaultValue_display_type = 1;
 
             $data = [
                 'name'          => $_POST['sociallymap_name'],
@@ -221,12 +227,14 @@ class Sociallymap_Plugin
 
         // ACTION CONFIG : update
         if(array_key_exists('sociallymap_updateConfig', $_POST) && $_POST['sociallymap_updateConfig']) {
-            if(!isset($_POST['sociallymap_draft'])) $_POST['sociallymap_draft'] = 0;
+            if(!isset($_POST['sociallymap_publish_type'])) $_POST['sociallymap_publish_type'] = "publish";
+
             $data = [
                 1 => $_POST['sociallymap_category'],
                 2 => $_POST['sociallymap_display_type'],
-                3 => $_POST['sociallymap_draft'],
+                3 => $_POST['sociallymap_publish_type'],
             ];
+
             $currentConfig = new ConfigOption;
             $currentConfig->save($data);
         }

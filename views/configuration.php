@@ -22,8 +22,8 @@
 
 			<label class="sociallymap_label">
 				Publication en tant que brouillon
-				<input type="checkbox" name="sociallymap_publish_type" class="sociallymap_formRSS_newFlux" value="1"
-				<?php if(1 == $default_options[2]->default_value) echo "checked" ?> >
+				<input type="checkbox" name="sociallymap_publish_type" class="sociallymap_formRSS_newFlux" value="draft"
+				<?php if("draft" == $default_options[2]->default_value) echo "checked" ?> >
 			</label>
 
 			<label class="sociallymap_label">
