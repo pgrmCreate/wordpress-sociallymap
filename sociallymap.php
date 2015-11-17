@@ -113,7 +113,15 @@ class Sociallymap_Plugin
             $configs = $config->getConfig();
             $jsonData  = $curl->launch();
 
-            $readmore = $this->templater->loadReadMore($jsonData[0]['linkUrl'], $jsonData[0]['id']);
+            if($configs[1]->default_value != 'modal') {
+                 $this->loadBackAssets([
+                'notModalManager' => true]);
+            }
+            else {
+                $this->loadBackAssets();
+            }
+           
+            $readmore = $this->templater->loadReadMore($jsonData[0]['linkUrl'], $jsonData[0]['id'], $configs[1]->default_value);
 
             foreach ($jsonData as $key => $value) {
                 $title = $value['linkTitle'];
@@ -241,6 +249,19 @@ class Sociallymap_Plugin
 
         $linkToList = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';
         // wp_redirect($linkToList, 301 ); exit;  
+    }
+
+    public function loadBackAssets ($exept = []) {
+        wp_enqueue_style('configuration.css', plugin_dir_url( __FILE__ ).'assets/styles/custom-readmore.css');
+
+        // MODAL DISPLAY TYPE IS ON
+        if(!isset($exept['notModalManager']) ) { 
+            wp_enqueue_style('fancybox', plugin_dir_url( __FILE__ ).'assets/styles/fancybox.css');
+
+            wp_enqueue_script('jquery');
+            wp_enqueue_script('fancy', plugin_dir_url( __FILE__ ).'assets/js/fancybox.js');
+            wp_enqueue_script('modal-manager', plugin_dir_url( __FILE__ ).'assets/js/modal-manager.js');
+        }
     }
 }
 

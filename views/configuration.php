@@ -35,9 +35,6 @@
 						<option value="tab" <?php if($default_options[1]->default_value == 'tab') echo ('selected');?> >
 							Nouvel onglet
 						</option>	
-						<option value="page" <?php if($default_options[1]->default_value == 'page') echo ('selected');?> >
-							Même page
-						</option>
 					</select>
 			</label>	
 
