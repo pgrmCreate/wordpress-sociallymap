@@ -28,29 +28,31 @@ class Sociallymap_Plugin
         global $wpdb;
         $this->wpdb = $wpdb;
 
+        register_uninstall_hook('uninstall.php', 'smUninstallPlugin');
+
         $this->templater = new Templater();
 
         $builder = new DbBuilder();
         $builder->dbInitialisation();
 
-        if(array_key_exists('sociallymap_postRSS', $_POST)      || 
+        if(array_key_exists('sociallymap_postRSS', $_POST)     || 
             array_key_exists('sociallymap_deleteRSS', $_POST)  || 
             array_key_exists('sociallymap_updateRSS', $_POST)  ||
             array_key_exists('sociallymap_updateConfig', $_POST) ) {
                 add_action('admin_menu', [$this, 'entityManager']);
         }
 
-        add_action('admin_menu', [$this, 'add_admin_menu'] );
-        add_action('init', [$this, 'rootingMapping'] );
-
         // Route for sociallymap
         add_action('parse_request', [$this, 'manageMessages'] );
+
+        add_action('admin_menu', [$this, 'add_admin_menu'] );
+        add_action('init', [$this, 'rootingMapping'] );
     }
 
     public function add_admin_menu()
-    {
+    {        
         add_menu_page( 'Sociallymap publisher', 'Sociallymap', 'manage',
-        'sociallymap-publisher', [$this, 'documentation_html'], 'dashicons-rss');
+        'sociallymap-publisher', [$this, 'documentation_html'], plugin_dir_url( __FILE__ ).'assets/images/logo.png');
 
         add_submenu_page('sociallymap-publisher', 'Documentation', 'Documentation',
         'manage_options', 'sociallymap-documentation', [$this, 'documentationHtml'] );
@@ -79,6 +81,7 @@ class Sociallymap_Plugin
 
             if ( ! isset( $rules['sociallymap/sm/getMessage'] ) ) {
                 global $wp_rewrite;
+
                 $wp_rewrite->flush_rules();
             }
         }
@@ -113,14 +116,8 @@ class Sociallymap_Plugin
             $configs = $config->getConfig();
             $jsonData  = $curl->launch();
 
-            if($configs[1]->default_value != 'modal') {
-                 $this->loadBackAssets([
-                'notModalManager' => true]);
-            }
-            else {
-                $this->loadBackAssets();
-            }
-           
+            $this->loadAssets(['notModalManager' => true]);
+
             $readmore = $this->templater->loadReadMore($jsonData[0]['linkUrl'], $jsonData[0]['id'], $configs[1]->default_value);
 
             foreach ($jsonData as $key => $value) {
@@ -135,16 +132,25 @@ class Sociallymap_Plugin
 
     public function configurationHtml()
     {
-        echo $this->templater->loadAdminPage('configuration.php');
+        $this->loadAssets();
+        $data = [];
+        if(array_key_exists('sociallymap_updateConfig', $_POST) ) {
+            $data = [
+            'isSaved' => true];
+        }
+
+        echo $this->templater->loadAdminPage('configuration.php', $data);
     }
 
     public function documentationHtml ()
     {
+        $this->loadAssets();
         echo $this->templater->loadAdminPage('documentation.php');
     }
 
     public function myEntitiesHtml ()
     {
+        $this->loadAssets();
         $entitiesCollection = new EntityCollection();
         $loaderRequest = $entitiesCollection->all();
         $listRSS = [];
@@ -166,6 +172,7 @@ class Sociallymap_Plugin
 
     public function addEntitiesHtml ()
     {
+        $this->loadAssets();
         $config = new ConfigOption();
         $configs = $config->getConfig();
         $data = new stdClass();
@@ -181,6 +188,7 @@ class Sociallymap_Plugin
 
     public function editHtml ()
     {
+        $this->loadAssets();
         $entity = new Entity;
         $editingEntity = $entity->getById($_GET['id']);
 
@@ -192,6 +200,7 @@ class Sociallymap_Plugin
         $entityCollection = new EntityCollection();
         $entityOption = new ConfigOption();
         $config = $entityOption->getConfig();
+        $linkToList = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';
 
         // ACTION ENTITY : delete
         if(array_key_exists('sociallymap_deleteRSS', $_POST) && $_POST['sociallymap_deleteRSS']) {
@@ -208,12 +217,14 @@ class Sociallymap_Plugin
                 'name'          => $_POST['sociallymap_label'],
                 'category'      => $_POST['sociallymap_category'],
                 'activate'      => $_POST['sociallymap_activate'],
+                'sm_entity_id'  => $_POST['sociallymap_entityId'],
                 'display_type'  => $_POST['sociallymap_display_type'],
                 'publish_type'  => $_POST['sociallymap_publish_type'],
                 'id'            => $_GET['id'],
             ];
 
             $entityCollection->update($data);
+            wp_redirect($linkToList, 301 ); exit;  
         }
 
 
@@ -226,11 +237,13 @@ class Sociallymap_Plugin
                 'name'          => $_POST['sociallymap_name'],
                 'category'      => $_POST['sociallymap_category'],
                 'activate'      => $_POST['sociallymap_activate'],
+                'sm_entity_id'  => $_POST['sociallymap_entityId'],
                 'publish_type'  => $config[2]->default_value,
                 'display_type'  => $config[1]->default_value,
             ];
 
             $entityCollection->add($data);
+            wp_redirect($linkToList, 301 ); exit;  
         }
 
         // ACTION CONFIG : update
@@ -246,16 +259,14 @@ class Sociallymap_Plugin
             $currentConfig = new ConfigOption;
             $currentConfig->save($data);
         }
-
-        $linkToList = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';
-        // wp_redirect($linkToList, 301 ); exit;  
     }
 
-    public function loadBackAssets ($exept = []) {
-        wp_enqueue_style('configuration.css', plugin_dir_url( __FILE__ ).'assets/styles/custom-readmore.css');
+    public function loadAssets ($exept = []) {
+        wp_enqueue_style('back', plugin_dir_url( __FILE__ ).'assets/styles/back.css');
 
         // MODAL DISPLAY TYPE IS ON
         if(!isset($exept['notModalManager']) ) { 
+            wp_enqueue_style('readmore', plugin_dir_url( __FILE__ ).'assets/styles/custom-readmore.css');
             wp_enqueue_style('fancybox', plugin_dir_url( __FILE__ ).'assets/styles/fancybox.css');
 
             wp_enqueue_script('jquery');

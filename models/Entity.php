@@ -49,6 +49,7 @@ class Entity
 			$this->table, [ 
 				'name'     => $data['name'],	// string
 				'activate' => $data['activate'],	// string
+				'sm_entity_id' => $data['sm_entity_id'],	// string
 			], 
 			[ 'ID' => $data['id'] ], 
 			['%s', '%d'],	// value1

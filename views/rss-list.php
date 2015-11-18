@@ -18,15 +18,10 @@
 				<input type="hidden" name="sociallymap_deleteRSS" value="1"/>
 				<tdead>
 					<tr>
-						<th id="cb" class="manage-column column-cb check-column">
-							<label class="screen-reader-text" for="cb-select-all-1">Select All</label>
-							<input id="cb-select-all-1" type="checkbox">
-						</th>
-
 						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
 						colspan="4">
 							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=login&amp;order=asc">
-								<span>Nom du flux RSS</span>
+								<span>Nom de l'entité</span>
 								<span class="sorting-indicator"></span>
 							</a>
 						</th>
@@ -50,7 +45,7 @@
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
 						colspan="2">
 							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
-								<span>Action</span>
+								<span>Active</span>
 								<span class="sorting-indicator"></span>
 							</a>
 						</th>	
@@ -61,16 +56,24 @@
 						foreach ($listRss as $key => $value) {
 						?>
 							<tr>
-								<td scope="row" class="check-column" colspan="0">
-									<label class="screen-reader-text" for="user_1">Select root</label>
-									<input type="checkbox" name="users[]" class="administrator" value="1">
-								</td>
-						
 								<td colspan="4">
-									<b>
-										# <?php echo $value->id; ?>
-									</b>
 									<?php echo $value->name; ?>
+									<div class="row-actions">
+										<span class="edit">
+											<a href="?page=sociallymap-rss-edit&id=<?php echo $value->id; ?>">
+												Editer
+											</a>
+										</span>
+										|
+										<span class="delete">
+											<button value="<?php echo $value->id; ?>" type="submit" name="submit" 
+											class="sm-link-action-style">
+												<a>
+													Effacer
+												</a>
+											</button>
+										</span>
+									</div>
 								</td>
 
 								<td colspan="2">
@@ -82,16 +85,7 @@
 								</td>
 
 								<td colspan="2">
-									<a href="?page=sociallymap-rss-edit&id=<?php echo $value->id; ?>">
-										<button class="button button-primary" type="button">
-										<i class="dashicons-before dashicons-welcome-write-blog sociallymap-icon-button"></i>
-										</button>
-									</a>
-									
-									<button class="button button-primary danger" type="submit" name="submit"
-									value="<?php echo $value->id; ?>">
-										<i class="dashicons-before dashicons-dismiss sociallymap-icon-button"></i>
-									</button>
+									<input type="checkbox" disabled <?php if($value->activate == true) echo "checked"; ?> >
 								</td>
 							</tr>
 						<?php

@@ -22,8 +22,8 @@ class EntityCollection
 		$option = new Option();
 
 		$dataEntity = [
-			'activate'     => rand(0, 1),
-			'sm_entity_id' => 0,
+			'activate'     => $data['activate'],
+			'sm_entity_id' => $data['sm_entity_id'],
 			'author_id'    => wp_get_current_user()->ID,
 			'name'         => $data['name'],
 		];
@@ -57,6 +57,7 @@ class EntityCollection
 			'id'        => $data['id'],
 			'name'      => $data['name'],
 			'activate'  => $data['activate'],
+			'sm_entity_id'  => $data['sm_entity_id'],
 			];
 		$entity->update($dataEntity);
 

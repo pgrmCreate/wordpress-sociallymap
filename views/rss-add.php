@@ -13,28 +13,51 @@
 	</h1>
 	<form method="post" class="sociallymap_formRSS">
 		<input type="hidden" name="sociallymap_postRSS" value="1"/>
-
-		<label class="sociallymap_label">
-			Ajouter un nom optionel
-			<input type="text" placeholder="Nom du flux RSS" name="sociallymap_name"
-			class="sociallymap_formRSS_newFlux">
-		</label>
-
-		<label class="sociallymap_label">
-			Catégorie cible de la publication
-			<select name="sociallymap_category">
-				<?php foreach (get_categories() as $key => $value) { ?>	
-					<option value="<?php echo get_cat_ID($value->name);?>"
-					<?php if($value->cat_ID === $default_value->category) echo "selected" ?> >
-					<?php echo $value->name;?></option>
-				<?php } ?>
-			</select>
-		</label>
 	
-		<label class="sociallymap_label">
-			Activate
-			<input type="checkbox" name="sociallymap_activate" class="sociallymap_formRSS_newFlux" value="1">
-		</label>
+		<table class="form-table">
+			<tbody>
+				<tr class="form-field form-required">
+					<th>
+						<label>Label</label>
+					</th>
+					<td>
+						<input type="text" placeholder="Mon entité" name="sociallymap_name"
+						class="sociallymap_formRSS_newFlux">
+					</td>
+				</tr>
+				<tr class="form-field form-required">
+					<th>
+						<label>Identifiant de l'entité sociallymap</label>
+					</th>
+					<td>
+						<input type="text" placeholder="Identifiant de l'entité sociallymap"
+						name="sociallymap_entityId" class="sociallymap_formRSS_newFlux">
+					</td>
+				</tr>
+				<tr class="form-field form-required">
+					<th>
+						<label>Categorie cible de la publication</label>
+					</th>
+					<td>
+						<select name="sociallymap_category">
+							<?php foreach (get_categories() as $key => $value) { ?>	
+								<option value="<?php echo get_cat_ID($value->name);?>"
+								<?php if($value->cat_ID === $default_value->category) echo "selected" ?> >
+								<?php echo $value->name;?></option>
+							<?php } ?>
+						</select>
+					</td>
+				</tr>
+				<tr class="form-field form-required">
+					<th>
+						<label>Activer</label>
+					</th>
+					<td>
+						<input type="checkbox" name="sociallymap_activate" class="sociallymap_formRSS_newFlux" value="1">
+					</td>
+				</tr>
+			</tbody>
+		</table>
 
 		<p class="submit sociallymap_valid-submit">
 			<button type="submit" name="submit" id="submit" class="button button-primary">

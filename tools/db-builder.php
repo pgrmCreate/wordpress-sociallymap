@@ -24,7 +24,7 @@
 	        if($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity'") != $this->table_entity) {
 	            $sql = "CREATE TABLE $this->table_entity (
 	              id mediumint(9) NOT NULL AUTO_INCREMENT,
-	              sm_entity_id mediumint(9),
+	              sm_entity_id varchar(255),
 	              activate boolean,
 	              author_id varchar(255),
 	              name varchar(255),
@@ -72,5 +72,9 @@
 	    
 	            dbDelta($sql);
 	        } 
+		}
+
+		public function destroyAll() {
+			echo("<br>Tout a été détruit...................");
 		}
 	}

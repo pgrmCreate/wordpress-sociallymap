@@ -8,7 +8,6 @@
 
 		public function loadAdminPage ($page, $data = null) {
 			load_plugin_textdomain('sociallymap', false, "../".basename(dirname( __FILE__ )) );
-			wp_enqueue_style('configuration.css', plugin_dir_url( __FILE__ ).'../assets/styles/configuration.css');
 
 			set_query_var('data', ['data' => $data]);
 
