@@ -13,10 +13,25 @@
 	
 ?>
 
+<?php
+	if($isSaved == true) {
+		?>
+		<div id="message" class="updated notice is-dismissible">
+			<p>
+				Modification bien effectué
+			</p>
+			<button type="button" class="notice-dismiss">
+				<span class="screen-reader-text">Cacher l'information</span>
+			</button>
+		</div>	
+		<?php
+	}
+?>
+
 <h1>Configuration du plugin sociallymap </h1>
 
 <div class="wrap">
-	<form method="post">
+	<form method="post" class="sociallymap_formRSS">
 		<input type="hidden" name="sociallymap_updateConfig" value="1">
 		
 		<table class="form-table">
@@ -37,15 +52,6 @@
 				</tr>
 				<tr class="form-field form-required">
 					<th>
-						<label>Publication en tant que brouillon</label>
-					</th>
-					<td>
-						<input type="checkbox" name="sociallymap_publish_type" class="sociallymap_formRSS_newFlux" value="draft"
-						<?php if("draft" == $default_options[2]->default_value) echo "checked" ?> >
-					</td>
-				</tr>
-				<tr class="form-field form-required">
-					<th>
 						<label>Ouverture du lien</label>
 					</th>
 					<td>
@@ -56,6 +62,20 @@
 							<option value="tab" <?php if($default_options[1]->default_value == 'tab') echo ('selected');?> >
 								Nouvel onglet
 							</option>	
+						</select>
+					</td>
+				</tr>
+				<tr class="form-field form-required">
+					<th>
+						<label>Publier en mode</label>
+					</th>
+					<td>
+						<select name="sociallymap_publish_type">
+							<option value="publish" <?php if($default_options[2]->default_value == 'publish') echo ('selected');?> >Publication</option>
+							<option value="draft" <?php if($default_options[2]->default_value == 'draft') echo ('selected');?>>Brouillon</option>
+							<option value="pending" <?php if($default_options[2]->default_value == 'pending') echo ('selected');?>>En attente de relecture</option>
+							<option value="private" <?php if($default_options[2]->default_value == 'private') echo ('selected');?>>Privée</option>
+							<option value="future" <?php if($default_options[2]->default_value == 'future') echo ('selected');?>>En attente de publication</option>
 						</select>
 					</td>
 				</tr>				
@@ -69,19 +89,4 @@
 			</button>
 		</p>
 	</form>
-
-	<?php
-		if($isSaved == true) {
-			?>
-			<div id="message" class="updated notice is-dismissible">
-				<p>
-					Modification bien effectué
-				</p>
-				<button type="button" class="notice-dismiss">
-					<span class="screen-reader-text">Cacher l'information</span>
-				</button>
-			</div>	
-			<?php
-		}
-	?>
 </div>

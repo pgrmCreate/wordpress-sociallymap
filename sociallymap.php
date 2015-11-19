@@ -13,6 +13,7 @@ require_once(plugin_dir_path( __FILE__ ).'tools/templater.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/db-builder.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/publisher.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/Requester.php');
+require_once(plugin_dir_path( __FILE__ ).'tools/ImageUploader.php');
 require_once(plugin_dir_path( __FILE__ ).'models/EntityCollection.php');
 require_once(plugin_dir_path( __FILE__ ).'models/Entity.php');
 require_once(plugin_dir_path( __FILE__ ).'models/Option.php');
@@ -118,14 +119,12 @@ class Sociallymap_Plugin
 
             $this->loadAssets(['notModalManager' => true]);
 
-            $readmore = $this->templater->loadReadMore($jsonData[0]['linkUrl'], $jsonData[0]['id'], $configs[1]->default_value);
-
             foreach ($jsonData as $key => $value) {
+                var_dump($value);
                 $title = $value['linkTitle'];
-                if($key == 1) {
-                    $contentArticle = $value['linkSummary'].$readmore;
-                    $publisher->publish($title, $contentArticle , $configs[0]->default_value, $configs[2]->default_value);
-                }
+                $readmore = $this->templater->loadReadMore($value['linkUrl'], $value['id'], $configs[1]->default_value);
+                $contentArticle = $value['linkSummary'].$readmore;
+                //$publisher->publish($title, $contentArticle , $configs[0]->default_value, $configs[2]->default_value);
             }
         }
     }
@@ -140,6 +139,9 @@ class Sociallymap_Plugin
         }
 
         echo $this->templater->loadAdminPage('configuration.php', $data);
+
+        $uploader = new ImageUploader();
+        $uploader->upload();
     }
 
     public function documentationHtml ()
@@ -156,10 +158,17 @@ class Sociallymap_Plugin
         $listRSS = [];
         $entity = new Entity();
 
+        $orderSense = "";
+        $orderKey = "";
+        if(isset($_GET['orderSense']) && isset($_GET['orderKey'])) {
+            $orderSense = $_GET['orderSense'];
+            $orderKey = $_GET['orderKey'];
+        }
+
         foreach ($loaderRequest as $datas) {
             foreach ($datas as $key => $value) {
                 if($key == "id") {
-                    $listRSS[] = $entity->getById($value);
+                    $listRSS[] = $entity->getById($value, $orderKey, $orderSense);
                 }
             }
         }
@@ -167,7 +176,6 @@ class Sociallymap_Plugin
         echo $this->templater->loadAdminPage('rss-list.php', $listRSS);
         $messages = file_get_contents(plugin_dir_path( __FILE__ ).'messages.json');
         $json_a = json_decode($messages, true);
-        $publisher = new Publisher();
     }
 
     public function addEntitiesHtml ()
@@ -180,6 +188,12 @@ class Sociallymap_Plugin
         foreach ($configs as $key => $value) {
             if($value->id == 1) {
                 $data->category =  $value->default_value;
+            }
+            elseif ($value->id == 3) {
+                $data->publish_type =  $value->default_value;
+            }
+            elseif ($value->id == 2) {
+                $data->activate =  $value->default_value;
             }
         }
 
@@ -211,7 +225,6 @@ class Sociallymap_Plugin
         // ACTION ENTITY : update
         if(array_key_exists('sociallymap_updateRSS', $_POST) && $_POST['sociallymap_updateRSS']) {
             if(!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
-            if(!isset($_POST['sociallymap_publish_type'])) $_POST['sociallymap_publish_type'] = 'publish';
 
             $data = [
                 'name'          => $_POST['sociallymap_label'],
@@ -231,7 +244,6 @@ class Sociallymap_Plugin
         // ACTION ENTITY : post
         if(array_key_exists('sociallymap_postRSS', $_POST) && $_POST['sociallymap_postRSS']) {
             if(!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
-            if(!isset($_POST['sociallymap_publish_type'])) $_POST['sociallymap_publish_type'] = 'publish';
 
             $data = [
                 'name'          => $_POST['sociallymap_name'],

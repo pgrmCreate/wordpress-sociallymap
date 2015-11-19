@@ -20,9 +20,9 @@ class Entity
 		return $wpdb->insert_id;
 	}
 
-	public function getById ($id) {
+	public function getById ($id, $orderKey="",$orderSense="") {
 		global $wpdb;
-		
+
 		$entityRequest = 'SELECT * FROM '.$this->table.' WHERE id='.$id;
 		$entity = $wpdb->get_row($entityRequest);
 

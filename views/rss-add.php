@@ -50,10 +50,25 @@
 				</tr>
 				<tr class="form-field form-required">
 					<th>
+						<label>Publier en mode</label>
+					</th>
+					<td>
+						<select name="sociallymap_publish_type">
+							<option value="publish" <?php if($default_value->publish_type == 'publish') echo ('selected');?> >Publication</option>
+							<option value="draft" <?php if($default_value->publish_type == 'draft') echo ('selected');?>>Brouillon</option>
+							<option value="pending" <?php if($default_value->publish_type == 'pending') echo ('selected');?>>En attente de relecture</option>
+							<option value="private" <?php if($default_value->publish_type == 'private') echo ('selected');?>>Privée</option>
+							<option value="future" <?php if($default_value->publish_type == 'future') echo ('selected');?>>En attente de publication</option>
+						</select>
+					</td>
+				</tr>
+				<tr class="form-field form-required">
+					<th>
 						<label>Activer</label>
 					</th>
 					<td>
-						<input type="checkbox" name="sociallymap_activate" class="sociallymap_formRSS_newFlux" value="1">
+						<input type="checkbox" name="sociallymap_activate" class="sociallymap_formRSS_newFlux"
+						 value="1" <?php if($default_value->activate == 1) echo "checked" ?>>
 					</td>
 				</tr>
 			</tbody>

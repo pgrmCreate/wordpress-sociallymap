@@ -5,7 +5,7 @@
 
 <div class="wrap">
 	<h1>
-		Mes RSS
+		Mes entités
 		<a href="?page=sociallymap-rss-add" class="page-title-action">
 			<i class="dashicons-before dashicons-plus-alt sociallymap-icon-link"></i>
 			Ajouter une entité
@@ -16,7 +16,7 @@
 		<table class="wp-list-table widefat fixed striped users">
 			<form method="post">
 				<input type="hidden" name="sociallymap_deleteRSS" value="1"/>
-				<tdead>
+				<thead>
 					<tr>
 						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
 						colspan="4">
@@ -48,9 +48,17 @@
 								<span>Active</span>
 								<span class="sorting-indicator"></span>
 							</a>
-						</th>	
+						</th>
+
+						<th scope="col" id="action" class="manage-column column-email sortable desc"
+						colspan="2">
+							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
+								<span>Dernière publication</span>
+								<span class="sorting-indicator"></span>
+							</a>
+						</th>		
 					</tr>
-				</tdead>
+				</thead>
 				<tbody id="the-list" data-wp-lists="list:user">
 					<?php
 						foreach ($listRss as $key => $value) {
@@ -87,12 +95,60 @@
 								<td colspan="2">
 									<input type="checkbox" disabled <?php if($value->activate == true) echo "checked"; ?> >
 								</td>
+
+								<td colspan="2">
+									<?php echo (get_user_by('id', $value->author_id)->last_published_message); ?>
+								</td>
 							</tr>
 						<?php
 						}
 						?>
 				</tbody>
+				<tfoot>
+					<tr>
+						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
+						colspan="4">
+							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=login&amp;order=asc">
+								<span>Nom de l'entité</span>
+								<span class="sorting-indicator"></span>
+							</a>
+						</th>
+
+						<th scope="col" id="category" class="manage-column column-name sortable desc"
+						colspan="2">
+							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=name&amp;order=asc">
+								<span>Catégorie</span>
+								<span class="sorting-indicator"></span>
+							</a>
+						</th>
+
+						<th scope="col" id="author" class="manage-column column-email sortable desc"
+						colspan="2">
+							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
+								<span>Auteur</span>
+								<span class="sorting-indicator"></span>
+							</a>
+						</th>
+
+						<th scope="col" id="action" class="manage-column column-email sortable desc"
+						colspan="2">
+							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
+								<span>Active</span>
+								<span class="sorting-indicator"></span>
+							</a>
+						</th>			
+
+						<th scope="col" id="action" class="manage-column column-email sortable desc"
+						colspan="2">
+							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
+								<span>Dernière publication</span>
+								<span class="sorting-indicator"></span>
+							</a>
+						</th>	
+					</tr>					
+				</tfoot>
 			<form>
 		</table>
 	</div>
 </div>
+

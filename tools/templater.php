@@ -27,7 +27,7 @@
 				'link' => $link,
 				'id' => $id,
 				'display_type' => $displayType
-				]);
+			]);
 
 			ob_start();
 				load_template($this->urlBase.'readmore_template.php');

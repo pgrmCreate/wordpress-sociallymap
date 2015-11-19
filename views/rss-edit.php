@@ -59,8 +59,13 @@
 						<label>Publier dans les brouillons</label>
 					</th>
 					<td>
-						<input name="sociallymap_publish_type" <?php if($editingEntity->options[2]->value == "draft") echo ('checked');?>
-						class="sociallymap_formRSS_newFlux" type="checkbox" value="draft">
+						<select name="sociallymap_publish_type">
+							<option value="publish" <?php if($editingEntity->options[2]->value == 'publish') echo ('selected');?> >Publication</option>
+							<option value="draft" <?php if($editingEntity->options[2]->value == 'draft') echo ('selected');?>>Brouillon</option>
+							<option value="pending" <?php if($editingEntity->options[2]->value == 'pending') echo ('selected');?>>En attente de relecture</option>
+							<option value="private" <?php if($editingEntity->options[2]->value == 'private') echo ('selected');?>>Privée</option>
+							<option value="future" <?php if($editingEntity->options[2]->value == 'future') echo ('selected');?>>En attente de publication</option>
+						</select>
 					</td>
 				</tr>
 				<tr class="form-field form-required">
