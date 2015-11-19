@@ -26,7 +26,7 @@
 			set_query_var('articleData', [
 				'link' => $link,
 				'id' => $id,
-				'display_type' => $displayType,
+				'display_type' => $displayType
 			]);
 
 			ob_start();

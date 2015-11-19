@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Sociallymap
-pPlugin URI: http://LoadDis-plugin.com
+Plugin URI: http://LoadDis-plugin.com
 Description: Un plugin permettant l'affichage de flux RSS
 Version: 0.1
 Author: Midnight Alhena
@@ -9,11 +9,12 @@ Author URI: http://alhena-conseil.com/
 License: GPL2
 */
 
-require_once(plugin_dir_path( __FILE__ ).'tools/templater.php');
-require_once(plugin_dir_path( __FILE__ ).'tools/db-builder.php');
-require_once(plugin_dir_path( __FILE__ ).'tools/publisher.php');
+require_once(plugin_dir_path( __FILE__ ).'tools/Templater.php');
+require_once(plugin_dir_path( __FILE__ ).'tools/Db-builder.php');
+require_once(plugin_dir_path( __FILE__ ).'tools/Publisher.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/Requester.php');
 require_once(plugin_dir_path( __FILE__ ).'tools/ImageUploader.php');
+require_once(plugin_dir_path( __FILE__ ).'tools/GithubUpdater.php');
 require_once(plugin_dir_path( __FILE__ ).'models/EntityCollection.php');
 require_once(plugin_dir_path( __FILE__ ).'models/Entity.php');
 require_once(plugin_dir_path( __FILE__ ).'models/Option.php');
@@ -29,7 +30,7 @@ class Sociallymap_Plugin
         global $wpdb;
         $this->wpdb = $wpdb;
 
-        register_uninstall_hook('uninstall.php', 'smUninstallPlugin');
+        // register_uninstall_hook('uninstall.php', 'smUninstallPlugin');
 
         $this->templater = new Templater();
 
@@ -47,6 +48,7 @@ class Sociallymap_Plugin
         add_action('parse_request', [$this, 'manageMessages'] );
 
         add_action('admin_menu', [$this, 'add_admin_menu'] );
+        add_action('admin_menu', [$this, 'githubConfiguration'] );
         add_action('init', [$this, 'rootingMapping'] );
     }
 
@@ -141,7 +143,7 @@ class Sociallymap_Plugin
         echo $this->templater->loadAdminPage('configuration.php', $data);
 
         $uploader = new ImageUploader();
-        $uploader->upload();
+        // $uploader->upload();
     }
 
     public function documentationHtml ()
@@ -285,6 +287,24 @@ class Sociallymap_Plugin
             wp_enqueue_script('fancy', plugin_dir_url( __FILE__ ).'assets/js/fancybox.js');
             wp_enqueue_script('modal-manager', plugin_dir_url( __FILE__ ).'assets/js/modal-manager.js');
         }
+    }
+
+    public function githubConfiguration () {
+        $config = array(
+            'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+            'proper_folder_name' => 'wordpress-sociallymap', // this is the name of the folder your plugin lives in
+            'api_url' => 'https://api.github.com/repos/pgrmCreate/wordpress-sociallymap', // the GitHub API url of your GitHub repo
+            'raw_url' => 'https://raw.github.com/pgrmCreate/wordpress-sociallymap/github', // the GitHub raw url of your GitHub repo
+            'github_url' => 'https://github.com/pgrmCreate/wordpress-sociallymap', // the GitHub url of your GitHub repo
+            'zip_url' => 'https://github.com/pgrmCreate/wordpress-sociallymap/zipball/github', // the zip url of the GitHub repo
+            'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+            'requires' => '3.0', // which version of WordPress does your plugin require?
+            'tested' => '3.3', // which version of WordPress is your plugin tested up to?
+            'readme' => 'README.md', // which file to use as the readme for the version number
+            'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+        );
+
+        new githubUpdater($config);
     }
 }
 
