@@ -3,7 +3,6 @@
 class Entity
 {
 	private $table;
-	private $attributesTable;
 
 	public function __construct () {
 		global $wpdb;
@@ -30,8 +29,6 @@ class Entity
 		$options = $wpdb->get_results($optionsRequest);
 
 		$entity->options = $options;
-
-		$this->attributesTable = $entity;
 
 		return $entity;
 	}

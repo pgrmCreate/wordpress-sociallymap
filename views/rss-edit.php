@@ -36,13 +36,20 @@
 						<label>Catégorie cible de la publication</label>
 					</th>
 					<td>
-						<select name="sociallymap_category">
-							<?php foreach (get_categories() as $key => $value) { ?>	
-							<option value="<?php echo $value->cat_ID; ?>"
-								<?php if($editingEntity->options[0]->value === $value->cat_ID) echo "selected" ?> >
-								<?php echo $value->name;?></option>
-								<?php } ?>
-						</select>
+						<?php foreach (get_categories() as $key => $value) { ?>	
+							<label class="listCats">
+							<?php echo $value->name;?>
+								<input 	name="sociallymap_category[]" type="checkbox" 
+										value="<?php echo get_cat_ID($value->name);?>"
+								<?php 
+									foreach ($editingEntity->options as $key => $currentOption) {
+										if($currentOption->options_id == '1' && $value->cat_ID == $currentOption->value) {
+											echo "checked";
+										}
+									} 
+								?> >	
+							</label>
+						<?php } ?>
 					</td>
 				</tr>
 				<tr class="form-field form-required">

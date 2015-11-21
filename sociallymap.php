@@ -3,7 +3,7 @@
 Plugin Name: Sociallymap
 Plugin URI: http://LoadDis-plugin.com
 Description: Un plugin permettant l'affichage de flux RSS
-Version: 0.1
+Version: 0.9
 Author: Midnight Alhena
 Author URI: http://alhena-conseil.com/
 License: GPL2
@@ -50,6 +50,25 @@ class Sociallymap_Plugin
         add_action('admin_menu', [$this, 'add_admin_menu'] );
         add_action('admin_menu', [$this, 'githubConfiguration'] );
         add_action('init', [$this, 'rootingMapping'] );
+        add_filter('the_content',[$this, "my_post_footer"]);
+    }
+
+    public function my_post_footer($content){
+        global $post;
+        $config = new ConfigOption();
+        $configs = $config->getConfig();
+
+        if($configs[1]->default_value == "tab") {
+            $footer = "<p data-hidden-display>tab</p>";
+        }
+        else {
+            $footer = "<p data-hidden-display>modal</p>";
+        }
+
+        if ($footer){
+          return $content . $footer;
+        }
+        return $content;
     }
 
     public function add_admin_menu()
@@ -74,8 +93,9 @@ class Sociallymap_Plugin
     }
 
     public function rootingMapping () {
+        $this->loadAssets(true);
+
         add_filter( 'rewrite_rules_array','my_insert_rewrite_rules' );
-        add_filter( 'query_vars','my_insert_query_vars' );
         add_action( 'wp_loaded','my_flush_rules' );
 
         // flush_rules() if our rules are not yet included
@@ -97,38 +117,36 @@ class Sociallymap_Plugin
             return $newrules + $rules;
         }
 
-        // Adding the id var so that WP recognizes it
-        function my_insert_query_vars( $vars )
-        {
-            array_push($vars, 'id', 'token');
-            return $vars;
-        }
+ 
     }
 
     public function manageMessages($wp) {
         $actions  = $wp->matched_rule;
 
-        if(isset($_GET['id'])) $entityId = $_GET['id'];
-        if(isset($_GET['token'])) $token = $_GET['token'];
+        // var_dump($_POST);
 
-        if($actions === "sociallymap/sm/getMessage" && isset($entityId) && isset($token)) {
-            $curl      = new Requester();
-            $publisher = new Publisher();
-            $config = new ConfigOption();
+        if(!isset($_POST['entityId']) || !isset($_POST['token']) || $actions !== "sociallymap/sm/getMessage") {
+            return false;
+        }
 
-            $configs = $config->getConfig();
-            $jsonData  = $curl->launch();
+        $curl      = new Requester();
+        $publisher = new Publisher();
+        $config = new ConfigOption();
 
-            $this->loadAssets(['notModalManager' => true]);
+        $configs = $config->getConfig();
+        $jsonData  = $curl->launch($_POST['entityId'], $_POST['token']);
 
-            foreach ($jsonData as $key => $value) {
-                var_dump($value);
-                $title = $value['linkTitle'];
-                $readmore = $this->templater->loadReadMore($value['linkUrl'], $value['id'], $configs[1]->default_value);
-                $contentArticle = $value['linkSummary'].$readmore;
-                //$publisher->publish($title, $contentArticle , $configs[0]->default_value, $configs[2]->default_value);
+        ?> <div styles="position: absolute; background: white; z-index: 9999999;"> <?php
+        foreach ($jsonData as $key => $value) {
+            $title = $value->linkTitle;
+            $readmore = $this->templater->loadReadMore($value->linkUrl, $value->id, $configs[1]->default_value);
+            if($readmore) {
+                $contentArticle = '<p>'.$value->linkSummary.'</p>'.$readmore;
+                $publisher->publish($title, $contentArticle , $configs[0]->default_value, $configs[2]->default_value);
             }
         }
+        ?> </div> <?php
+
     }
 
     public function configurationHtml()
@@ -156,9 +174,6 @@ class Sociallymap_Plugin
     {
         $this->loadAssets();
         $entitiesCollection = new EntityCollection();
-        $loaderRequest = $entitiesCollection->all();
-        $listRSS = [];
-        $entity = new Entity();
 
         $orderSense = "";
         $orderKey = "";
@@ -167,15 +182,10 @@ class Sociallymap_Plugin
             $orderKey = $_GET['orderKey'];
         }
 
-        foreach ($loaderRequest as $datas) {
-            foreach ($datas as $key => $value) {
-                if($key == "id") {
-                    $listRSS[] = $entity->getById($value, $orderKey, $orderSense);
-                }
-            }
-        }
+        $listRSS = $entitiesCollection->all($orderKey, $orderSense);
 
         echo $this->templater->loadAdminPage('rss-list.php', $listRSS);
+
         $messages = file_get_contents(plugin_dir_path( __FILE__ ).'messages.json');
         $json_a = json_decode($messages, true);
     }
@@ -275,11 +285,9 @@ class Sociallymap_Plugin
         }
     }
 
-    public function loadAssets ($exept = []) {
-        wp_enqueue_style('back', plugin_dir_url( __FILE__ ).'assets/styles/back.css');
-
+    public function loadAssets ($isFront = false) {
         // MODAL DISPLAY TYPE IS ON
-        if(!isset($exept['notModalManager']) ) { 
+        if($isFront) { 
             wp_enqueue_style('readmore', plugin_dir_url( __FILE__ ).'assets/styles/custom-readmore.css');
             wp_enqueue_style('fancybox', plugin_dir_url( __FILE__ ).'assets/styles/fancybox.css');
 
@@ -287,25 +295,29 @@ class Sociallymap_Plugin
             wp_enqueue_script('fancy', plugin_dir_url( __FILE__ ).'assets/js/fancybox.js');
             wp_enqueue_script('modal-manager', plugin_dir_url( __FILE__ ).'assets/js/modal-manager.js');
         }
+        else {
+            wp_enqueue_style('back', plugin_dir_url( __FILE__ ).'assets/styles/back.css');
+        }
     }
 
     public function githubConfiguration () {
         $config = array(
-            'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+            'slug'               => plugin_basename(__FILE__), // this is the slug of your plugin
             'proper_folder_name' => 'wordpress-sociallymap', // this is the name of the folder your plugin lives in
-            'api_url' => 'https://api.github.com/repos/pgrmCreate/wordpress-sociallymap', // the GitHub API url of your GitHub repo
-            'raw_url' => 'https://raw.github.com/pgrmCreate/wordpress-sociallymap/github', // the GitHub raw url of your GitHub repo
-            'github_url' => 'https://github.com/pgrmCreate/wordpress-sociallymap', // the GitHub url of your GitHub repo
-            'zip_url' => 'https://github.com/pgrmCreate/wordpress-sociallymap/zipball/github', // the zip url of the GitHub repo
-            'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
-            'requires' => '3.0', // which version of WordPress does your plugin require?
-            'tested' => '3.3', // which version of WordPress is your plugin tested up to?
-            'readme' => 'README.md', // which file to use as the readme for the version number
-            'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+            'api_url'            => 'https://api.github.com/repos/pgrmCreate/wordpress-sociallymap', // the GitHub API url of your GitHub repo
+            'raw_url'            => 'https://raw.github.com/pgrmCreate/wordpress-sociallymap/github', // the GitHub raw url of your GitHub repo
+            'github_url'         => 'https://github.com/pgrmCreate/wordpress-sociallymap', // the GitHub url of your GitHub repo
+            'zip_url'            => 'https://github.com/pgrmCreate/wordpress-sociallymap/zipball/github', // the zip url of the GitHub repo
+            'sslverify'          => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+            'requires'           => '4.3.1', // which version of WordPress does your plugin require?
+            'tested'             => '4.3.1', // which version of WordPress is your plugin tested up to?
+            'readme'             => 'README.md', // which file to use as the readme for the version number
+            'access_token'       => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
         );
 
         new githubUpdater($config);
     }
 }
+
 
 new Sociallymap_Plugin();

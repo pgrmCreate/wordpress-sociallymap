@@ -29,11 +29,15 @@ class EntityCollection
 		];
 		$entityID = $entity->save($dataEntity);
 
-		$dataOption = [
+		print_r($data['category']);
+
+		foreach ($data['category'] as $key => $value) {
+			$dataOption = [
 			'option_id' => 1,
-			'value'     => $data['category']
-		];
-		$option->save($dataOption, $entityID);
+			'value'     => $value
+			];
+			$option->save($dataOption, $entityID);
+		}
 
 		$dataOption = [
 			'option_id' => 2,
@@ -70,13 +74,31 @@ class EntityCollection
 		$option->update($optionsEntity);
 	}
 
-	public function all() {
+	public function all($orderKey="", $orderSense="") {
 		global $wpdb;
+		$entity = new Entity();
+		$listRSS = [];
+
 		$entitiesRequest = 'SELECT * FROM '.$this->table_entity;
-		
 		$entities = $wpdb->get_results($entitiesRequest);
 
-		return $entities;
+		// LOAD ENTITIES
+        foreach ($entities as $data) {
+            $listRSS[] = $entity->getById($data->id, $orderKey, $orderSense);      
+        }
+
+        // DEBUG
+	  //       $debug_request = "
+		 //        SELECT ENT.*, OPT.value , OPT.options_id
+		 //        FROM $this->table_entity ENT 
+		 //        INNER JOIN $this->table_options OPT 
+		 //        ON ENT.id = OPT.entity_id";
+
+			// $debug_value = $wpdb->get_results($debug_request);
+	  //       var_dump($debug_value);
+        // DEBUG
+
+		return $listRSS;
 	}
 
 	public function deleteRowsByID ($id) {

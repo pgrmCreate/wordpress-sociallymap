@@ -85,7 +85,19 @@
 								</td>
 
 								<td colspan="2">
-									<?php echo (get_the_category_by_ID($value->options[0]->value)); ?>
+									<ul class="display-list-cat">
+									<?php 
+										$listCat = [];
+										foreach ($value->options as $key => $category) {
+											if($category->options_id == '1') {
+												$catName = get_the_category_by_ID((integer)$category->value);
+												?>
+														<li> <?php echo $catName; ?> </li>
+												<?php
+											}
+										}
+									?>
+									</ul>
 								</td>			
 
 								<td colspan="2">

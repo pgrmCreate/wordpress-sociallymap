@@ -39,13 +39,13 @@
 						<label>Categorie cible de la publication</label>
 					</th>
 					<td>
-						<select name="sociallymap_category">
-							<?php foreach (get_categories() as $key => $value) { ?>	
-								<option value="<?php echo get_cat_ID($value->name);?>"
-								<?php if($value->cat_ID === $default_value->category) echo "selected" ?> >
-								<?php echo $value->name;?></option>
+						<?php foreach (get_categories() as $key => $value) { ?>	
+							<label>
+							<?php echo $value->name;?>
+								<input name="sociallymap_category[]" type="checkbox" value="<?php echo get_cat_ID($value->name);?>"
+								<?php if($value->cat_ID === $default_value->category) echo "checked" ?> >	
+							</label>
 							<?php } ?>
-						</select>
 					</td>
 				</tr>
 				<tr class="form-field form-required">

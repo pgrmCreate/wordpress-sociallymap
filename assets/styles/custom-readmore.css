@@ -64,3 +64,9 @@
 .sm-modal-close > .dashicons-before:before  {
 	font-size: 30px;
 }
+
+[data-hidden-display] {
+	color: transparent;
+	height: 0;
+	margin: 0;
+}

@@ -3,7 +3,6 @@
 class Option
 {
 	private $table;
-	private $attributesTable;
 
 	public function __construct () {
 		global $wpdb;
@@ -45,15 +44,30 @@ class Option
 
 		// UPDATE CATEGORY
 		if(isset($data['category'])) {
-			$wpdb->update( 
-				$this->table, [ 
-					'value' => $data['category'],	// string
-				], [ 
-					'entity_id' => $data['idSource'],
-					'options_id' => 1
-				], ['%d'],	// value1
-				['%d']
-			);
+			$currentCatsRequest = "
+				SELECT value FROM $this->table 
+				WHERE 	entity_id = $data[idSource]
+				AND options_id = 1";
+			$options = $wpdb->get_results($currentCatsRequest);
+
+			$optCats = [];
+			foreach ($options as $key => $value) {
+				$optCats[] = $value->value;
+			}
+
+			if($optCats != $data['category']) {
+				$wpdb->delete( $this->table, [
+					'entity_id' 	=> $data['idSource'],
+					'options_id' 	=> 1]);
+
+				foreach ($data['category'] as $key => $value) {
+					$wpdb->insert($this->table, [
+						'entity_id'  => $data['idSource'],
+						'options_id' => 1,
+						'value'      => $value,
+					]);
+				}
+			}
 		}
 
 		// UPDATE WINDOWS

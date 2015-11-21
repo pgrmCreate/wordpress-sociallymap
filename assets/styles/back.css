@@ -74,3 +74,12 @@ label.sociallymap_label > [type="checkbox"] {
 	background: none;
 	cursor: pointer;
 }
+
+.display-list-cat > li + li {
+		border-top: 1px solid #eee;
+}
+
+.listCats + .listCats:before {
+		content: "|";
+		color: #ccc;
+}

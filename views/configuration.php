@@ -18,7 +18,7 @@
 		?>
 		<div id="message" class="updated notice is-dismissible">
 			<p>
-				Modification bien effectué
+				Modification bien effectuée
 			</p>
 			<button type="button" class="notice-dismiss">
 				<span class="screen-reader-text">Cacher l'information</span>
