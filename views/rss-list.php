@@ -109,7 +109,7 @@
 								</td>
 
 								<td colspan="2">
-									<?php echo (get_user_by('id', $value->author_id)->last_published_message); ?>
+									<?php echo $value->last_published_message; ?>
 								</td>
 							</tr>
 						<?php

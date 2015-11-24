@@ -22,10 +22,11 @@ class EntityCollection
 		$option = new Option();
 
 		$dataEntity = [
-			'activate'     => $data['activate'],
-			'sm_entity_id' => $data['sm_entity_id'],
-			'author_id'    => wp_get_current_user()->ID,
-			'name'         => $data['name'],
+			'activate'               => $data['activate'],
+			'sm_entity_id'           => $data['sm_entity_id'],
+			'author_id'              => wp_get_current_user()->ID,
+			'name'                   => $data['name'],
+			'last_published_message' => date('Y-m-d H:i:s'),
 		];
 		$entityID = $entity->save($dataEntity);
 
@@ -111,5 +112,14 @@ class EntityCollection
 		$option->deleteByOwnerId($id);
 
 		return ($entity && $option);
+	}
+
+	public function getByEntityId($entityId) {
+		global $wpdb;
+
+		$objectEntity = new Entity();
+		$entity = $objectEntity->getByEntityId($entityId);
+
+		return $entity;
 	}
 }

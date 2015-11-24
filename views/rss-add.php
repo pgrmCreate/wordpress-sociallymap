@@ -39,7 +39,7 @@
 						<label>Categorie cible de la publication</label>
 					</th>
 					<td>
-						<?php foreach (get_categories() as $key => $value) { ?>	
+						<?php foreach (get_categories(['hide_empty' => 0]) as $key => $value) { ?>	
 							<label>
 							<?php echo $value->name;?>
 								<input name="sociallymap_category[]" type="checkbox" value="<?php echo get_cat_ID($value->name);?>"
@@ -54,7 +54,7 @@
 					</th>
 					<td>
 						<select name="sociallymap_publish_type">
-							<option value="publish" <?php if($default_value->publish_type == 'publish') echo ('selected');?> >Publication</option>
+							<option value="publish" <?php if($default_value->publish_type == 'publish') echo ('selected');?> >Publier</option>
 							<option value="draft" <?php if($default_value->publish_type == 'draft') echo ('selected');?>>Brouillon</option>
 							<option value="pending" <?php if($default_value->publish_type == 'pending') echo ('selected');?>>En attente de relecture</option>
 							<option value="private" <?php if($default_value->publish_type == 'private') echo ('selected');?>>Privée</option>
@@ -64,7 +64,7 @@
 				</tr>
 				<tr class="form-field form-required">
 					<th>
-						<label>Activer</label>
+						<label>Actif</label>
 					</th>
 					<td>
 						<input type="checkbox" name="sociallymap_activate" class="sociallymap_formRSS_newFlux"

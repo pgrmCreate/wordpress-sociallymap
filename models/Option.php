@@ -42,11 +42,12 @@ class Option
 	public function update($data) {
 		global $wpdb;
 
+
 		// UPDATE CATEGORY
 		if(isset($data['category'])) {
 			$currentCatsRequest = "
 				SELECT value FROM $this->table 
-				WHERE 	entity_id = $data[idSource]
+				WHERE entity_id = $data[idSource]
 				AND options_id = 1";
 			$options = $wpdb->get_results($currentCatsRequest);
 

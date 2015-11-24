@@ -36,7 +36,7 @@
 						<label>Catégorie cible de la publication</label>
 					</th>
 					<td>
-						<?php foreach (get_categories() as $key => $value) { ?>	
+						<?php foreach (get_categories(['hide_empty' => 0]) as $key => $value) { ?>	
 							<label class="listCats">
 							<?php echo $value->name;?>
 								<input 	name="sociallymap_category[]" type="checkbox" 
@@ -54,7 +54,7 @@
 				</tr>
 				<tr class="form-field form-required">
 					<th>
-						<label>Active</label>
+						<label>Actif</label>
 					</th>
 					<td>
 						<input name="sociallymap_activate" <?php if($editingEntity->activate) echo ('checked');?>
@@ -63,11 +63,11 @@
 				</tr>
 				<tr class="form-field form-required">
 					<th>
-						<label>Publier dans les brouillons</label>
+						<label>Type de publication</label>
 					</th>
 					<td>
 						<select name="sociallymap_publish_type">
-							<option value="publish" <?php if($editingEntity->options[2]->value == 'publish') echo ('selected');?> >Publication</option>
+							<option value="publish" <?php if($editingEntity->options[2]->value == 'publish') echo ('selected');?> >Publier</option>
 							<option value="draft" <?php if($editingEntity->options[2]->value == 'draft') echo ('selected');?>>Brouillon</option>
 							<option value="pending" <?php if($editingEntity->options[2]->value == 'pending') echo ('selected');?>>En attente de relecture</option>
 							<option value="private" <?php if($editingEntity->options[2]->value == 'private') echo ('selected');?>>Privée</option>

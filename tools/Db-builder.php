@@ -28,7 +28,7 @@
 	              activate boolean,
 	              author_id varchar(255),
 	              name varchar(255),
-	              counter integer,
+	              counter integer DEFAULT 0,
 	              last_published_message datetime,
 	              UNIQUE KEY id (id)
 	            ) $charset_collate;";

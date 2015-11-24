@@ -23,12 +23,15 @@ Class Publisher {
 			'post_content' => $content,
 			'post_category' => $listCats,
 			'post_status' => $publish_type,
+			'post_author' => get_current_user_id(),
 		];
 		
 		//temporarily disable
 		remove_filter('content_save_pre', 'wp_filter_post_kses');
 		remove_filter('content_filtered_save_pre', 'wp_filter_post_kses');
-		wp_insert_post($post, true);
+		if(wp_insert_post($post, false) != 0) {
+			
+		}
 		//bring it back once you're done posting
 		add_filter('content_save_pre', 'wp_filter_post_kses');
 		add_filter('content_filtered_save_pre', 'wp_filter_post_kses');

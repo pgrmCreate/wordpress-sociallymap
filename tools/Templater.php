@@ -20,20 +20,20 @@
 			return $view;
 		}
 
-		public function loadReadMore($link, $id) {
+		public function loadReadMore() {
 			load_plugin_textdomain('sociallymap', false, "../".basename(dirname( __FILE__ )) );
 
-			set_query_var('articleData', [
-				'link' => $link,
-				'id' => $id
-			]);
-
 			ob_start();
-				load_template($this->urlBase.'readmore-template.php');
+				load_template($this->urlBase.'readmore-template.php', true);
 				$readmore = ob_get_contents();
 			ob_end_clean();
 
-
 			return $readmore;
+		}
+
+		public function formatReadMoreUrl ($content, $url) {
+			$contentFormated = str_replace('href=""', 'href="'.$url.'"', $content);
+
+			return $contentFormated;
 		}
 }

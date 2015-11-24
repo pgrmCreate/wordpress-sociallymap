@@ -44,12 +44,14 @@ class Sociallymap_Plugin
                 add_action('admin_menu', [$this, 'entityManager']);
         }
 
+        // todo comment routing system on all code
+
         // Route for sociallymap
         add_action('parse_request', [$this, 'manageMessages'] );
 
         add_action('admin_menu', [$this, 'add_admin_menu'] );
         add_action('admin_menu', [$this, 'githubConfiguration'] );
-        add_action('init', [$this, 'rootingMapping'] );
+        add_action('init', [$this, 'routingMapping'] );
         add_filter('the_content',[$this, "my_post_footer"]);
     }
 
@@ -76,23 +78,25 @@ class Sociallymap_Plugin
         add_menu_page( 'Sociallymap publisher', 'Sociallymap', 'manage',
         'sociallymap-publisher', [$this, 'documentation_html'], plugin_dir_url( __FILE__ ).'assets/images/logo.png');
 
-        add_submenu_page('sociallymap-publisher', 'Documentation', 'Documentation',
-        'manage_options', 'sociallymap-documentation', [$this, 'documentationHtml'] );
+        add_submenu_page('sociallymap-publisher', 'Mes entités', 'Mes entités',
+        'manage_options', 'sociallymap-rss-list', [$this, 'myEntitiesHtml'] );
+
+        add_submenu_page('sociallymap-publisher', 'Ajouter une entité', 'Ajouter une entité',
+        'manage_options', 'sociallymap-rss-add', [$this, 'addEntitiesHtml'] );  
+
 
         add_submenu_page('sociallymap-publisher', 'Configuration', 'Configuration',
         'manage_options', 'sociallymap-configuration', [$this, 'configurationHtml'] ); 
 
-        add_submenu_page('sociallymap-publisher', 'Mes entités', 'Mes entités',
-        'manage_options', 'sociallymap-rss-list', [$this, 'myEntitiesHtml'] );
-
+        add_submenu_page('sociallymap-publisher', 'Documentation', 'Documentation',
+        'manage_options', 'sociallymap-documentation', [$this, 'documentationHtml'] );
+        
         add_submenu_page(null, 'edit entity', 'Editer lien',
         'manage_options', 'sociallymap-rss-edit', [$this, 'editHtml'] ); 
 
-        add_submenu_page('sociallymap-publisher', 'Ajouter une entité', 'Ajouter une entité',
-        'manage_options', 'sociallymap-rss-add', [$this, 'addEntitiesHtml'] );         
     }
 
-    public function rootingMapping () {
+    public function routingMapping () {
         $this->loadAssets(true);
 
         add_filter( 'rewrite_rules_array','my_insert_rewrite_rules' );
@@ -102,7 +106,7 @@ class Sociallymap_Plugin
         function my_flush_rules(){
             $rules = get_option( 'rewrite_rules' );
 
-            if ( ! isset( $rules['sociallymap/sm/getMessage'] ) ) {
+            if ( ! isset( $rules['sociallymap'] ) ) {
                 global $wp_rewrite;
 
                 $wp_rewrite->flush_rules();
@@ -112,8 +116,8 @@ class Sociallymap_Plugin
             // Adding a new rule
         function my_insert_rewrite_rules( $rules )
         {
-            $newrules = array();
-            $newrules['sociallymap/sm/getMessage'] = 'index.php?sociallymap=$matches[1]&sm=$matches[2]&getMessage=$matches[3]';
+            $newrules = [];
+            $newrules['sociallymap'] = 'index.php/sociallymap';
             return $newrules + $rules;
         }
 
@@ -125,35 +129,64 @@ class Sociallymap_Plugin
 
         // var_dump($_POST);
 
-        if(!isset($_POST['entityId']) || !isset($_POST['token']) || $actions !== "sociallymap/sm/getMessage") {
+        if(!isset($_POST['entityId']) || !isset($_POST['token']) || $actions !== "sociallymap") {
             return false;
         }
 
+        $collector = new EntityCollection();
         $curl      = new Requester();
         $publisher = new Publisher();
-        $config = new ConfigOption();
+        $config    = new ConfigOption();
+        $entityObject    = new Entity();
 
         $configs = $config->getConfig();
-        $jsonData  = $curl->launch($_POST['entityId'], $_POST['token']);
 
-        ?> <div styles="position: absolute; background: white; z-index: 9999999;"> <?php
-        foreach ($jsonData as $key => $value) {
-            $title = $value->linkTitle;
-            $readmore = $this->templater->loadReadMore($value->linkUrl, $value->id, $configs[1]->default_value);
-            if($readmore) {
-                $contentArticle = '<p>'.$value->linkSummary.'</p>'.$readmore;
-                $publisher->publish($title, $contentArticle , $configs[0]->default_value, $configs[2]->default_value);
+        $entityExisting = $collector->getByEntityId($_POST['entityId']);
+
+        if (empty($entityExisting)) {
+            wp_send_json_error( [
+                'message' => 'ok',
+                'error ' => 'entityId inconnu',
+                ]);
+            return false;
+        }
+        elseif ($entityExisting->activate == false) {
+            return false;
+        }
+
+        $entity_list_category = [];
+        foreach ($entityExisting->options as $key => $value) {
+            if ($value->options_id == 1) {
+                $entity_list_category[] = $value->value;
+            }
+
+            if ($value->options_id == 3) {
+                $entity_publish_type = $value->value;
             }
         }
-        ?> </div> <?php
 
+        $jsonData  = $curl->launch($_POST['entityId'], $_POST['token']);
+
+        $baseReadMore = $this->templater->loadReadMore();
+        foreach ($jsonData as $key => $value) {
+            $title = $value->linkTitle;
+            $uploader = new ImageUploader();
+
+            $readmore = $this->templater->formatReadMoreUrl($baseReadMore, $value->linkUrl);
+            $imagePost = $uploader->tryUploadPost($value->linkThumbnail, $value->media, $value->mediaType);
+            $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
+            $contentArticle = '<p>'.$imagePost.'<br>'.$value->linkSummary.'</p>'.$readmore;
+            $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
+
+            $publisher->publish($title, $contentArticle , $entity_list_category, $entity_publish_type);
+        }
     }
 
     public function configurationHtml()
     {
         $this->loadAssets();
         $data = [];
-        if(array_key_exists('sociallymap_updateConfig', $_POST) ) {
+        if (array_key_exists('sociallymap_updateConfig', $_POST) ) {
             $data = [
             'isSaved' => true];
         }
@@ -185,9 +218,6 @@ class Sociallymap_Plugin
         $listRSS = $entitiesCollection->all($orderKey, $orderSense);
 
         echo $this->templater->loadAdminPage('rss-list.php', $listRSS);
-
-        $messages = file_get_contents(plugin_dir_path( __FILE__ ).'messages.json');
-        $json_a = json_decode($messages, true);
     }
 
     public function addEntitiesHtml ()
@@ -218,6 +248,7 @@ class Sociallymap_Plugin
         $entity = new Entity;
         $editingEntity = $entity->getById($_GET['id']);
 
+
         echo $this->templater->loadAdminPage('rss-edit.php', $editingEntity);
     }
 
@@ -237,15 +268,16 @@ class Sociallymap_Plugin
         // ACTION ENTITY : update
         if(array_key_exists('sociallymap_updateRSS', $_POST) && $_POST['sociallymap_updateRSS']) {
             if(!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
+            if(!isset($_POST['sociallymap_category'])) $_POST['sociallymap_category'] = [];
 
             $data = [
-                'name'          => $_POST['sociallymap_label'],
-                'category'      => $_POST['sociallymap_category'],
-                'activate'      => $_POST['sociallymap_activate'],
-                'sm_entity_id'  => $_POST['sociallymap_entityId'],
-                'display_type'  => $_POST['sociallymap_display_type'],
-                'publish_type'  => $_POST['sociallymap_publish_type'],
-                'id'            => $_GET['id'],
+                'name'                   => $_POST['sociallymap_label'],
+                'category'               => $_POST['sociallymap_category'],
+                'activate'               => $_POST['sociallymap_activate'],
+                'sm_entity_id'           => $_POST['sociallymap_entityId'],
+                'display_type'           => $_POST['sociallymap_display_type'],
+                'publish_type'           => $_POST['sociallymap_publish_type'],
+                'id'                     => $_GET['id'],
             ];
 
             $entityCollection->update($data);
@@ -301,7 +333,7 @@ class Sociallymap_Plugin
     }
 
     public function githubConfiguration () {
-        $config = array(
+        $config = [
             'slug'               => plugin_basename(__FILE__), // this is the slug of your plugin
             'proper_folder_name' => 'wordpress-sociallymap', // this is the name of the folder your plugin lives in
             'api_url'            => 'https://api.github.com/repos/pgrmCreate/wordpress-sociallymap', // the GitHub API url of your GitHub repo
@@ -313,7 +345,7 @@ class Sociallymap_Plugin
             'tested'             => '4.3.1', // which version of WordPress is your plugin tested up to?
             'readme'             => 'README.md', // which file to use as the readme for the version number
             'access_token'       => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
-        );
+        ];
 
         new githubUpdater($config);
     }
