@@ -7,15 +7,12 @@ class Requester {
 
 		$curl = curl_init();
 		$urlCreator = [
-		"baseUrl" 	=> "http://app.sociallymap.local",
+		"baseUrl" 	=> "http://plugin.alhena-dev.com/",
 		"entityId" 	=> $entityId,
 		"token"		=> $token,
 		];
 		$targetUrl = $urlCreator['baseUrl']."/raw-exporter/".$urlCreator['entityId'].
 		"/feed?token=".$urlCreator['token'];
-
-		$targetUrl = "http://app.sociallymap.local/emulatorSM/";
-		// echo('<b>link : </b>'.$targetUrl.'<br>');
 
 		$options = [
 			CURLOPT_RETURNTRANSFER => 1,
