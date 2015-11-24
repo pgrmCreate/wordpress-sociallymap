@@ -16,8 +16,4 @@
 	</a>
 </p>
 
-<?php
-
-ssh wordpress:motDePasse@MachineSurLaquelleJeveuxmeconnecter
-
 

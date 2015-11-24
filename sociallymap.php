@@ -90,7 +90,7 @@ class Sociallymap_Plugin
 
         add_submenu_page('sociallymap-publisher', 'Documentation', 'Documentation',
         'manage_options', 'sociallymap-documentation', [$this, 'documentationHtml'] );
-        
+
         add_submenu_page(null, 'edit entity', 'Editer lien',
         'manage_options', 'sociallymap-rss-edit', [$this, 'editHtml'] ); 
 
@@ -125,6 +125,12 @@ class Sociallymap_Plugin
     }
 
     public function manageMessages($wp) {
+
+        echo("BONJOUR");
+        echo("############################################");
+        echo("############################################");
+        echo("############################################");
+
         $actions  = $wp->matched_rule;
 
         // var_dump($_POST);
