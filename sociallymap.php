@@ -206,6 +206,9 @@ class SociallymapPlugin
 
         $jsonData  = $curl->launch($_POST['entityId'], $_POST['token']);
 
+        echo("Je teste");
+        print_r($jsonData);
+
         $baseReadMore = $this->templater->loadReadMore();
         foreach ($jsonData as $key => $value) {
             $title = $value->linkTitle;
