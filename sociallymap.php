@@ -117,7 +117,7 @@ class Sociallymap_Plugin
         function my_insert_rewrite_rules( $rules )
         {
             $newrules = [];
-            $newrules['sociallymap'] = 'index.php/sociallymap';
+            $newrules['sociallymap'] = 'index.php/sociallymap=$matches[1]';
             return $newrules + $rules;
         }
 
@@ -125,11 +125,6 @@ class Sociallymap_Plugin
     }
 
     public function manageMessages($wp) {
-
-        echo("BONJOUR");
-        echo("############################################");
-        echo("############################################");
-        echo("############################################");
 
         $actions  = $wp->matched_rule;
 
