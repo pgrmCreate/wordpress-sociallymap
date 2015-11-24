@@ -7,7 +7,7 @@ class Requester {
 
 		$curl = curl_init();
 		$urlCreator = [
-		"baseUrl" 	=> "http://plugin.alhena-dev.com/",
+		"baseUrl" 	=> "http://app.sociallymap.local",
 		"entityId" 	=> $entityId,
 		"token"		=> $token,
 		];
