@@ -1,6 +1,6 @@
 <?php
 	$data = get_query_var('data');
-	$editingEntity = $data['data'];
+	$editingEntity = $data['data']['editingEntity'];
 ?>
 
 <div class="wrap">
@@ -42,8 +42,8 @@
 								<input 	name="sociallymap_category[]" type="checkbox" 
 										value="<?php echo get_cat_ID($value->name);?>"
 								<?php 
-									foreach ($editingEntity->options as $key => $currentOption) {
-										if($currentOption->options_id == '1' && $value->cat_ID == $currentOption->value) {
+									foreach ($editingEntity->options->category as $key => $currentOption) {
+										if($value->cat_ID == $currentOption) {
 											echo "checked";
 										}
 									} 
@@ -67,28 +67,25 @@
 					</th>
 					<td>
 						<select name="sociallymap_publish_type">
-							<option value="publish" <?php if($editingEntity->options[2]->value == 'publish') echo ('selected');?> >Publier</option>
-							<option value="draft" <?php if($editingEntity->options[2]->value == 'draft') echo ('selected');?>>Brouillon</option>
-							<option value="pending" <?php if($editingEntity->options[2]->value == 'pending') echo ('selected');?>>En attente de relecture</option>
-							<option value="private" <?php if($editingEntity->options[2]->value == 'private') echo ('selected');?>>Privée</option>
-							<option value="future" <?php if($editingEntity->options[2]->value == 'future') echo ('selected');?>>En attente de publication</option>
-						</select>
-					</td>
-				</tr>
-				<tr class="form-field form-required">
-					<th>
-						<label>Ouverture du lien</label>
-					</th>
-					<td>
-						<select name="sociallymap_display_type">
-							<option value="modal" <?php if($editingEntity->options[1]->value == 'modal') echo ('selected');?> >
-								Fenêtre modale
+							<option value ="publish" 
+								<?php if($editingEntity->options->publish_type == 'publish') echo('selected'); ?>>
+								Publier
 							</option>
-							<option value="tab" <?php if($editingEntity->options[1]->value == 'tab') echo ('selected');?> >
-								Nouvel onglet
-							</option>	
-							<option value="page" <?php if($editingEntity->options[1]->value == 'page') echo ('selected');?> >
-								Même page
+							<option value ="draft" 
+								<?php if($editingEntity->options->publish_type == 'draft') echo('selected'); ?>>
+								Brouillon
+							</option>
+							<option value ="pending" 
+								<?php if($editingEntity->options->publish_type == 'pending') echo('selected'); ?>>
+								En attente de relecture
+							</option>
+							<option value ="private" 
+								<?php if($editingEntity->options->publish_type == 'private') echo('selected'); ?>>
+								Privée
+							</option>
+							<option value ="future" 
+								<?php if($editingEntity->options->publish_type == 'future') echo('selected'); ?>>
+								En attente de publication
 							</option>
 						</select>
 					</td>

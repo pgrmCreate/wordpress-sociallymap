@@ -20,19 +20,22 @@ require_once(plugin_dir_path( __FILE__ ).'models/Entity.php');
 require_once(plugin_dir_path( __FILE__ ).'models/Option.php');
 require_once(plugin_dir_path( __FILE__ ).'models/ConfigOption.php');
 
-class Sociallymap_Plugin
+class SociallymapPlugin
 {
     private $wpdb;
     private $templater;
+    private $config_default_value;
 
     public function __construct()
     {
         global $wpdb;
         $this->wpdb = $wpdb;
 
-        // register_uninstall_hook('uninstall.php', 'smUninstallPlugin');
-
         $this->templater = new Templater();
+
+        $configsOption = new ConfigOption;
+        $this->config_default_value = $configsOption->getConfig();
+
 
         $builder = new DbBuilder();
         $builder->dbInitialisation();
@@ -46,13 +49,79 @@ class Sociallymap_Plugin
 
         // todo comment routing system on all code
 
-        // Route for sociallymap
-        add_action('parse_request', [$this, 'manageMessages'] );
+        add_action( 'init', [$this, 'rewriteInit']);
+        add_action( 'template_redirect', [$this, 'redirectIntercept']);
+
 
         add_action('admin_menu', [$this, 'add_admin_menu'] );
         add_action('admin_menu', [$this, 'githubConfiguration'] );
-        add_action('init', [$this, 'routingMapping'] );
         add_filter('the_content',[$this, "my_post_footer"]);
+    }
+
+    static public function install() {
+        global $wp_rewrite;
+
+        self::addRewriteRules();
+
+        $wp_rewrite->flush_rules();
+    }
+
+    public function redirectIntercept() {
+        global $wp_query;
+        if( $wp_query->get('sociallymap-plugin') ) {
+            $this->manageMessages();
+            exit;
+        }
+    }
+
+    public function rewriteInit() {
+        add_rewrite_tag('%sociallymap-plugin%', '1');
+        $this->addRewriteRules();
+
+    }
+
+    static public function addRewriteRules() {
+        add_rewrite_rule('sociallymap', 'index.php?sociallymap-plugin=1', 'top');
+    }
+
+    public function routingMapping ($router) {
+        // $this->loadAssets(true);
+        die('yep');
+        add_rewrite_rule('sociallymap', '/wp-content/plugins/handler.php', 'top');
+        flush_rewrite_rules();
+
+        echo("/////////////////////////////////////////////////////");
+        echo("/////////////////////////////////////////////////////");
+        echo("<script> alert('connected!'); </script>");
+
+        // function create_routes($router) {
+        //     echo("<script> alert('on this route!'); </script>");
+        //     $router->add_route('facebook-login', [
+        //         'path'            => 'login',
+        //         'access_callback' => true,
+        //         'page_callback'   => 'facebook_login'
+        //     ]);
+        // }
+        // add_action('wp_router_generate_routes', 'create_routes');
+
+        // function facebook_login() {
+        //     echo("<script> alert('connected!'); </script>");
+        // }
+
+        $router->add_route('wp-router-sample', [
+            'path' => '^api/(.*?)$',
+            'query_vars' => [
+                'sample_argument' => 1,
+            ],
+            'page_callback' => 'bjr',
+            'access_callback' => TRUE,
+            ]);
+
+            function bjr() {
+                echo("<script> alert('connected!'); </script>");
+            }
+
+            bjr();
     }
 
     public function my_post_footer($content){
@@ -96,41 +165,10 @@ class Sociallymap_Plugin
 
     }
 
-    public function routingMapping () {
-        $this->loadAssets(true);
-
-        add_filter( 'rewrite_rules_array','my_insert_rewrite_rules' );
-        add_action( 'wp_loaded','my_flush_rules' );
-
-        // flush_rules() if our rules are not yet included
-        function my_flush_rules(){
-            $rules = get_option( 'rewrite_rules' );
-
-            if ( ! isset( $rules['sociallymap'] ) ) {
-                global $wp_rewrite;
-
-                $wp_rewrite->flush_rules();
-            }
-        }
-
-            // Adding a new rule
-        function my_insert_rewrite_rules( $rules )
-        {
-            $newrules = [];
-            $newrules['sociallymap'] = 'index.php/sociallymap=$matches[1]';
-            return $newrules + $rules;
-        }
-
- 
-    }
-
-    public function manageMessages($wp) {
-
-        $actions  = $wp->matched_rule;
-
+    public function manageMessages() {
         // var_dump($_POST);
 
-        if(!isset($_POST['entityId']) || !isset($_POST['token']) || $actions !== "sociallymap") {
+        if(!isset($_POST['entityId']) || !isset($_POST['token'])) {
             return false;
         }
 
@@ -249,8 +287,24 @@ class Sociallymap_Plugin
         $entity = new Entity;
         $editingEntity = $entity->getById($_GET['id']);
 
+        $categoryList = [];
+        $publish_type = "draft";
+        foreach ($editingEntity->options as $key => $value) {
+            if($value->options_id == '1') {
+                $categoryList[] = $value->value;
+            }
+            if($value->options_id == '3') {
+                $publish_type = $value->value;
+            }
+        }
 
-        echo $this->templater->loadAdminPage('rss-edit.php', $editingEntity);
+        $editingEntity->options = new stdClass;
+        $editingEntity->options->category = $categoryList;
+        $editingEntity->options->publish_type = $publish_type;
+
+        $sendItem['editingEntity'] = $editingEntity;
+
+        echo $this->templater->loadAdminPage('rss-edit.php', $sendItem);
     }
 
     public function entityManager () 
@@ -305,8 +359,6 @@ class Sociallymap_Plugin
 
         // ACTION CONFIG : update
         if(array_key_exists('sociallymap_updateConfig', $_POST) && $_POST['sociallymap_updateConfig']) {
-            if(!isset($_POST['sociallymap_publish_type'])) $_POST['sociallymap_publish_type'] = "publish";
-
             $data = [
                 1 => $_POST['sociallymap_category'],
                 2 => $_POST['sociallymap_display_type'],
@@ -352,5 +404,6 @@ class Sociallymap_Plugin
     }
 }
 
+register_activation_hook(__FILE__, ['SociallymapPlugin', 'install']);
 
-new Sociallymap_Plugin();
+new SociallymapPlugin();
