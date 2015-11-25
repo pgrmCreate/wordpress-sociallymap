@@ -1,12 +1,12 @@
 <?php
 /*
 Plugin Name: Sociallymap
-Plugin URI: http://LoadDis-plugin.com
-Description: Un plugin permettant l'affichage de flux RSS
-Version: 0.9
-Author: Midnight Alhena
-Author URI: http://alhena-conseil.com/
-License: GPL2
+Plugin URI: https://github.com/alhenaconseil/wordpress-sociallymap
+Description: A plugin that let the sociallymap users post on their blog from their mapping
+Version: 1.0
+Author: Sociallymap
+Author URI: http://www.sociallymap.com/
+License: MIT
 */
 
 require_once(plugin_dir_path( __FILE__ ).'tools/Templater.php');
@@ -68,10 +68,31 @@ class SociallymapPlugin
 
     public function redirectIntercept() {
         global $wp_query;
+
         if( $wp_query->get('sociallymap-plugin') ) {
             error_log('Ping received: '.print_r($_POST, true));
-            $this->manageMessages();
+
+            // We don't have the right parameters
+            if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
+                header("HTTP/1.0 400 Bad Request");
+                exit;
+            }
+
+            $collector = new EntityCollection();
+            $entity = $collector->getByEntityId($_POST['entityId']);
+
+            // This entity not exists
+            if (empty($entity)) {
+                header("HTTP/1.0 404 Not Found");
+                exit;
+            }
+
+            // Try to retrieve the pending messages
+            $this->manageMessages($entity);
+
             exit;
+        }
+        else {
         }
     }
 
@@ -163,35 +184,22 @@ class SociallymapPlugin
         'manage_options', 'sociallymap-rss-edit', [$this, 'editHtml'] ); 
     }
 
-    public function manageMessages() {
-        if(!isset($_POST['entityId']) || !isset($_POST['token'])) {
-            return false;
-        }
-
-        $collector = new EntityCollection();
-        $requester      = new Requester();
-        $publisher = new Publisher();
-        $config    = new ConfigOption();
-        $entityObject    = new Entity();
+    public function manageMessages($entity) {
+        $requester    = new Requester();
+        $publisher    = new Publisher();
+        $config       = new ConfigOption();
+        $entityObject = new Entity();
 
         $configs = $config->getConfig();
 
-        $entityExisting = $collector->getByEntityId($_POST['entityId']);
-
-        if (empty($entityExisting)) {
-            wp_send_json_error( [
-                'message' => 'ok',
-                'error' => 'entityId inconnu',
-            ]);
-
-            return false;
-        }
-        elseif ($entityExisting->activate == false) {
-            return false;
+        // The entity is not active
+        if (!$entity->activate) {
+            exit;
         }
 
+        // Retrieve the entity categories
         $entity_list_category = [];
-        foreach ($entityExisting->options as $key => $value) {
+        foreach ($entity->options as $key => $value) {
             if ($value->options_id == 1) {
                 $entity_list_category[] = $value->value;
             }
