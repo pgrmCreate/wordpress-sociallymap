@@ -220,7 +220,7 @@ class SociallymapPlugin
             // $contentArticle = '<p>'.$imagePost.'<br>'.$value->linkSummary.'</p>'.$readmore;
             // $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
 
-            // $publisher->publish($title, $contentArticle , $entity_list_category, $entity_publish_type);
+            $publisher->publish($title, $contentArticle , $entity_list_category, $entity_publish_type);
         }
     }
 
