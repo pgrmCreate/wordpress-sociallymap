@@ -30,6 +30,7 @@ class SociallymapPlugin
     {
         global $wpdb;
         $this->wpdb = $wpdb;
+        $_ENV["URL_SOCIALLYMAP"] = "http://app.sociallymap-staging.com";
 
         $this->templater = new Templater();
 
@@ -40,7 +41,7 @@ class SociallymapPlugin
         $builder = new DbBuilder();
         $builder->dbInitialisation();
 
-        if(array_key_exists('sociallymap_postRSS', $_POST)     || 
+        if (array_key_exists('sociallymap_postRSS', $_POST)     || 
             array_key_exists('sociallymap_deleteRSS', $_POST)  || 
             array_key_exists('sociallymap_updateRSS', $_POST)  ||
             array_key_exists('sociallymap_updateConfig', $_POST) ) {
@@ -48,14 +49,17 @@ class SociallymapPlugin
         }
 
         // todo comment routing system on all code
-
         add_action( 'init', [$this, 'rewriteInit']);
         add_action( 'template_redirect', [$this, 'redirectIntercept']);
 
-
         add_action('admin_menu', [$this, 'add_admin_menu'] );
         add_action('admin_menu', [$this, 'githubConfiguration'] );
-        add_filter('the_content',[$this, "my_post_footer"]);
+        add_filter('the_content',[$this, "postFooter"]);
+        add_filter('init',[$this, "initialisation"]);
+    }
+
+    public function initialisation() {
+        $this->loadAssets(true);
     }
 
     static public function install() {
@@ -67,9 +71,9 @@ class SociallymapPlugin
     }
 
     public function redirectIntercept() {
-        global $wp_query;
+        global $wp_query;        
 
-        if( $wp_query->get('sociallymap-plugin') ) {
+        if ($wp_query->get('sociallymap-plugin') ) {
             error_log('Ping received: '.print_r($_POST, true));
 
             // We don't have the right parameters
@@ -88,7 +92,10 @@ class SociallymapPlugin
             }
 
             // Try to retrieve the pending messages
-            $this->manageMessages($entity);
+            if($this->manageMessages($entity) == false) {
+                header("HTTP/1.0 502 Bad manage data");
+                exit;
+            }
 
             exit;
         }
@@ -105,52 +112,12 @@ class SociallymapPlugin
         add_rewrite_rule('sociallymap', 'index.php?sociallymap-plugin=1', 'top');
     }
 
-    public function routingMapping ($router) {
-        // $this->loadAssets(true);
-        die('yep');
-        add_rewrite_rule('sociallymap', '/wp-content/plugins/handler.php', 'top');
-        flush_rewrite_rules();
-
-        echo("/////////////////////////////////////////////////////");
-        echo("/////////////////////////////////////////////////////");
-        echo("<script> alert('connected!'); </script>");
-
-        // function create_routes($router) {
-        //     echo("<script> alert('on this route!'); </script>");
-        //     $router->add_route('facebook-login', [
-        //         'path'            => 'login',
-        //         'access_callback' => true,
-        //         'page_callback'   => 'facebook_login'
-        //     ]);
-        // }
-        // add_action('wp_router_generate_routes', 'create_routes');
-
-        // function facebook_login() {
-        //     echo("<script> alert('connected!'); </script>");
-        // }
-
-        $router->add_route('wp-router-sample', [
-            'path' => '^api/(.*?)$',
-            'query_vars' => [
-                'sample_argument' => 1,
-            ],
-            'page_callback' => 'bjr',
-            'access_callback' => TRUE,
-            ]);
-
-            function bjr() {
-                echo("<script> alert('connected!'); </script>");
-            }
-
-            bjr();
-    }
-
-    public function my_post_footer($content){
+    public function postFooter($content){
         global $post;
         $config = new ConfigOption();
         $configs = $config->getConfig();
 
-        if($configs[1]->default_value == "tab") {
+        if ($configs[1]->default_value == "tab") {
             $footer = "<p data-hidden-display>tab</p>";
         }
         else {
@@ -209,20 +176,39 @@ class SociallymapPlugin
             }
         }
 
-        $jsonData = $requester->launch($_POST['entityId'], $_POST['token']);
+        try {
+            $jsonData = $requester->launch($_POST['entityId'], $_POST['token']);
 
-        $baseReadMore = $this->templater->loadReadMore();
-        foreach ($jsonData as $key => $value) {
-            $title = $value->linkTitle;
-            $uploader = new ImageUploader();
+            $baseReadMore = $this->templater->loadReadMore();
 
-            $readmore = $this->templater->formatReadMoreUrl($baseReadMore, $value->linkUrl);
-            $imagePost = $uploader->tryUploadPost($value->linkThumbnail, $value->media, $value->mediaType);
-            $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
-            $contentArticle = '<p>'.$imagePost.'<br>'.$value->linkSummary.'</p>'.$readmore;
-            $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
+            foreach ($jsonData as $key => $value) {
+                if (empty($value->linkTitle) || empty($value->linkThumbnail) || empty($value->$value->linkSummary) 
+                    || empty($value->$value->linkUrl)) {
+                    throw new Exception('Base pattern of message contain empty value', 1);
+                }
 
-            $publisher->publish($title, $contentArticle , $entity_list_category, $entity_publish_type);
+                $title = $value->linkTitle;
+                $uploader = new ImageUploader();
+
+                $readmore = $this->templater->formatReadMoreUrl($baseReadMore, $value->linkUrl);
+
+                $imagePost = $uploader->tryUploadPost($value->linkThumbnail, $value->media, $value->mediaType);
+                $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
+                
+                if(empty($imagePost) || gettype($imagePost) != "string") {
+                    throw new Exception('Error from uploading image posting', 1);
+                }
+                $contentArticle = '<p>'.$imagePost.'<br>'.$value->linkSummary.'</p>'.$readmore;
+                $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
+
+                if (!$publisher->publish($title, $contentArticle , $entity_list_category, $entity_publish_type)) {
+                    throw new Exception('Error from post publish', 1);
+                }
+            }  
+        }
+        catch (Exception $e) {
+            error_log('Sociallymap: Error data loading');
+            exit;
         }
     }
 
@@ -251,7 +237,7 @@ class SociallymapPlugin
 
         $orderSense = "";
         $orderKey = "";
-        if(isset($_GET['orderSense']) && isset($_GET['orderKey'])) {
+        if (isset($_GET['orderSense']) && isset($_GET['orderKey'])) {
             $orderSense = $_GET['orderSense'];
             $orderKey = $_GET['orderKey'];
         }
@@ -268,7 +254,7 @@ class SociallymapPlugin
         $data = new stdClass();
 
         foreach ($configs as $key => $value) {
-            if($value->id == 1) {
+            if ($value->id == 1) {
                 $data->category =  $value->default_value;
             }
             elseif ($value->id == 3) {
@@ -290,10 +276,10 @@ class SociallymapPlugin
         $categoryList = [];
         $publish_type = "draft";
         foreach ($editingEntity->options as $key => $value) {
-            if($value->options_id == '1') {
+            if ($value->options_id == '1') {
                 $categoryList[] = $value->value;
             }
-            if($value->options_id == '3') {
+            if ($value->options_id == '3') {
                 $publish_type = $value->value;
             }
         }
@@ -314,15 +300,15 @@ class SociallymapPlugin
         $linkToList = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';
 
         // ACTION ENTITY : delete
-        if(array_key_exists('sociallymap_deleteRSS', $_POST) && $_POST['sociallymap_deleteRSS']) {
+        if (array_key_exists('sociallymap_deleteRSS', $_POST) && $_POST['sociallymap_deleteRSS']) {
             $idRemoving = $_POST['submit'];
             $entityCollection->deleteRowsByID($idRemoving);
         }
 
         // ACTION ENTITY : update
-        if(array_key_exists('sociallymap_updateRSS', $_POST) && $_POST['sociallymap_updateRSS']) {
-            if(!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
-            if(!isset($_POST['sociallymap_category'])) $_POST['sociallymap_category'] = [];
+        if (array_key_exists('sociallymap_updateRSS', $_POST) && $_POST['sociallymap_updateRSS']) {
+            if (!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
+            if (!isset($_POST['sociallymap_category'])) $_POST['sociallymap_category'] = [];
 
             $data = [
                 'name'                   => $_POST['sociallymap_label'],
@@ -340,8 +326,8 @@ class SociallymapPlugin
 
 
         // ACTION ENTITY : post
-        if(array_key_exists('sociallymap_postRSS', $_POST) && $_POST['sociallymap_postRSS']) {
-            if(!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
+        if (array_key_exists('sociallymap_postRSS', $_POST) && $_POST['sociallymap_postRSS']) {
+            if (!isset($_POST['sociallymap_activate'])) $_POST['sociallymap_activate'] = 0;
 
             $data = [
                 'name'          => $_POST['sociallymap_name'],
@@ -357,7 +343,7 @@ class SociallymapPlugin
         }
 
         // ACTION CONFIG : update
-        if(array_key_exists('sociallymap_updateConfig', $_POST) && $_POST['sociallymap_updateConfig']) {
+        if (array_key_exists('sociallymap_updateConfig', $_POST) && $_POST['sociallymap_updateConfig']) {
             $data = [
                 1 => $_POST['sociallymap_category'],
                 2 => $_POST['sociallymap_display_type'],
@@ -371,7 +357,7 @@ class SociallymapPlugin
 
     public function loadAssets ($isFront = false) {
         // MODAL DISPLAY TYPE IS ON
-        if($isFront) { 
+        if ($isFront) { 
             wp_enqueue_style('readmore', plugin_dir_url( __FILE__ ).'assets/styles/custom-readmore.css');
             wp_enqueue_style('fancybox', plugin_dir_url( __FILE__ ).'assets/styles/fancybox.css');
 

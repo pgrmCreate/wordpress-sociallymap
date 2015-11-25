@@ -39,7 +39,7 @@ class Entity
 		$entityRequest = $wpdb->prepare('SELECT * FROM '.$this->table.' WHERE sm_entity_id=%s', $entityId);
 		$entity = $wpdb->get_row($entityRequest);
 
-		if(empty($entity)) {
+		if (empty($entity)) {
 			return false;
 		}
 
@@ -60,7 +60,7 @@ class Entity
 	public function update($data) {
 		global $wpdb;
 
-		if(!isset($data['id'])) { return false; }
+		if (!isset($data['id'])) { return false; }
 
 		$wpdb->update( 
 			$this->table, [ 

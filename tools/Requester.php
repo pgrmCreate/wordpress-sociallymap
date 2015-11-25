@@ -7,7 +7,7 @@ class Requester
 
 		// @TODO Retrieve the right url's depending the environement
 		$urlCreator = [
-			'baseUrl' 	=> 'http://app.sociallymap-staging.com',
+			'baseUrl' 	=> $_ENV["URL_SOCIALLYMAP"],
 			'entityId' 	=> $entityId,
 			'token'		=> $token,
 		];
@@ -45,6 +45,7 @@ class Requester
 		catch (Exception $e) {
 			header("HTTP/1.0 502 Bad Gateway");
 			error_log('Sociallymap: Error during retrieving entity pending messages');
+			error_log('# Error: '.$e->getMessage().' #');
 			exit;
 		}
 		

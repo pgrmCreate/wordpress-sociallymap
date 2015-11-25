@@ -19,9 +19,17 @@
 				<thead>
 					<tr>
 						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
-						colspan="4">
+						colspan="2">
 							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=login&amp;order=asc">
 								<span>Nom de l'entité</span>
+								<span class="sorting-indicator"></span>
+							</a>
+						</th>
+
+						<th scope="col" id="entityId" class="manage-column column-username column-primary sortable desc"
+						colspan="2">
+							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=login&amp;order=asc">
+								<span>Identifiant de l'entité sociallymap</span>
 								<span class="sorting-indicator"></span>
 							</a>
 						</th>
@@ -64,7 +72,7 @@
 						foreach ($listRss as $key => $value) {
 						?>
 							<tr>
-								<td colspan="4">
+								<td colspan="2">
 									<?php echo $value->name; ?>
 									<div class="row-actions">
 										<span class="edit">
@@ -82,6 +90,10 @@
 											</button>
 										</span>
 									</div>
+								</td>
+
+								<td colspan="2">
+									<?php echo $value->sm_entity_id; ?>
 								</td>
 
 								<td colspan="2">

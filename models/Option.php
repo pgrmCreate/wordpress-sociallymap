@@ -44,7 +44,7 @@ class Option
 
 
 		// UPDATE CATEGORY
-		if(isset($data['category'])) {
+		if (isset($data['category'])) {
 			$currentCatsRequest = "
 				SELECT value FROM $this->table 
 				WHERE entity_id = $data[idSource]
@@ -56,7 +56,7 @@ class Option
 				$optCats[] = $value->value;
 			}
 
-			if($optCats != $data['category']) {
+			if ($optCats != $data['category']) {
 				$wpdb->delete( $this->table, [
 					'entity_id' 	=> $data['idSource'],
 					'options_id' 	=> 1]);
@@ -72,7 +72,7 @@ class Option
 		}
 
 		// UPDATE WINDOWS
-		if(isset($data['display_type'])) {
+		if (isset($data['display_type'])) {
 			$wpdb->update( 
 				$this->table, [ 
 					'value' => $data['display_type'],	// string
@@ -84,7 +84,7 @@ class Option
 		}
 
 		// UPDATE PUBLISH MODE
-		if(isset($data['publish_type'])) {
+		if (isset($data['publish_type'])) {
 			$wpdb->update( 
 				$this->table, [ 
 					'value' => $data['publish_type'],	// string

@@ -21,7 +21,7 @@
 
 	        $charset_collate = $this->wpdb->get_charset_collate();
 
-	        if($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity'") != $this->table_entity) {
+	        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity'") != $this->table_entity) {
 	            $sql = "CREATE TABLE $this->table_entity (
 	              id mediumint(9) NOT NULL AUTO_INCREMENT,
 	              sm_entity_id varchar(255),
@@ -36,7 +36,7 @@
 	            dbDelta($sql);
 	        }
 
-	        if($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_options'") != $this->table_options) {
+	        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_options'") != $this->table_options) {
 	            $sql = "CREATE TABLE $this->table_options (
 	              id mediumint(9) NOT NULL AUTO_INCREMENT,
 	              default_value varchar(255),
@@ -62,7 +62,7 @@
 	            ], ['%s', '%s']);
 	        }
 
-	        if($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity_options'") != $this->table_entity_options) {
+	        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity_options'") != $this->table_entity_options) {
 	            $sql = "CREATE TABLE $this->table_entity_options (
 	              id mediumint(9) NOT NULL AUTO_INCREMENT,
 	              entity_id mediumint(9),
