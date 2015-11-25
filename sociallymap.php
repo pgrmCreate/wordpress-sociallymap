@@ -206,7 +206,8 @@ class SociallymapPlugin
 
         $jsonData  = $curl->launch($_POST['entityId'], $_POST['token']);
 
-        echo("Je teste");
+        echo("REQUEST ACCCEPT!!");
+        echo("############################################################");
         print_r($jsonData);
 
         $baseReadMore = $this->templater->loadReadMore();
@@ -214,13 +215,13 @@ class SociallymapPlugin
             $title = $value->linkTitle;
             $uploader = new ImageUploader();
 
-            $readmore = $this->templater->formatReadMoreUrl($baseReadMore, $value->linkUrl);
-            $imagePost = $uploader->tryUploadPost($value->linkThumbnail, $value->media, $value->mediaType);
-            $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
-            $contentArticle = '<p>'.$imagePost.'<br>'.$value->linkSummary.'</p>'.$readmore;
-            $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
+            // $readmore = $this->templater->formatReadMoreUrl($baseReadMore, $value->linkUrl);
+            // $imagePost = $uploader->tryUploadPost($value->linkThumbnail, $value->media, $value->mediaType);
+            // $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
+            // $contentArticle = '<p>'.$imagePost.'<br>'.$value->linkSummary.'</p>'.$readmore;
+            // $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
 
-            $publisher->publish($title, $contentArticle , $entity_list_category, $entity_publish_type);
+            // $publisher->publish($title, $contentArticle , $entity_list_category, $entity_publish_type);
         }
     }
 
