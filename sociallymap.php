@@ -69,6 +69,7 @@ class SociallymapPlugin
     public function redirectIntercept() {
         global $wp_query;
         if( $wp_query->get('sociallymap-plugin') ) {
+            error_log('Ping received: '.print_r($_POST));
             $this->manageMessages();
             exit;
         }
@@ -141,8 +142,7 @@ class SociallymapPlugin
         return $content;
     }
 
-    public function add_admin_menu()
-    {        
+    public function add_admin_menu() {        
         add_menu_page( 'Sociallymap publisher', 'Sociallymap', 'manage',
         'sociallymap-publisher', [$this, 'documentation_html'], plugin_dir_url( __FILE__ ).'assets/images/logo.png');
 
@@ -161,18 +161,15 @@ class SociallymapPlugin
 
         add_submenu_page(null, 'edit entity', 'Editer lien',
         'manage_options', 'sociallymap-rss-edit', [$this, 'editHtml'] ); 
-
     }
 
     public function manageMessages() {
-        // var_dump($_POST);
-
         if(!isset($_POST['entityId']) || !isset($_POST['token'])) {
             return false;
         }
 
         $collector = new EntityCollection();
-        $curl      = new Requester();
+        $requester      = new Requester();
         $publisher = new Publisher();
         $config    = new ConfigOption();
         $entityObject    = new Entity();
@@ -184,8 +181,9 @@ class SociallymapPlugin
         if (empty($entityExisting)) {
             wp_send_json_error( [
                 'message' => 'ok',
-                'error ' => 'entityId inconnu',
-                ]);
+                'error' => 'entityId inconnu',
+            ]);
+
             return false;
         }
         elseif ($entityExisting->activate == false) {
@@ -203,29 +201,24 @@ class SociallymapPlugin
             }
         }
 
-        $jsonData  = $curl->launch($_POST['entityId'], $_POST['token']);
-
-        echo("REQUEST ACCCEPT!!");
-        echo("############################################################");
-        print_r($jsonData);
+        $jsonData = $requester->launch($_POST['entityId'], $_POST['token']);
 
         $baseReadMore = $this->templater->loadReadMore();
         foreach ($jsonData as $key => $value) {
             $title = $value->linkTitle;
             $uploader = new ImageUploader();
 
-            // $readmore = $this->templater->formatReadMoreUrl($baseReadMore, $value->linkUrl);
-            // $imagePost = $uploader->tryUploadPost($value->linkThumbnail, $value->media, $value->mediaType);
-            // $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
-            // $contentArticle = '<p>'.$imagePost.'<br>'.$value->linkSummary.'</p>'.$readmore;
-            // $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
+            $readmore = $this->templater->formatReadMoreUrl($baseReadMore, $value->linkUrl);
+            $imagePost = $uploader->tryUploadPost($value->linkThumbnail, $value->media, $value->mediaType);
+            $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
+            $contentArticle = '<p>'.$imagePost.'<br>'.$value->linkSummary.'</p>'.$readmore;
+            $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
 
             $publisher->publish($title, $contentArticle , $entity_list_category, $entity_publish_type);
         }
     }
 
-    public function configurationHtml()
-    {
+    public function configurationHtml() {
         $this->loadAssets();
         $data = [];
         if (array_key_exists('sociallymap_updateConfig', $_POST) ) {
@@ -239,14 +232,12 @@ class SociallymapPlugin
         // $uploader->upload();
     }
 
-    public function documentationHtml ()
-    {
+    public function documentationHtml() {
         $this->loadAssets();
         echo $this->templater->loadAdminPage('documentation.php');
     }
 
-    public function myEntitiesHtml ()
-    {
+    public function myEntitiesHtml() {
         $this->loadAssets();
         $entitiesCollection = new EntityCollection();
 
@@ -262,8 +253,7 @@ class SociallymapPlugin
         echo $this->templater->loadAdminPage('rss-list.php', $listRSS);
     }
 
-    public function addEntitiesHtml ()
-    {
+    public function addEntitiesHtml() {
         $this->loadAssets();
         $config = new ConfigOption();
         $configs = $config->getConfig();
@@ -284,8 +274,7 @@ class SociallymapPlugin
         echo $this->templater->loadAdminPage('rss-add.php', $data);
     }
 
-    public function editHtml ()
-    {
+    public function editHtml() {
         $this->loadAssets();
         $entity = new Entity;
         $editingEntity = $entity->getById($_GET['id']);
@@ -310,8 +299,7 @@ class SociallymapPlugin
         echo $this->templater->loadAdminPage('rss-edit.php', $sendItem);
     }
 
-    public function entityManager () 
-    {
+    public function entityManager() {
         $entityCollection = new EntityCollection();
         $entityOption = new ConfigOption();
         $config = $entityOption->getConfig();
