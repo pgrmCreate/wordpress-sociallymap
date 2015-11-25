@@ -69,7 +69,7 @@ class SociallymapPlugin
     public function redirectIntercept() {
         global $wp_query;
         if( $wp_query->get('sociallymap-plugin') ) {
-            error_log('Ping received: '.print_r($_POST));
+            error_log('Ping received: '.print_r($_POST, true));
             $this->manageMessages();
             exit;
         }
