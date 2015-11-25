@@ -77,7 +77,6 @@ class SociallymapPlugin
     public function rewriteInit() {
         add_rewrite_tag('%sociallymap-plugin%', '1');
         $this->addRewriteRules();
-
     }
 
     static public function addRewriteRules() {

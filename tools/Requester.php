@@ -7,7 +7,7 @@ class Requester {
 
 		$curl = curl_init();
 		$urlCreator = [
-		"baseUrl" 	=> "http://app.sociallymap.local",
+		"baseUrl" 	=> "http://app.sociallymap-staging.com",
 		"entityId" 	=> $entityId,
 		"token"		=> $token,
 		];
@@ -26,6 +26,9 @@ class Requester {
 		$result = curl_exec($curl);
 
 		$result = json_decode($result);
+
+		echo("THX FOR RETURN");
+		var_dump($result);
 
 		return $result;
 	}
