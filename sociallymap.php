@@ -106,6 +106,7 @@ class SociallymapPlugin
             // This entity not exists
             if (empty($entity)) {
                 header("HTTP/1.0 404 Not Found");
+                error_log("Socially map try to connect to plugin but entity ID is no found");
                 exit;
             }
 
@@ -244,9 +245,8 @@ class SociallymapPlugin
             $baseReadMore = $this->templater->loadReadMore();
 
             foreach ($jsonData as $key => $value) {
-                foreach ($value as $key => $value) {
-                    error_log(print_R($value, true));
-                }
+                error_log(print_R($value, true));
+
                 $contentArticle = "<p>";
                 $imagePost = "";
                 $readmore = "" ;
@@ -268,10 +268,8 @@ class SociallymapPlugin
                     $title = "";
                 } else {
                     // Check if Title existing
-                    if (empty($value->link)) {
-                        $title = $value->linkTitle;
-                    } else {
-                        $title = " ";
+                    if (empty($value->link->title)) {
+                        $title = $value->link->title;
                     }
 
                     // Check if Image thumbnail existing and media url no exist
@@ -292,6 +290,7 @@ class SociallymapPlugin
                     }
                 }
                 
+                $contentArticle .= $value->content;
                 $contentArticle .= "</p>";
 
                 // add readmore to content if $readmore is not empty
