@@ -114,11 +114,13 @@ class SociallymapPlugin
             if ($this->manageMessages($entity) == false) {
                 header("HTTP/1.0 502 Bad gateway");
                 print_r($_POST);
+                
+            } else {
                 header("HTTP/1.0 200 OK");
-                    exit(json_encode([
-                        'message' => "ok"]));
+                exit(json_encode([
+                    'message' => "ok"]));
             }
-            exit;
+
         }
     }
 
