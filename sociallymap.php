@@ -268,7 +268,7 @@ class SociallymapPlugin
                     $title = "";
                 } else {
                     // Check if Title existing
-                    if (empty($value->link->title)) {
+                    if (!empty($value->link->title)) {
                         $title = $value->link->title;
                     }
 
