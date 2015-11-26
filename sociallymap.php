@@ -113,6 +113,7 @@ class SociallymapPlugin
             // Try to retrieve the pending messages
             if ($this->manageMessages($entity) == false) {
                 header("HTTP/1.0 502 Bad gateway");
+                print_r($_POST);
                 exit;
             }
             exit;
