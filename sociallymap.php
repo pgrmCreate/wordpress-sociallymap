@@ -265,6 +265,7 @@ class SociallymapPlugin
             }
         } catch (Exception $e) {
             error_log('Sociallymap: Error data loading');
+            error_log('# Error : '.$e->getMessage());
             exit;
         }
     }
