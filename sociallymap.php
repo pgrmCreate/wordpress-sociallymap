@@ -88,6 +88,21 @@ class SociallymapPlugin
             $collector = new EntityCollection();
             $entity = $collector->getByEntityId($_POST['entityId']);
 
+
+            // Context : Testing connection between sociallymap and wordpress plugin
+            if ($_POST['token'] == "connection-test") {
+                header('Content-Type: application/json');
+                if (empty($entity)) {
+                    header("HTTP/1.0 404 Not Found");
+                    exit(json_encode([
+                        'error' => "entityId inconnu"]));
+                } else {
+                    header("HTTP/1.0 200 OK");
+                    exit(json_encode([
+                        'message' => "ok"]));
+                }
+            }
+
             // This entity not exists
             if (empty($entity)) {
                 header("HTTP/1.0 404 Not Found");
@@ -96,7 +111,7 @@ class SociallymapPlugin
 
             // Try to retrieve the pending messages
             if ($this->manageMessages($entity) == false) {
-                header("HTTP/1.0 502 Bad manage data");
+                header("HTTP/1.0 502 Bad gateway");
                 exit;
             }
             exit;
@@ -216,6 +231,7 @@ class SociallymapPlugin
             }
         }
 
+        // Try request to sociallymap on response
         try {
             $jsonData = $requester->launch($_POST['entityId'], $_POST['token']);
 
