@@ -269,7 +269,7 @@ class SociallymapPlugin
                 }
 
                 // Check Link object existing
-                if (isset($value->link)) {
+                if (!isset($value->link)) {
                     $title = "";
                 } else {
                     // Check if Title existing
