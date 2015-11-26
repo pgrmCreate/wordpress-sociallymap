@@ -245,7 +245,7 @@ class SociallymapPlugin
 
             foreach ($jsonData as $key => $value) {
                 foreach ($value as $key => $value) {
-                    error_log($value);
+                    error_log(print_R($value, true));
                 }
                 $contentArticle = "<p>";
                 $imagePost = "";
