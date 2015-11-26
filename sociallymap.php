@@ -232,35 +232,74 @@ class SociallymapPlugin
         }
 
         // Try request to sociallymap on response
+        $uploader = new ImageUploader();
         try {
             $jsonData = $requester->launch($_POST['entityId'], $_POST['token']);
+ 
+            if (empty($jsonData)) {
+                throw new Exception('No data returned from request', 1);
+                exit();
+            }
 
             $baseReadMore = $this->templater->loadReadMore();
 
             foreach ($jsonData as $key => $value) {
-                if (empty($value->linkTitle) ||
-                    empty($value->linkThumbnail) ||
-                    empty($value->$value->linkSummary) ||
-                    empty($value->$value->linkUrl)) {
-                    throw new Exception('Base pattern of message contain empty value', 1);
+                $contentArticle = "<p>";
+                $imagePost = "";
+                $readmore = "" ;
+
+                // Check if Media object exist
+                if (isset($value->media) && $value->media->type == "photo") {
+                    $imagePost = $uploader->upload($value->media->url);
+                    // format html tag if upload return a string (no wp_error array)
+                    if (gettype($imagePost) == "string") {
+                        $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
+                        $contentArticle += $imagePost;
+                    } else {
+                        $imagePost = "";
+                    }
                 }
 
-                $title = $value->linkTitle;
-                $uploader = new ImageUploader();
+                // Check Link object existing
+                if (isset($value->link)) {
+                    $title = "";
+                } else {
+                    // Check if Title existing
+                    if (empty($value->link)) {
+                        $title = $value->linkTitle;
+                    } else {
+                        $title = " ";
+                    }
 
-                $readmore = $this->templater->formatReadMoreUrl($baseReadMore, $value->linkUrl);
+                    // Check if Image thumbnail existing and media url no exist
+                    if ($imagePost == "" && !empty($value->link->thumbnail)) {
+                        $imagePost = $uploader->upload($value->link->thumbnail);
+                        // format html tag if upload return a string (no wp_error array)
+                        if (gettype($imagePost) == "string") {
+                            $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
+                            $contentArticle .= $imagePost;
+                        } else {
+                            $imagePost = "";
+                        }
+                    }
 
-                $imagePost = $uploader->tryUploadPost($value->linkThumbnail, $value->media, $value->mediaType);
-                $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
+                    // Check if Link URL existing
+                    if (!empty($value->link->url)) {
+                        $readmore = $this->templater->formatReadMoreUrl($baseReadMore, $value->link->url);
+                    }
+                }
                 
-                if (empty($imagePost) || gettype($imagePost) != "string") {
-                    throw new Exception('Error from uploading image posting', 1);
+                $contentArticle .= "</p>";
+
+                // add readmore to content if $readmore is not empty
+                if ($readmore != "") {
+                    $contentArticle .= $readmore;
                 }
-                $contentArticle = '<p>'.$imagePost.'<br>'.$value->linkSummary.'</p>'.$readmore;
-                $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
 
                 if (!$publisher->publish($title, $contentArticle, $entity_list_category, $entity_publish_type)) {
                     throw new Exception('Error from post publish', 1);
+                } else {
+                    $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
                 }
             }
         } catch (Exception $e) {
