@@ -114,7 +114,9 @@ class SociallymapPlugin
             if ($this->manageMessages($entity) == false) {
                 header("HTTP/1.0 502 Bad gateway");
                 print_r($_POST);
-                exit;
+                header("HTTP/1.0 200 OK");
+                    exit(json_encode([
+                        'message' => "ok"]));
             }
             exit;
         }
@@ -304,6 +306,7 @@ class SociallymapPlugin
                     throw new Exception('Error from post publish', 1);
                 } else {
                     $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
+                    return true;
                 }
             }
         } catch (Exception $e) {

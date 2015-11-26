@@ -12,7 +12,8 @@ class Requester
             'entityId'=> $entityId,
             'token'   => $token,
         ];
-        $targetUrl = $urlCreator['baseUrl'].'/raw-exporter/'.$urlCreator['entityId'].'/feed?token='.$urlCreator['token'];
+        $targetUrl = $urlCreator['baseUrl'].'/raw-exporter/'.$urlCreator['entityId'].
+        '/feed?token='.$urlCreator['token'];
 
         $options = [
             // Return the transfer, don't display it
