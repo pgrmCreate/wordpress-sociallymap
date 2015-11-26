@@ -244,6 +244,9 @@ class SociallymapPlugin
             $baseReadMore = $this->templater->loadReadMore();
 
             foreach ($jsonData as $key => $value) {
+                foreach ($value as $key => $value) {
+                    error_log($value);
+                }
                 $contentArticle = "<p>";
                 $imagePost = "";
                 $readmore = "" ;
@@ -296,6 +299,7 @@ class SociallymapPlugin
                     $contentArticle .= $readmore;
                 }
 
+                // handle publish
                 if (!$publisher->publish($title, $contentArticle, $entity_list_category, $entity_publish_type)) {
                     throw new Exception('Error from post publish', 1);
                 } else {
