@@ -3,7 +3,7 @@
 class Requester
 {
     public function launch($entityId, $token, $environement)
-    {
+    { 
         error_log('Ping received: '.print_r([$entityId, $token, $environement], true), 3, plugin_dir_path(__FILE__)."../logs/error.log");
 
         if (!is_callable('curl_init')) {
@@ -11,7 +11,7 @@ class Requester
             header("HTTP/1.0 501 Not Implemented");
             exit("Curl request impossible for wordpress server");
         }
-
+ 
         $curl = curl_init();
 
         $envtype = $_ENV['URL_SOCIALLYMAP'];

@@ -2,6 +2,8 @@
     $data = get_query_var('articleData');
     $url = $data['url'];
     $display_type = $data['display_type'];
+
+    var_dump(get_query_var('articleData'));
 ?>
 
 <p>

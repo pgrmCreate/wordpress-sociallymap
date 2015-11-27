@@ -1,6 +1,6 @@
 <?php
-	$data = get_query_var('data');
-	$default_value = $data['data'];
+    $data = get_query_var('data');
+    $default_value = $data['data'];
 ?>
 
 <div class="wrap">
