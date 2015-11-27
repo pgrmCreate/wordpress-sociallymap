@@ -67,6 +67,7 @@ class SociallymapPlugin
     public function initialization()
     {
         $this->loadAssets(true);
+        error_log('I test my log! '.print_r($_POST, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
     }
 
     public static function install()
