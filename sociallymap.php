@@ -83,7 +83,7 @@ class SociallymapPlugin
         global $wp_query;
 
         if ($wp_query->get('sociallymap-plugin')) {
-            error_log('Ping received on /sociallymap/ : ', 3, plugin_dir_path(__FILE__)."logs/error.log");
+            error_log('Ping received on /sociallymap/ : '.print_r($_POST, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
 
             // We don't have the right parameters
             if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
