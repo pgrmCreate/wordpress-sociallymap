@@ -158,8 +158,6 @@ class SociallymapPlugin
         if (empty($entityPicked)) {
             exit();
         }
-        echo("#################################");
-        var_dump($entityPicked);
 
         foreach ($entityPicked->options as $key => $value) {
             if ($value->options_id == '2') {
@@ -168,10 +166,8 @@ class SociallymapPlugin
         }
 
         if ($display_type == "tab") {
-            echo("is TAB, i convert ...............");
             $content = preg_replace('#data-display-type="modal"#', 'data-display-type="tab"', $content);
         } else {
-            echo("is MODAL, i convert ...............");
             $content = preg_replace('#data-display-type="tab"#', 'data-display-type="modal"', $content);
         }
 
