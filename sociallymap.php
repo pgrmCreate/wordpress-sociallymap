@@ -10,7 +10,7 @@ License: MIT
 */
 
 require_once(plugin_dir_path(__FILE__).'tools/Templater.php');
-require_once(plugin_dir_path(__FILE__).'tools/Db-builder.php');
+require_once(plugin_dir_path(__FILE__).'tools/DbBuilder.php');
 require_once(plugin_dir_path(__FILE__).'tools/Publisher.php');
 require_once(plugin_dir_path(__FILE__).'tools/Requester.php');
 require_once(plugin_dir_path(__FILE__).'tools/ImageUploader.php');
@@ -41,7 +41,7 @@ class SociallymapPlugin
         $this->templater = new Templater();
         $this->controller = new SociallymapController();
 
-        $configsOption = new ConfigOption;
+        $configsOption = new ConfigOption();
         $this->config_default_value = $configsOption->getConfig();
 
         $builder = new DbBuilder();
@@ -61,10 +61,10 @@ class SociallymapPlugin
         add_action('admin_menu', [$this, 'addAdminMenu']);
         add_action('admin_menu', [$this, 'githubConfiguration']);
         add_filter('the_content', [$this, "postFooter"]);
-        add_filter('init', [$this, "initialisation"]);
+        add_filter('init', [$this, "initialization"]);
     }
 
-    public function initialisation()
+    public function initialization()
     {
         $this->loadAssets(true);
     }
@@ -179,7 +179,7 @@ class SociallymapPlugin
             'manage_options',
             'sociallymap-rss-list',
             function () {
-                $this->loadTemplate("listEntity");
+                $this->loadTemplate("listEntities");
             }
         );
 
@@ -257,7 +257,7 @@ class SociallymapPlugin
         // Try request to sociallymap on response
         $uploader = new ImageUploader();
         try {
-            $jsonData = $requester->launch($_POST['entityId'], $_POST['token']);
+            $jsonData = $requester->launch($_POST['entityId'], $_POST['token'], $_POST['env']);
  
             if (empty($jsonData)) {
                 throw new Exception('No data returned from request', 1);

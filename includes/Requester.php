@@ -4,7 +4,7 @@ class Requester
 {
     public function launch($entityId, $token)
     {
-        if (is_callable('curl_init')) {
+        if (!is_callable('curl_init')) {
             error_log("Curl no exist, request impossible..", 3, plugin_dir_path(__FILE__)."logs/error.log");
             header("HTTP/1.0 501 Not Implemented");
             exit("Curl request impossible for wordpress server");

@@ -50,7 +50,7 @@ class SociallymapController
 
         $sendItem['editingEntity'] = $editingEntity;
 
-        echo $this->templater->loadAdminPage('rss-edit.php', $sendItem);
+        echo $this->templater->loadAdminPage('entity-edit.php', $sendItem);
     }
 
     public function addEntity()
@@ -69,10 +69,10 @@ class SociallymapController
             }
         }
 
-        echo $this->templater->loadAdminPage('rss-add.php', $data);
+        echo $this->templater->loadAdminPage('entity-add.php', $data);
     }
 
-    public function listEntity()
+    public function listEntities()
     {
         $entitiesCollection = new EntityCollection();
 
@@ -85,6 +85,6 @@ class SociallymapController
 
         $listRSS = $entitiesCollection->all($orderKey, $orderSense);
 
-        echo $this->templater->loadAdminPage('rss-list.php', $listRSS);
+        echo $this->templater->loadAdminPage('entity-list.php', $listRSS);
     }
 }

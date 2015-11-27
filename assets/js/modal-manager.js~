@@ -1,5 +1,7 @@
 (function($) {
   $(document).ready(function(){
+  	var readMoreElement = document.querySelectorAll(".sm-readmore-link");
+
 	$(".sm-display-modal").fancybox({
 		maxWidth	: 1400,
 		maxHeight	: 600,
