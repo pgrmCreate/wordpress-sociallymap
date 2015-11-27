@@ -1,8 +1,5 @@
 <?php
-    $data = get_query_var('articleData');
-
-    var_dump(get_query_var('articleData'));
-    echo("MAJ");
+    $data = get_query_var('data');
     $url = $data['url'];
     $display_type = $data['display_type'];
 
