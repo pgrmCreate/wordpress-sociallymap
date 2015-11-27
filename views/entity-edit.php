@@ -54,10 +54,11 @@
                 </tr>
                 <tr class="form-field form-required">
                     <th>
-                        <label>Activer</label>
+                        <label>Actif</label>
                     </th>
                     <td>
-                        <input name="sociallymap_activate" class="sociallymap_formRSS_newFlux" type="checkbox" value="1">
+                        <input name="sociallymap_activate" class="sociallymap_formRSS_newFlux" type="checkbox" value="1"
+                        <?php if ($editingEntity->display_type == "modal") { echo ("checked"); } ?> >
                     </td>
                 </tr>
                 <tr class="form-field form-required">
@@ -66,7 +67,7 @@
                     </th>
                     <td>
                         <input type="checkbox" name="sociallymap_display_type" class="sociallymap_formRSS_newFlux"
-                        value="modal" <?php if ($editingEntity->display_type == 1) { echo ("checked"); } ?>>
+                        value="modal" <?php if ($editingEntity->activate) { echo ("checked"); } ?>>
                     </td>
                 </tr>
                 <tr class="form-field form-required">

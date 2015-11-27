@@ -77,7 +77,7 @@
 					</th>
 					<td>
 						<input type="checkbox" name="sociallymap_display_type" class="sociallymap_formRSS_newFlux"
-						 value="modal"?>>
+						 value="modal">
 					</td>
 				</tr>
 			</tbody>

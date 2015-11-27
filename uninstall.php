@@ -1,5 +1,11 @@
 <?php
-    require_once(plugin_dir_path(__FILE__).'includes/DbBuilder.php');
+// If uninstall is not called from WordPress, exit
+if (!defined('WP_UNINSTALL_PLUGIN')) {
+    exit();
+}
 
-    $dbBuilder = new DbBuilder();
-    $dbBuilder->destroyAll();
+global $wpdb;
+
+$wpdb->query("DROP TABLE IF EXISTS".$wpdb->prefix."sm_options");
+$wpdb->query("DROP TABLE IF EXISTS".$wpdb->prefix."sm_entity_options");
+$wpdb->query("DROP TABLE IF EXISTS".$wpdb->prefix."sm_entities");

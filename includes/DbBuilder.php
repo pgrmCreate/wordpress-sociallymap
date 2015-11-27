@@ -78,13 +78,4 @@ class DbBuilder
             dbDelta($sql);
         }
     }
-
-    public function destroyAll()
-    {
-        global $wpdb;
-
-        $wpdb->query("DROP TABLE IF EXISTS $this->table_options");
-        $wpdb->query("DROP TABLE IF EXISTS $this->table_entity_options");
-        $wpdb->query("DROP TABLE IF EXISTS $this->table_entity");
-    }
 }
