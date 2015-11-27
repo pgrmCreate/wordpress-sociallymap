@@ -15,7 +15,7 @@ class Requester
         $curl = curl_init();
 
         $envtype = $_ENV['URL_SOCIALLYMAP'];
-        error_log("Actuel target env : ".$envtype, 3, plugin_dir_path(__FILE__)."../logs/error.log");
+        error_log("Actuel target env : ".print_r($envtype, true), 3, plugin_dir_path(__FILE__)."../logs/error.log");
 
     // @TODO Retrieve the right url's depending the environement
         $urlCreator = [
