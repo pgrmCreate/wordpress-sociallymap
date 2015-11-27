@@ -15,6 +15,7 @@ require_once(plugin_dir_path(__FILE__).'tools/Publisher.php');
 require_once(plugin_dir_path(__FILE__).'tools/Requester.php');
 require_once(plugin_dir_path(__FILE__).'tools/ImageUploader.php');
 require_once(plugin_dir_path(__FILE__).'tools/GithubUpdater.php');
+require_once(plugin_dir_path(__FILE__).'tools/SociallymapController.php');
 require_once(plugin_dir_path(__FILE__).'models/EntityCollection.php');
 require_once(plugin_dir_path(__FILE__).'models/Entity.php');
 require_once(plugin_dir_path(__FILE__).'models/Option.php');
@@ -24,19 +25,24 @@ class SociallymapPlugin
 {
     private $wpdb;
     private $templater;
+    private $controller;
     private $config_default_value;
 
     public function __construct()
     {
         global $wpdb;
         $this->wpdb = $wpdb;
-        $_ENV["URL_SOCIALLYMAP"] = "http://app.sociallymap-staging.com";
+        $_ENV["URL_SOCIALLYMAP"] = [
+            "prod"    => "http://app.sociallymap.com",
+            "staging" => "http://app.sociallymap-staging.com",
+            "dev"     => "http://app.sociallymap.local",
+        ];
 
         $this->templater = new Templater();
+        $this->controller = new SociallymapController();
 
         $configsOption = new ConfigOption;
         $this->config_default_value = $configsOption->getConfig();
-
 
         $builder = new DbBuilder();
         $builder->dbInitialisation();
@@ -77,7 +83,7 @@ class SociallymapPlugin
         global $wp_query;
 
         if ($wp_query->get('sociallymap-plugin')) {
-            error_log('Ping received: '.print_r($_POST, true));
+            error_log('Ping received: '.print_r($_POST, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
 
             // We don't have the right parameters
             if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
@@ -106,7 +112,7 @@ class SociallymapPlugin
             // This entity not exists
             if (empty($entity)) {
                 header("HTTP/1.0 404 Not Found");
-                error_log("Socially map try to connect to plugin but entity ID is no found");
+                error_log("Socially map try to connect to plugin but entity ID is no found", 3, plugin_dir_path(__FILE__)."logs/error.log");
                 exit;
             }
 
@@ -160,7 +166,9 @@ class SociallymapPlugin
             'Sociallymap',
             'manage',
             'sociallymap-publisher',
-            [$this, 'documentation_html'],
+            function () {
+                $this->loadTemplate("documentation");
+            },
             plugin_dir_url(__FILE__).'assets/images/logo.png'
         );
 
@@ -170,7 +178,9 @@ class SociallymapPlugin
             'Mes entités',
             'manage_options',
             'sociallymap-rss-list',
-            [$this, 'myEntitiesHtml']
+            function () {
+                $this->loadTemplate("listEntity");
+            }
         );
 
         add_submenu_page(
@@ -179,7 +189,9 @@ class SociallymapPlugin
             'Ajouter une entité',
             'manage_options',
             'sociallymap-rss-add',
-            [$this, 'addEntitiesHtml']
+            function () {
+                $this->loadTemplate("addEntity");
+            }
         );
 
         add_submenu_page(
@@ -188,7 +200,9 @@ class SociallymapPlugin
             'Configuration',
             'manage_options',
             'sociallymap-configuration',
-            [$this, 'configurationHtml']
+            function () {
+                $this->loadTemplate("configuration");
+            }
         );
 
         add_submenu_page(
@@ -197,8 +211,9 @@ class SociallymapPlugin
             'Documentation',
             'manage_options',
             'sociallymap-documentation',
-            [$this,
-            'documentationHtml']
+            function () {
+                $this->loadTemplate("documentation");
+            }
         );
 
         add_submenu_page(
@@ -207,7 +222,9 @@ class SociallymapPlugin
             'Editer lien',
             'manage_options',
             'sociallymap-rss-edit',
-            [$this, 'editHtml']
+            function () {
+                $this->loadTemplate("editEntity");
+            }
         );
     }
 
@@ -250,7 +267,7 @@ class SociallymapPlugin
             $baseReadMore = $this->templater->loadReadMore();
 
             foreach ($jsonData as $key => $value) {
-                error_log(print_R($value, true));
+                error_log(print_R($value, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
 
                 $contentArticle = "<p>";
                 $imagePost = "";
@@ -312,94 +329,17 @@ class SociallymapPlugin
                 }
             }
         } catch (Exception $e) {
-            error_log('Sociallymap: Error data loading');
-            error_log('# Error : '.$e->getMessage());
+            error_log('Sociallymap: Error data loading', 3, plugin_dir_path(__FILE__)."logs/error.log");
+            error_log('# Error : '.$e->getMessage(), 3, plugin_dir_path(__FILE__)."logs/error.log");
             exit;
         }
     }
 
-    public function configurationHtml()
+    public function loadTemplate($params)
     {
         $this->loadAssets();
-        $data = [];
-        if (array_key_exists('sociallymap_updateConfig', $_POST)) {
-            $data = [
-            'isSaved' => true];
-        }
 
-        echo $this->templater->loadAdminPage('configuration.php', $data);
-
-        $uploader = new ImageUploader();
-        // $uploader->upload();
-    }
-
-    public function documentationHtml()
-    {
-        $this->loadAssets();
-        echo $this->templater->loadAdminPage('documentation.php');
-    }
-
-    public function myEntitiesHtml()
-    {
-        $this->loadAssets();
-        $entitiesCollection = new EntityCollection();
-
-        $orderSense = "";
-        $orderKey = "";
-        if (isset($_GET['orderSense']) && isset($_GET['orderKey'])) {
-            $orderSense = $_GET['orderSense'];
-            $orderKey = $_GET['orderKey'];
-        }
-
-        $listRSS = $entitiesCollection->all($orderKey, $orderSense);
-
-        echo $this->templater->loadAdminPage('rss-list.php', $listRSS);
-    }
-
-    public function addEntitiesHtml()
-    {
-        $this->loadAssets();
-        $config = new ConfigOption();
-        $configs = $config->getConfig();
-        $data = new stdClass();
-
-        foreach ($configs as $key => $value) {
-            if ($value->id == 1) {
-                $data->category = $value->default_value;
-            } elseif ($value->id == 3) {
-                $data->publish_type =  $value->default_value;
-            } elseif ($value->id == 2) {
-                $data->activate =  $value->default_value;
-            }
-        }
-
-        echo $this->templater->loadAdminPage('rss-add.php', $data);
-    }
-
-    public function editHtml()
-    {
-        $this->loadAssets();
-        $entity = new Entity;
-        $editingEntity = $entity->getById($_GET['id']);
-
-        $categoryList = [];
-        $publish_type = "draft";
-        foreach ($editingEntity->options as $key => $value) {
-            if ($value->options_id == '1') {
-                $categoryList[] = $value->value;
-            }
-            if ($value->options_id == '3') {
-                $publish_type = $value->value;
-            }
-        }
-
-        $editingEntity->options = new stdClass;
-        $editingEntity->options->category = $categoryList;
-        $editingEntity->options->publish_type = $publish_type;
-
-        $sendItem['editingEntity'] = $editingEntity;
-
-        echo $this->templater->loadAdminPage('rss-edit.php', $sendItem);
+        $this->controller->$params();
     }
 
     public function entityManager()

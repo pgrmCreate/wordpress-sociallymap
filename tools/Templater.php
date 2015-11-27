@@ -1,39 +1,45 @@
 <?php
-	class Templater {
-		private $urlBase;
 
-		public function __construct () {
-			$this->urlBase =  dirname( __FILE__ ) . '/../views/';
-		}
+class Templater
+{
+    private $urlBase;
 
-		public function loadAdminPage ($page, $data = null) {
-			load_plugin_textdomain('sociallymap', false, "../".basename(dirname( __FILE__ )) );
+    public function __construct()
+    {
+        $this->urlBase =  dirname(__FILE__) . '/../views/';
+    }
 
-			set_query_var('data', ['data' => $data]);
+    public function loadAdminPage($page, $data = null)
+    {
+        load_plugin_textdomain('sociallymap', false, "../".basename(dirname(__FILE__)));
 
-			ob_start();
-				load_template($this->urlBase.'menu.php');
-				load_template($this->urlBase.$page);
-				$view = ob_get_contents();
-			ob_end_clean();
+        set_query_var('data', ['data' => $data]);
 
-			return $view;
-		}
+        ob_start();
+            load_template($this->urlBase.'menu.php');
+            load_template($this->urlBase.$page);
+            $view = ob_get_contents();
+        ob_end_clean();
 
-		public function loadReadMore() {
-			load_plugin_textdomain('sociallymap', false, "../".basename(dirname( __FILE__ )) );
+        return $view;
+    }
 
-			ob_start();
-				load_template($this->urlBase.'readmore-template.php', true);
-				$readmore = ob_get_contents();
-			ob_end_clean();
+    public function loadReadMore()
+    {
+        load_plugin_textdomain('sociallymap', false, "../".basename(dirname(__FILE__)));
 
-			return $readmore;
-		}
+        ob_start();
+            load_template($this->urlBase.'readmore-template.php', true);
+            $readmore = ob_get_contents();
+        ob_end_clean();
 
-		public function formatReadMoreUrl ($content, $url) {
-			$contentFormated = str_replace('href=""', 'href="'.$url.'"', $content);
+        return $readmore;
+    }
 
-			return $contentFormated;
-		}
+    public function formatReadMoreUrl($content, $url)
+    {
+        $contentFormated = str_replace('href=""', 'href="'.$url.'"', $content);
+
+        return $contentFormated;
+    }
 }
