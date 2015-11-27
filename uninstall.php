@@ -4,8 +4,7 @@
 //     exit();
 // }
 
-global $wpdb;
-
-$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix."sm_options");
-$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix."sm_entity_options");
-$wpdb->query("DROP TABLE IF EXISTS ".$wpdb->prefix."sm_entities");
+    require_once(plugin_dir_path(__FILE__).'includes/DbBuilder.php');
+       
+    $dbBuilder = new DbBuilder();
+    $dbBuilder->destroyAll();
