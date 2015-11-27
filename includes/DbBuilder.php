@@ -6,7 +6,7 @@ class DbBuilder
     private $table_options;
     private $table_entity_options;
     private $table_entity;
-
+ 
 
     public function __construct()
     {
@@ -81,6 +81,10 @@ class DbBuilder
 
     public function destroyAll()
     {
-        echo("<br>Tout a été détruit...................");
+        global $wpdb;
+
+        $wpdb->query("DROP TABLE IF EXISTS $this->table_options");
+        $wpdb->query("DROP TABLE IF EXISTS $this->table_entity_options");
+        $wpdb->query("DROP TABLE IF EXISTS $this->table_entity");
     }
 }
