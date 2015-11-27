@@ -128,6 +128,7 @@
 						}
 						?>
 				</tbody>
+				<?php if (count((array)$listRss > 1)) { ?>
 				<tfoot>
 					<tr>
 						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
@@ -171,6 +172,7 @@
 						</th>	
 					</tr>					
 				</tfoot>
+				<?php } ?>
 			<form>
 		</table>
 	</div>

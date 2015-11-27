@@ -153,6 +153,11 @@ class SociallymapPlugin
         $idSelect = $matches[1];
 
         $entityPicked = $entityObject->getById($idSelect);
+
+        // entity unknown
+        if (empty($entityPicked)) {
+            exit();
+        }
         echo("#################################");
         var_dump($entityPicked);
 
@@ -164,10 +169,10 @@ class SociallymapPlugin
 
         if ($display_type == "tab") {
             echo("is TAB, i convert ...............");
-            $content = preg_replace('data-display-type="modal"', 'data-display-type="tab"', $content);
+            $content = preg_replace('#data-display-type="modal"#', 'data-display-type="tab"', $content);
         } else {
             echo("is MODAL, i convert ...............");
-            $content = preg_replace('data-display-type="tab"', 'data-display-type="modal"', $content);
+            $content = preg_replace('#data-display-type="tab"#', 'data-display-type="modal"', $content);
         }
 
         return $content;
