@@ -4,10 +4,10 @@ class Requester
 {
     public function launch($entityId, $token, $environement)
     {
-        error_log('Ping received: '.print_r([$entityId, $token, $environement], true), 3, plugin_dir_path(__FILE__)."logs/error.log");
+        error_log('Ping received: '.print_r([$entityId, $token, $environement], true), 3, plugin_dir_path(__FILE__)."../logs/error.log");
 
         if (!is_callable('curl_init')) {
-            error_log("Curl no exist, request impossible..", 3, plugin_dir_path(__FILE__)."logs/error.log");
+            error_log("Curl no exist, request impossible..", 3, plugin_dir_path(__FILE__)."../logs/error.log");
             header("HTTP/1.0 501 Not Implemented");
             exit("Curl request impossible for wordpress server");
         }
@@ -15,7 +15,7 @@ class Requester
         $curl = curl_init();
 
         $envtype = $_ENV['URL_SOCIALLYMAP'][$environement];
-        error_log("Actuel target env : ".$envtype, 3, plugin_dir_path(__FILE__)."logs/error.log");
+        error_log("Actuel target env : ".$envtype, 3, plugin_dir_path(__FILE__)."../logs/error.log");
 
     // @TODO Retrieve the right url's depending the environement
         $urlCreator = [
@@ -56,8 +56,8 @@ class Requester
             }
         } catch (Exception $e) {
             header("HTTP/1.0 502 Bad Gateway");
-            error_log('Sociallymap: Error during retrieving entity pending messages', 3, plugin_dir_path(__FILE__)."logs/error.log");
-            error_log('# Error: '.$e->getMessage().' #', 3, plugin_dir_path(__FILE__)."logs/error.log");
+            error_log('Sociallymap: Error during retrieving entity pending messages', 3, plugin_dir_path(__FILE__)."../logs/error.log");
+            error_log('# Error: '.$e->getMessage().' #', 3, plugin_dir_path(__FILE__)."../logs/error.log");
             exit;
         }
         

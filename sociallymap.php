@@ -83,7 +83,7 @@ class SociallymapPlugin
         global $wp_query;
 
         if ($wp_query->get('sociallymap-plugin')) {
-            error_log('Ping received on /sociallymap/ : '.print_r($_POST, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
+            error_log('Ping received on /sociallymap/ : ', 3, plugin_dir_path(__FILE__)."logs/error.log");
 
             // We don't have the right parameters
             if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
@@ -235,8 +235,6 @@ class SociallymapPlugin
         $config       = new ConfigOption();
         $entityObject = new Entity();
 
-        error_log("ENTER MANAGE #1", 3, plugin_dir_path(__FILE__)."logs/error.log");
-
         $configs = $config->getConfig();
 
         // The entity is not active
@@ -259,8 +257,6 @@ class SociallymapPlugin
         // Try request to sociallymap on response
         $uploader = new ImageUploader();
         try {
-            error_log("ENTER MANAGE #2 ".print_r($_POST, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
-
             $jsonData = $requester->launch($_POST['entityId'], $_POST['token'], $_POST['env']);
  
             if (empty($jsonData)) {
