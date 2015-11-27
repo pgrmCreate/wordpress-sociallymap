@@ -2,7 +2,7 @@
 
 class Requester
 {
-    public function launch($entityId, $token)
+    public function launch($entityId, $token, $environement)
     {
         if (!is_callable('curl_init')) {
             error_log("Curl no exist, request impossible..", 3, plugin_dir_path(__FILE__)."logs/error.log");
@@ -12,7 +12,7 @@ class Requester
 
         $curl = curl_init();
 
-        $envtype = $_ENV[$token];
+        $envtype = $_ENV[$environement];
 
     // @TODO Retrieve the right url's depending the environement
         $urlCreator = [

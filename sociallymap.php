@@ -9,13 +9,13 @@ Author URI: http://www.sociallymap.com/
 License: MIT
 */
 
-require_once(plugin_dir_path(__FILE__).'tools/Templater.php');
-require_once(plugin_dir_path(__FILE__).'tools/DbBuilder.php');
-require_once(plugin_dir_path(__FILE__).'tools/Publisher.php');
-require_once(plugin_dir_path(__FILE__).'tools/Requester.php');
-require_once(plugin_dir_path(__FILE__).'tools/ImageUploader.php');
-require_once(plugin_dir_path(__FILE__).'tools/GithubUpdater.php');
-require_once(plugin_dir_path(__FILE__).'tools/SociallymapController.php');
+require_once(plugin_dir_path(__FILE__).'includes/Templater.php');
+require_once(plugin_dir_path(__FILE__).'includes/DbBuilder.php');
+require_once(plugin_dir_path(__FILE__).'includes/Publisher.php');
+require_once(plugin_dir_path(__FILE__).'includes/Requester.php');
+require_once(plugin_dir_path(__FILE__).'includes/ImageUploader.php');
+require_once(plugin_dir_path(__FILE__).'includes/GithubUpdater.php');
+require_once(plugin_dir_path(__FILE__).'includes/SociallymapController.php');
 require_once(plugin_dir_path(__FILE__).'models/EntityCollection.php');
 require_once(plugin_dir_path(__FILE__).'models/Entity.php');
 require_once(plugin_dir_path(__FILE__).'models/Option.php');
