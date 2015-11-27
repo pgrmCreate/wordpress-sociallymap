@@ -169,7 +169,7 @@ class SociallymapPlugin
             function () {
                 $this->loadTemplate("documentation");
             },
-            plugin_dir_url(__FILE__).'assets/images/logo.png'
+            plugin_dir_url(__FILE__).'assets/images/icon.png'
         );
 
         add_submenu_page(
@@ -417,14 +417,14 @@ class SociallymapPlugin
     {
         // MODAL DISPLAY TYPE IS ON
         if ($isFront) {
-            wp_enqueue_style('readmore', plugin_dir_url(__FILE__).'assets/styles/custom-readmore.css');
-            wp_enqueue_style('fancybox', plugin_dir_url(__FILE__).'assets/styles/fancybox.css');
+            wp_enqueue_style('readmore', plugin_dir_url(__FILE__).'assets/css/custom-readmore.css');
+            wp_enqueue_style('fancybox', plugin_dir_url(__FILE__).'assets/css/fancybox.css');
 
             wp_enqueue_script('jquery');
             wp_enqueue_script('fancy', plugin_dir_url(__FILE__).'assets/js/fancybox.js');
             wp_enqueue_script('modal-manager', plugin_dir_url(__FILE__).'assets/js/modal-manager.js');
         } else {
-            wp_enqueue_style('back', plugin_dir_url(__FILE__).'assets/styles/back.css');
+            wp_enqueue_style('back', plugin_dir_url(__FILE__).'assets/css/back.css');
         }
     }
 
