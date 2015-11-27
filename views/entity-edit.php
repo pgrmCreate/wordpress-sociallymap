@@ -54,7 +54,7 @@
                 </tr>
                 <tr class="form-field form-required">
                     <th>
-                        <label>Afficher </label>
+                        <label>Activer</label>
                     </th>
                     <td>
                         <input name="sociallymap_activate" class="sociallymap_formRSS_newFlux" type="checkbox" value="1">
