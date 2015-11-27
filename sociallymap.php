@@ -257,7 +257,7 @@ class SociallymapPlugin
         // Try request to sociallymap on response
         $uploader = new ImageUploader();
         try {
-            $jsonData = $requester->launch($_POST['entityId'], $_POST['token'], $_POST['env']);
+            $jsonData = $requester->launch($_POST['entityId'], $_POST['token'], $_POST['environment']);
  
             if (empty($jsonData)) {
                 throw new Exception('No data returned from request', 1);
