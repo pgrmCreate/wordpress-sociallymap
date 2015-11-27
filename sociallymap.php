@@ -144,18 +144,32 @@ class SociallymapPlugin
     public function postFooter($content)
     {
         global $post;
+        $entityObject = new Entity();
         $config = new ConfigOption();
         $configs = $config->getConfig();
 
-        if ($configs[1]->default_value == "tab") {
-            $footer = "<p data-hidden-display>tab</p>";
-        } else {
-            $footer = "<p data-hidden-display>modal</p>";
+        $pattern = '#data-entity-id="([0-9]+)"#';
+        preg_match($pattern, $content, $matches);
+        $idSelect = $matches[1];
+
+        $entityPicked = $entityObject->getById($idSelect);
+        echo("#################################");
+        var_dump($entityPicked);
+
+        foreach ($entityPicked->options as $key => $value) {
+            if ($value->options_id == '2') {
+                $display_type = $value->value;
+            }
         }
 
-        if ($footer) {
-            return $content . $footer;
+        if ($display_type == "tab") {
+            echo("is TAB, i convert ...............");
+            $content = preg_replace('data-display-type="modal"', 'data-display-type="tab"', $content);
+        } else {
+            echo("is MODAL, i convert ...............");
+            $content = preg_replace('data-display-type="tab"', 'data-display-type="modal"', $content);
         }
+
         return $content;
     }
 
@@ -310,7 +324,7 @@ class SociallymapPlugin
 
                     // Check if Link URL existing
                     if (!empty($value->link->url)) {
-                        $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type);
+                        $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type, $entity->id);
                     }
                 }
                 

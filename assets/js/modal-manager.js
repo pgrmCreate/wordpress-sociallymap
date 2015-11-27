@@ -7,7 +7,7 @@
 				maxHeight	: 1200,
 				fitToView	: false,
 				width		: '90%',
-				height		: '80%',
+				height		: '90%',
 				autoSize	: false,
 				closeClick	: false,
 				openEffect	: 'none',

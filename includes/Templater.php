@@ -24,13 +24,14 @@ class Templater
         return $view;
     }
 
-    public function loadReadMore($url, $display_type)
+    public function loadReadMore($url, $display_type, $entityId)
     {
         load_plugin_textdomain('sociallymap', false, "../".basename(dirname(__FILE__)));
 
         set_query_var('data', [
             'url' => $url,
             'display_type' => $display_type,
+            'entityId' => $entityId,
         ]);
 
         ob_start();
