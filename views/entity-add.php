@@ -54,11 +54,11 @@
 					</th>
 					<td>
 						<select name="sociallymap_publish_type">
-							<option value="publish" <?php if($default_value->publish_type == 'publish') echo ('selected');?> >Publier</option>
-							<option value="draft" <?php if($default_value->publish_type == 'draft') echo ('selected');?>>Brouillon</option>
-							<option value="pending" <?php if($default_value->publish_type == 'pending') echo ('selected');?>>En attente de relecture</option>
-							<option value="private" <?php if($default_value->publish_type == 'private') echo ('selected');?>>Privée</option>
-							<option value="future" <?php if($default_value->publish_type == 'future') echo ('selected');?>>En attente de publication</option>
+							<option value="publish" <?php if ($default_value->publish_type == 'publish') echo ('selected');?> >Publier</option>
+							<option value="draft" <?php if ($default_value->publish_type == 'draft') echo ('selected');?>>Brouillon</option>
+							<option value="pending" <?php if ($default_value->publish_type == 'pending') echo ('selected');?>>En attente de relecture</option>
+							<option value="private" <?php if ($default_value->publish_type == 'private') echo ('selected');?>>Privée</option>
+							<option value="future" <?php if ($default_value->publish_type == 'future') echo ('selected');?>>En attente de publication</option>
 						</select>
 					</td>
 				</tr>
@@ -69,6 +69,15 @@
 					<td>
 						<input type="checkbox" name="sociallymap_activate" class="sociallymap_formRSS_newFlux"
 						 value="1" <?php if($default_value->activate == 1) echo "checked" ?>>
+					</td>
+				</tr>
+				<tr class="form-field form-required">
+					<th>
+						<label>Afficher dans une fenêtre modale</label>
+					</th>
+					<td>
+						<input type="checkbox" name="sociallymap_display_type" class="sociallymap_formRSS_newFlux"
+						 value="modal"?>>
 					</td>
 				</tr>
 			</tbody>

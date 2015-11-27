@@ -54,11 +54,19 @@
                 </tr>
                 <tr class="form-field form-required">
                     <th>
-                        <label>Actif</label>
+                        <label>Afficher </label>
                     </th>
                     <td>
-                        <input name="sociallymap_activate" <?php if ($editingEntity->activate) echo ('checked');?>
-                        class="sociallymap_formRSS_newFlux" type="checkbox" value="1">
+                        <input name="sociallymap_activate" class="sociallymap_formRSS_newFlux" type="checkbox" value="1">
+                    </td>
+                </tr>
+                <tr class="form-field form-required">
+                    <th>
+                        <label>Ouverture du lien dans une fenêtre modale</label>
+                    </th>
+                    <td>
+                        <input type="checkbox" name="sociallymap_display_type" class="sociallymap_formRSS_newFlux"
+                        value="modal" <?php if ($editingEntity->display_type == 1) { echo ("checked"); } ?>>
                     </td>
                 </tr>
                 <tr class="form-field form-required">
@@ -68,23 +76,23 @@
                     <td>
                         <select name="sociallymap_publish_type">
                             <option value ="publish" 
-                                <?php if($editingEntity->options->publish_type == 'publish') echo('selected'); ?>>
+                                <?php if ($editingEntity->options->publish_type == 'publish') echo('selected'); ?>>
                                 Publier
                             </option>
                             <option value ="draft" 
-                                <?php if($editingEntity->options->publish_type == 'draft') echo('selected'); ?>>
+                                <?php if ($editingEntity->options->publish_type == 'draft') echo('selected'); ?>>
                                 Brouillon
                             </option>
                             <option value ="pending" 
-                                <?php if($editingEntity->options->publish_type == 'pending') echo('selected'); ?>>
+                                <?php if ($editingEntity->options->publish_type == 'pending') echo('selected'); ?>>
                                 En attente de relecture
                             </option>
                             <option value ="private" 
-                                <?php if($editingEntity->options->publish_type == 'private') echo('selected'); ?>>
+                                <?php if ($editingEntity->options->publish_type == 'private') echo('selected'); ?>>
                                 Privée
                             </option>
                             <option value ="future" 
-                                <?php if($editingEntity->options->publish_type == 'future') echo('selected'); ?>>
+                                <?php if ($editingEntity->options->publish_type == 'future') echo('selected'); ?>>
                                 En attente de publication
                             </option>
                         </select>

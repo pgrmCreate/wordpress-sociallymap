@@ -194,16 +194,16 @@ class SociallymapPlugin
             }
         );
 
-        add_submenu_page(
-            'sociallymap-publisher',
-            'Configuration',
-            'Configuration',
-            'manage_options',
-            'sociallymap-configuration',
-            function () {
-                $this->loadTemplate("configuration");
-            }
-        );
+        // add_submenu_page(
+        //     'sociallymap-publisher',
+        //     'Configuration',
+        //     'Configuration',
+        //     'manage_options',
+        //     'sociallymap-configuration',
+        //     function () {
+        //         $this->loadTemplate("configuration");
+        //     }
+        // );
 
         add_submenu_page(
             'sociallymap-publisher',
@@ -249,6 +249,10 @@ class SociallymapPlugin
                 $entity_list_category[] = $value->value;
             }
 
+            if ($value->options_id == 2) {
+                $entity_display_type = $value->value;
+            }
+
             if ($value->options_id == 3) {
                 $entity_publish_type = $value->value;
             }
@@ -263,8 +267,6 @@ class SociallymapPlugin
                 throw new Exception('No data returned from request', 1);
                 exit();
             }
-
-            $baseReadMore = $this->templater->loadReadMore();
 
             foreach ($jsonData as $key => $value) {
                 error_log(print_R($value, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
@@ -308,7 +310,7 @@ class SociallymapPlugin
 
                     // Check if Link URL existing
                     if (!empty($value->link->url)) {
-                        $readmore = $this->templater->formatReadMoreUrl($baseReadMore, $value->link->url);
+                        $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type);
                     }
                 }
                 
@@ -363,6 +365,9 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_category'])) {
                 $_POST['sociallymap_category'] = [];
             }
+            if (!isset($_POST['sociallymap_display_type'])) {
+                $_POST['sociallymap_display_type'] = "tab";
+            }
 
             $data = [
                 'name'                   => $_POST['sociallymap_label'],
@@ -385,14 +390,17 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_activate'])) {
                 $_POST['sociallymap_activate'] = 0;
             }
+            if (!isset($_POST['sociallymap_display_type'])) {
+                $_POST['sociallymap_display_type'] = "tab";
+            }
 
             $data = [
                 'name'          => $_POST['sociallymap_name'],
                 'category'      => $_POST['sociallymap_category'],
                 'activate'      => $_POST['sociallymap_activate'],
                 'sm_entity_id'  => $_POST['sociallymap_entityId'],
-                'publish_type'  => $config[2]->default_value,
-                'display_type'  => $config[1]->default_value,
+                'publish_type'  => $_POST['sociallymap_publish_type'],
+                'display_type'  => $_POST['sociallymap_display_type'],
             ];
 
             $entityCollection->add($data);

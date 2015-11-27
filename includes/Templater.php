@@ -24,22 +24,20 @@ class Templater
         return $view;
     }
 
-    public function loadReadMore()
+    public function loadReadMore($url)
     {
         load_plugin_textdomain('sociallymap', false, "../".basename(dirname(__FILE__)));
 
+        set_query_var('data', [
+            'url' => $url,
+            'display_type' => $url,
+        ]);
+
         ob_start();
-            load_template($this->urlBase.'readmore-template.php', true);
+            load_template($this->urlBase.'readmore-template.php');
             $readmore = ob_get_contents();
         ob_end_clean();
 
         return $readmore;
-    }
-
-    public function formatReadMoreUrl($content, $url)
-    {
-        $contentFormated = str_replace('href=""', 'href="'.$url.'"', $content);
-
-        return $contentFormated;
     }
 }
