@@ -116,7 +116,6 @@ class SociallymapPlugin
                 exit;
             }
 
-            error_log("Launch message!", 3, plugin_dir_path(__FILE__)."logs/error.log");
             // Try to retrieve the pending messages
             if ($this->manageMessages($entity) == false) {
                 header("HTTP/1.0 502 Bad gateway");
