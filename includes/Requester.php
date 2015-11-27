@@ -14,7 +14,7 @@ class Requester
 
         $curl = curl_init();
 
-        $envtype = $_ENV[$environement];
+        $envtype = $_ENV['URL_SOCIALLYMAP'][$environement];
 
     // @TODO Retrieve the right url's depending the environement
         $urlCreator = [
