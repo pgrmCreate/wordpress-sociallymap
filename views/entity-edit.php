@@ -1,8 +1,6 @@
 <?php
     $data = get_query_var('data');
     $editingEntity = $data['data']['editingEntity'];
-
-    var_dump($editingEntity);
 ?>
 
 <div class="wrap">
@@ -69,7 +67,7 @@
                     </th>
                     <td>
                         <input type="checkbox" name="sociallymap_display_type" class="sociallymap_formRSS_newFlux" value="modal"
-                         <?php if ($editingEntity->display_type == "modal") echo("checked"); ?> >
+                         <?php if ($editingEntity->options->display_type == "modal") echo("checked"); ?> >
                     </td>
                 </tr>
                 <tr class="form-field form-required">
