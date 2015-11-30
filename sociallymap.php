@@ -166,7 +166,7 @@ class SociallymapPlugin
             }
 
             if ($value->options_id == '4') {
-                $link_canonical = true;
+                $link_canonical = $value->value;
             }
         }
 
