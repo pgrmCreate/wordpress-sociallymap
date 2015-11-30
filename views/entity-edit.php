@@ -75,7 +75,7 @@
                         <label>Lien canonique</label>
                     </th>
                     <td>
-                        <input type="checkbox" name="sociallymap_link_canonical" class="sociallymap_formRSS_newFlux" value="modal"
+                        <input type="checkbox" name="sociallymap_link_canonical" class="sociallymap_formRSS_newFlux" value="1"
                          <?php if ($editingEntity->options->link_canonical == "1") echo("checked"); ?> >
                     </td>
                 </tr>
