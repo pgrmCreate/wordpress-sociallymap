@@ -147,6 +147,7 @@ class SociallymapPlugin
         $entityObject = new Entity();
         $config = new ConfigOption();
         $configs = $config->getConfig();
+        $link_canonical = false;
 
         $pattern = '#data-entity-id="([0-9]+)"#';
         preg_match($pattern, $content, $matches);
@@ -163,6 +164,10 @@ class SociallymapPlugin
             if ($value->options_id == '2') {
                 $display_type = $value->value;
             }
+
+            if ($value->options_id == '4') {
+                $link_canonical = true;
+            }
         }
 
         if ($display_type == "tab") {
@@ -170,6 +175,12 @@ class SociallymapPlugin
         } else {
             $content = preg_replace('#data-display-type="tab"#', 'data-display-type="modal"', $content);
         }
+
+        if ($link_canonical) {
+            $content = preg_replace('#<link (.+) />#', '', $content);
+        }
+
+
 
         return $content;
     }
@@ -382,6 +393,10 @@ class SociallymapPlugin
             }
             if (!isset($_POST['sociallymap_display_type'])) {
                 $_POST['sociallymap_display_type'] = "tab";
+            }   
+
+            if (!isset($_POST['sociallymap_link_canonical'])) {
+                $_POST['sociallymap_display_type'] = 0;
             }
 
             $data = [
