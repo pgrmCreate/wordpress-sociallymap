@@ -26,6 +26,7 @@ class Entity
 
         $entityRequest = $wpdb->prepare('SELECT * FROM '.$this->table.' WHERE id=%d', $id);
         $entity = $wpdb->get_row($entityRequest);
+        $entity->options = new stdClass;
 
         $optionsRequest = 'SELECT options_id, value FROM '.$wpdb->prefix.'sm_entity_options WHERE entity_id = '.$id;
         $options = $wpdb->get_results($optionsRequest);

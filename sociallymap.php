@@ -407,6 +407,7 @@ class SociallymapPlugin
                 'display_type'   => $_POST['sociallymap_display_type'],
                 'publish_type'   => $_POST['sociallymap_publish_type'],
                 'link_canonical' => $_POST['sociallymap_link_canonical'],
+                'image'          => $_POST['sociallymap_image'],
                 'id'             => $_GET['id'],
             ];
 

@@ -32,8 +32,6 @@ class EntityCollection
         ];
         $entityID = $entity->save($dataEntity);
 
-        print_r($data['category']);
-
         foreach ($data['category'] as $key => $value) {
             $dataOption = [
             'option_id' => 1,
