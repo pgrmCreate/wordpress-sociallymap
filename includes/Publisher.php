@@ -4,7 +4,7 @@ class Publisher
 {
     public function publish($title, $content, $image, $category = 1, $publish_type = 'draft')
     {
-        error_log('#UPLOAD# path: '.$image, 3, plugin_dir_path(__FILE__)."logs/error.log");
+        error_log('#UPLOAD# path: '.$image, 3, plugin_dir_path(__FILE__)."../logs/error.log");
 
         $listCats = [];
         if (is_array($category)) {
