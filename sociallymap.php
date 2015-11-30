@@ -153,6 +153,11 @@ class SociallymapPlugin
         preg_match($pattern, $content, $matches);
         $idSelect = $matches[1];
 
+        // id unknown
+        if (empty($idSelect)) {
+            exit();
+        }
+        
         $entityPicked = $entityObject->getById($idSelect);
 
         // entity unknown
