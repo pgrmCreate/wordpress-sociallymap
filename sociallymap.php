@@ -282,6 +282,10 @@ class SociallymapPlugin
             if ($value->options_id == 3) {
                 $entity_publish_type = $value->value;
             }
+
+            if ($value->options_id == 5) {
+                $entity_image = $value->value;
+            }
         }
 
         // Try request to sociallymap on response
@@ -300,18 +304,6 @@ class SociallymapPlugin
                 $contentArticle = "<p>";
                 $imagePost = "";
                 $readmore = "" ;
-
-                // Check if Media object exist
-                if (isset($value->media) && $value->media->type == "photo") {
-                    $imagePost = $uploader->upload($value->media->url);
-                    // format html tag if upload return a string (no wp_error array)
-                    if (gettype($imagePost) == "string") {
-                        $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
-                        $contentArticle += $imagePost;
-                    } else {
-                        $imagePost = "";
-                    }
-                }
 
                 // Check Link object existing
                 if (!isset($value->link)) {
@@ -348,8 +340,34 @@ class SociallymapPlugin
                     $contentArticle .= $readmore;
                 }
 
+                // Check if Media object exist
+                $isUploaded = false;
+                if (isset($value->media) && $value->media->type == "photo") {
+                    $imagePost = $uploader->upload($value->media->url);
+                    // format html tag if upload return a string (no wp_error array)
+                    if (gettype($imagePost) == "string") {
+                        $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
+                        $isUploaded = true;
+                    } else {
+                        $imagePost = "";
+                    }
+                }
+
+                // Put options attachment image about from options
+                $imageAttachment = "";
+                if ($isUploaded) {
+                    if (in_array($entity_image, ['content', 'both'])) {
+                        $contentArticle += $imagePost;
+                    }
+                    if (in_array($entity_image, ['thumbnail', 'both'])) {
+                        if (preg_match('src="(.+)"', $imagePost, $output_array)) {
+                            $imageAttachment = parse_url($output_array[1], PHP_URL_PATH);
+                        }
+                    }
+                }
+                        
                 // handle publish
-                if (!$publisher->publish($title, $contentArticle, $entity_list_category, $entity_publish_type)) {
+                if (!$publisher->publish($title, $contentArticle, $imageAttachment, $entity_list_category, $entity_publish_type)) {
                     throw new Exception('Error from post publish', 1);
                 } else {
                     $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
