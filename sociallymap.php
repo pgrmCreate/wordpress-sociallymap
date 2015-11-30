@@ -177,7 +177,7 @@ class SociallymapPlugin
         }
 
         if (!$link_canonical) {
-            $content = preg_replace('#<link (.+) />#', '', $content);
+            $content = preg_replace('#<link (.+) >#', '', $content);
         }
 
 
@@ -396,7 +396,7 @@ class SociallymapPlugin
             }   
 
             if (!isset($_POST['sociallymap_link_canonical'])) {
-                $_POST['sociallymap_display_type'] = 0;
+                $_POST['sociallymap_link_canonical'] = 0;
             }
 
             $data = [
