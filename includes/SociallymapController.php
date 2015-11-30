@@ -36,6 +36,7 @@ class SociallymapController
         $categoryList = [];
         $publish_type = "draft";
         $display_type = "modal";
+        $link_canonical = "1";
         foreach ($editingEntity->options as $key => $value) {
             if ($value->options_id == '1') {
                 $categoryList[] = $value->value;
@@ -46,12 +47,16 @@ class SociallymapController
             if ($value->options_id == '3') {
                 $publish_type = $value->value;
             }
+            if ($value->options_id == '4') {
+                $link_canonical = $value->value;
+            }
         }
 
         $editingEntity->options = new stdClass;
         $editingEntity->options->category = $categoryList;
         $editingEntity->options->publish_type = $publish_type;
         $editingEntity->options->display_type = $display_type;
+        $editingEntity->options->link_canonical = $link_canonical;
 
         $sendItem['editingEntity'] = $editingEntity;
 

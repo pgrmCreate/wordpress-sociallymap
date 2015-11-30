@@ -72,6 +72,15 @@
                 </tr>
                 <tr class="form-field form-required">
                     <th>
+                        <label>Lien canonique</label>
+                    </th>
+                    <td>
+                        <input type="checkbox" name="sociallymap_link_canonical" class="sociallymap_formRSS_newFlux" value="modal"
+                         <?php if ($editingEntity->options->link_canonical == "1") echo("checked"); ?> >
+                    </td>
+                </tr>
+                <tr class="form-field form-required">
+                    <th>
                         <label>Type de publication</label>
                     </th>
                     <td>

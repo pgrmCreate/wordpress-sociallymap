@@ -36,7 +36,7 @@ class DbBuilder
                 UNIQUE KEY id (id)
                 ) $charset_collate;";
 
-        dbDelta($sql);
+            dbDelta($sql);
         }
 
         if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_options'") != $this->table_options) {
@@ -47,22 +47,27 @@ class DbBuilder
                 UNIQUE KEY id (id)
                 ) $charset_collate;";
 
-        dbDelta($sql);
+            dbDelta($sql);
 
-        $this->wpdb->insert($this->table_options, [
+            $this->wpdb->insert($this->table_options, [
             'label' => 'category',
             'default_value' => 0,
             ], ['%s', '%d']);
 
-        $this->wpdb->insert($this->table_options, [
+            $this->wpdb->insert($this->table_options, [
             'label' => 'display_type',
             'default_value' => 'tab',
             ], ['%s', '%s']);
 
-        $this->wpdb->insert($this->table_options, [
+            $this->wpdb->insert($this->table_options, [
             'label' => 'publish_type',
             'default_value' => 'draft',
             ], ['%s', '%s']);
+
+            $this->wpdb->insert($this->table_options, [
+            'label' => 'link_canonical',
+            'default_value' => '1',
+            ], ['%s', '%d']);
         }
 
         if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity_options'") != $this->table_entity_options) {
@@ -74,9 +79,9 @@ class DbBuilder
                 UNIQUE KEY id (id)
                 ) $charset_collate;";
 
-        	dbDelta($sql);
-        	}
+            dbDelta($sql);
         }
+    }
 
     public function destroyAll()
     {

@@ -68,7 +68,7 @@
 					</th>
 					<td>
 						<input type="checkbox" name="sociallymap_activate" class="sociallymap_formRSS_newFlux"
-						 value="1" <?php if($default_value->activate == 1) echo "checked" ?>>
+						 value="1" checked>
 					</td>
 				</tr>
 				<tr class="form-field form-required">
@@ -77,7 +77,16 @@
 					</th>
 					<td>
 						<input type="checkbox" name="sociallymap_display_type" class="sociallymap_formRSS_newFlux"
-						 value="modal">
+						 value="modal" checked>
+					</td>
+				</tr>
+				<tr class="form-field form-required">
+					<th>
+						<label>Lien canonique</label>
+					</th>
+					<td>
+						<input type="checkbox" name="sociallymap_link_canonical" class="sociallymap_formRSS_newFlux"
+						 value="1" checked>
 					</td>
 				</tr>
 			</tbody>

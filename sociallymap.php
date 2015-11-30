@@ -385,13 +385,14 @@ class SociallymapPlugin
             }
 
             $data = [
-                'name'                   => $_POST['sociallymap_label'],
-                'category'               => $_POST['sociallymap_category'],
-                'activate'               => $_POST['sociallymap_activate'],
-                'sm_entity_id'           => $_POST['sociallymap_entityId'],
-                'display_type'           => $_POST['sociallymap_display_type'],
-                'publish_type'           => $_POST['sociallymap_publish_type'],
-                'id'                     => $_GET['id'],
+                'name'           => $_POST['sociallymap_label'],
+                'category'       => $_POST['sociallymap_category'],
+                'activate'       => $_POST['sociallymap_activate'],
+                'sm_entity_id'   => $_POST['sociallymap_entityId'],
+                'display_type'   => $_POST['sociallymap_display_type'],
+                'publish_type'   => $_POST['sociallymap_publish_type'],
+                'link_canonical' => $_POST['sociallymap_link_canonical'],
+                'id'             => $_GET['id'],
             ];
 
             $entityCollection->update($data);
@@ -399,7 +400,7 @@ class SociallymapPlugin
             exit;
         }
 
-
+ 
         // ACTION ENTITY : post
         if (array_key_exists('sociallymap_postRSS', $_POST) && $_POST['sociallymap_postRSS']) {
             if (!isset($_POST['sociallymap_activate'])) {
@@ -407,15 +408,19 @@ class SociallymapPlugin
             }
             if (!isset($_POST['sociallymap_display_type'])) {
                 $_POST['sociallymap_display_type'] = "tab";
+            } 
+            if (!isset($_POST['sociallymap_link_canonical'])) {
+                $_POST['sociallymap_display_type'] = 0;
             }
 
             $data = [
-                'name'          => $_POST['sociallymap_name'],
-                'category'      => $_POST['sociallymap_category'],
-                'activate'      => $_POST['sociallymap_activate'],
-                'sm_entity_id'  => $_POST['sociallymap_entityId'],
-                'publish_type'  => $_POST['sociallymap_publish_type'],
-                'display_type'  => $_POST['sociallymap_display_type'],
+                'name'           => $_POST['sociallymap_name'],
+                'category'       => $_POST['sociallymap_category'],
+                'activate'       => $_POST['sociallymap_activate'],
+                'sm_entity_id'   => $_POST['sociallymap_entityId'],
+                'publish_type'   => $_POST['sociallymap_publish_type'],
+                'display_type'   => $_POST['sociallymap_display_type'],
+                'link_canonical' => $_POST['sociallymap_link_canonical'],
             ];
 
             $entityCollection->add($data);
