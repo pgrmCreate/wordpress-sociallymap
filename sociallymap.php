@@ -157,7 +157,7 @@ class SociallymapPlugin
         if (empty($idSelect)) {
             exit();
         }
-        
+
         $entityPicked = $entityObject->getById($idSelect);
 
         // entity unknown
@@ -351,8 +351,10 @@ class SociallymapPlugin
                 if (isset($value->media) && $value->media->type == "photo") {
                     $imageSrc = $uploader->upload($value->media->url);
 
+                    error_log('RETURN SRC : '.imageSrc, 3, plugin_dir_path(__FILE__)."logs/error.log");
+
                     // WHEN NO ERROR : FORMAT
-                    if (gettype($imagePost) == "string") {
+                    if (gettype($imageSrc) == "string") {
                         $imageTag = '<img class="aligncenter src="'.$imageSrc.'" alt="">';
                         $isUploaded = true;
                     } else {
