@@ -177,7 +177,7 @@ class SociallymapPlugin
         }
 
         if (!$link_canonical) {
-            $content = preg_replace('#<link (.+) >#', '', $content);
+            $content = preg_replace('#<link (.+)>#', '0', $content);
         }
 
 
