@@ -176,7 +176,7 @@ class SociallymapPlugin
             $content = preg_replace('#data-display-type="tab"#', 'data-display-type="modal"', $content);
         }
 
-        if ($link_canonical) {
+        if (!$link_canonical) {
             $content = preg_replace('#<link (.+) />#', '', $content);
         }
 
@@ -423,9 +423,9 @@ class SociallymapPlugin
             }
             if (!isset($_POST['sociallymap_display_type'])) {
                 $_POST['sociallymap_display_type'] = "tab";
-            } 
+            }
             if (!isset($_POST['sociallymap_link_canonical'])) {
-                $_POST['sociallymap_display_type'] = 0;
+                $_POST['sociallymap_link_canonical'] = 0;
             }
 
             $data = [
