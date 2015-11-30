@@ -54,6 +54,18 @@
                 </tr>
                 <tr class="form-field form-required">
                     <th>
+                        <label>Image</label>
+                    </th>
+                    <td>
+                        <select name="sociallymap_image">
+                            <option value="content" <?php if ($editingEntity->options->image == 'content') echo ('selected');?> >Inserer dans le contenu</option>
+                            <option value="thumbnail" <?php if ($editingEntity->options->image == 'thumbnail') echo ('selected');?>>Inserer en tant qu'image à la une</option>
+                            <option value="both" <?php if ($editingEntity->options->image == 'both') echo ('selected');?>>Inserer en tant que contenu et image à la une</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="form-field form-required">
+                    <th>
                         <label>Actif</label>
                     </th>
                     <td>

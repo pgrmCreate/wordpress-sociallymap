@@ -436,6 +436,7 @@ class SociallymapPlugin
                 'publish_type'   => $_POST['sociallymap_publish_type'],
                 'display_type'   => $_POST['sociallymap_display_type'],
                 'link_canonical' => $_POST['sociallymap_link_canonical'],
+                'image'          => $_POST['image'],
             ];
 
             $entityCollection->add($data);

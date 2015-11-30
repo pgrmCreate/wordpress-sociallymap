@@ -119,5 +119,19 @@ class Option
             );
         }
 
+        // UPDATE IMAGE ATTACHMENT
+        if (isset($data['image'])) {
+            $wpdb->update(
+                $this->table,
+                [
+                    'value' => $data['image'],    // string
+                ],
+                [
+                    'entity_id' => $data['idSource'],
+                    'options_id' => 5
+                ]
+            );
+        }
+
     }
 }

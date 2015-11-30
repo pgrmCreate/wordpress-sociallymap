@@ -68,6 +68,11 @@ class DbBuilder
             'label' => 'link_canonical',
             'default_value' => '1',
             ], ['%s', '%d']);
+
+            $this->wpdb->insert($this->table_options, [
+            'label' => 'image',
+            'default_value' => 'content',
+            ], ['%s', '%s']);
         }
 
         if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity_options'") != $this->table_entity_options) {
