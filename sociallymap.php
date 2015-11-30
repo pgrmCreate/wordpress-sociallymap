@@ -315,12 +315,13 @@ class SociallymapPlugin
                     }
 
                     // Check if Image thumbnail existing and media url no exist
-                    if ($imagePost == "" && !empty($value->link->thumbnail)) {
-                        $imagePost = $uploader->upload($value->link->thumbnail);
-                        // format html tag if upload return a string (no wp_error array)
+                    if (!empty($value->link->thumbnail)) {
+                        $imageSrc = $uploader->upload($value->link->thumbnail);
+                        
+                        // WHEN NO ERROR : FORMAT
                         if (gettype($imagePost) == "string") {
-                            $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
-                            $contentArticle .= $imagePost;
+                            $imageTag = '<img class="aligncenter src="'.$imageSrc.'" alt="">';
+                            $isUploaded = true;
                         } else {
                             $imagePost = "";
                         }
@@ -343,10 +344,11 @@ class SociallymapPlugin
                 // Check if Media object exist
                 $isUploaded = false;
                 if (isset($value->media) && $value->media->type == "photo") {
-                    $imagePost = $uploader->upload($value->media->url);
-                    // format html tag if upload return a string (no wp_error array)
+                    $imageSrc = $uploader->upload($value->media->url);
+
+                    // WHEN NO ERROR : FORMAT
                     if (gettype($imagePost) == "string") {
-                        $imagePost = substr($imagePost, 0, 5).'class="aligncenter"'.substr($imagePost, 5);
+                        $imageTag = '<img class="aligncenter src="'.$imageSrc.'" alt="">';
                         $isUploaded = true;
                     } else {
                         $imagePost = "";
@@ -356,13 +358,14 @@ class SociallymapPlugin
                 // Put options attachment image about from options
                 $imageAttachment = "";
                 if ($isUploaded) {
+                    // PUSH IN CONTENT
                     if (in_array($entity_image, ['content', 'both'])) {
                         $contentArticle += $imagePost;
                     }
+                    // PUSH IN THUMBNAIL
                     if (in_array($entity_image, ['thumbnail', 'both'])) {
-                        if (preg_match('src="(.+)"', $imagePost, $output_array)) {
-                            $imageAttachment = $output_array[1];
-                        }
+                        error_log('UPLOAD VALUE SRC : '.$imageSrc, 3, plugin_dir_path(__FILE__)."logs/error.log");
+                        $imageAttachment = $imageSrc;
                     }
                 }
                         
