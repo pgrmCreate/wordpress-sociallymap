@@ -361,7 +361,7 @@ class SociallymapPlugin
                     }
                     if (in_array($entity_image, ['thumbnail', 'both'])) {
                         if (preg_match('src="(.+)"', $imagePost, $output_array)) {
-                            $imageAttachment = parse_url($output_array[1], PHP_URL_PATH);
+                            $imageAttachment = $output_array[1];
                         }
                     }
                 }
