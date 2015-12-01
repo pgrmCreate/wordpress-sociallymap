@@ -344,7 +344,7 @@ class SociallymapPlugin
                     }
                 }
                 // Check if Image thumbnail existing
-                else if (isset($value->link) && !empty($value->link->thumbnail)) {
+                elseif (isset($value->link) && !empty($value->link->thumbnail)) {
                     $imageSrc = $uploader->upload($value->link->thumbnail);
                     
                     // WHEN NO ERROR : FORMAT

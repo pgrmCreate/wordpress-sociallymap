@@ -35,6 +35,9 @@ class Requester
 
         curl_setopt_array($curl, $options);
     
+        // get on UTF8
+        header('Content-type: text/html; charset=UTF-8');
+        
         $result = curl_exec($curl);
         $requestInfos = curl_getinfo($curl);
 
