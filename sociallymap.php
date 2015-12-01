@@ -141,7 +141,7 @@ class SociallymapPlugin
     public function postFooter($content)
     {
         global $post;
-        /*
+
         $entityObject = new Entity();
         $config = new ConfigOption();
         $configs = $config->getConfig();
@@ -175,14 +175,13 @@ class SociallymapPlugin
 
         $content = preg_replace('#data-display-type=""#', 'data-display-type="'.$display_type.'"', $content);
 
-        if (!$link_canonical) {
-            $content = preg_replace('/<link (.+)>/', '', $content);
+        function relCanonical()
+        {
+            echo ('<link rel="canonical" href="https://www.example.com" />');
         }
 
-        */
-
-        if (is_single()) {
-            $content = "POST SEUL!!";
+        if (!$link_canonical && is_single()) {
+            add_action('wp_header', 'relCanonical');
         }
 
         return $content;
