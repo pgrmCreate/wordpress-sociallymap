@@ -163,15 +163,6 @@ class SociallymapPlugin
             exit();
         }
 
-        $entityPicked = $entityObject->getById($idSelect);
-
-        foreach ($entityPicked->options as $key => $value) {
-            if ($value->options_id == '4') {
-                $link_canonical = $value->value;
-            }
-        }
-
-        var_dump($content);
 
         $patternUrl = '#data-article-url="(.+)"#';
         preg_match($patternUrl, $content, $matches);
@@ -182,6 +173,14 @@ class SociallymapPlugin
             exit();
         }
 
+        $entityPicked = $entityObject->getById($idSelect);
+
+        foreach ($entityPicked->options as $key => $value) {
+            if ($value->options_id == '4') {
+                $link_canonical = $value->value;
+            }
+        }
+
             // entity unknown
         if (empty($entityPicked)) {
             exit();
@@ -189,14 +188,11 @@ class SociallymapPlugin
 
         echo("ENTITY SERCH .... OK!");
 
-        if ($link_canonical == true) {
+        if ($link_canonical) {
             echo("CANONICAL ACTIVE!");
-                    // remove the default WordPress canonical URL function
-            if (function_exists('rel_canonical')) {
-                remove_action('wp_head', 'rel_canonical');
-            }
 
             // replace the default WordPress canonical URL function with your own
+            remove_action('wp_head', 'rel_canonical');
             add_action('wp_head', [$this, 'customRelCanonical'], 10, 1);
             do_action('wp_head', $entityUrl);
         }
