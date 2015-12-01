@@ -4,8 +4,6 @@ class Publisher
 {
     public function publish($title, $content, $image, $category = 1, $publish_type = 'draft')
     {
-        error_log('#UPLOAD# path: '.$image, 3, plugin_dir_path(__FILE__)."../logs/error.log");
-
         $listCats = [];
         if (is_array($category)) {
             foreach ($category as $key => $value) {
@@ -25,7 +23,13 @@ class Publisher
         remove_filter('content_save_pre', 'wp_filter_post_kses');
         remove_filter('content_filtered_save_pre', 'wp_filter_post_kses');
 
-        $newPostId = wp_insert_post($post, false);
+        try {
+            $newPostId = wp_insert_post($post, true);
+        } catch (Exception $e) {
+            error_log('Error : '.$e->getMessage(), 3, plugin_dir_path(__FILE__)."logs/error.log");
+            exit;
+        }
+
         if ($newPostId == 0) {
             return false;
         }
