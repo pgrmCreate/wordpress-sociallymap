@@ -33,7 +33,6 @@ class Requester
         curl_setopt_array($curl, $options);
 
         $result = curl_exec($curl);
-        error_log("Title debug ?".print_r($result, true), 3, plugin_dir_path(__FILE__)."../logs/error.log");
         $requestInfos = curl_getinfo($curl);
 
         // Close the curl session and free allocated memory
@@ -46,7 +45,9 @@ class Requester
             }
 
             // Decode the JSON response
-            $result = json_decode($result);
+            error_log("Add debug : ".print_r(json_decode($result)->link, true), 3, plugin_dir_path(__FILE__)."../logs/error.log");
+            $result = mb_convert_encoding(json_decode($result), 'UTF-8');
+
 
             // The request failed
             if ($requestInfos['http_code'] !== 200) {
