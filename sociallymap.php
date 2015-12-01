@@ -83,8 +83,6 @@ class SociallymapPlugin
         global $wp_query;
 
         if ($wp_query->get('sociallymap-plugin')) {
-            error_log('Ping received on /sociallymap/ : '.print_r($_POST, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
-
             // We don't have the right parameters
             if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
                 header("HTTP/1.0 400 Bad Request");
@@ -112,7 +110,6 @@ class SociallymapPlugin
             // This entity not exists
             if (empty($entity)) {
                 header("HTTP/1.0 404 Not Found");
-                error_log("Socially map try to connect to plugin but entity ID is no found", 3, plugin_dir_path(__FILE__)."logs/error.log");
                 exit;
             }
 
@@ -265,6 +262,7 @@ class SociallymapPlugin
         $publisher    = new Publisher();
         $config       = new ConfigOption();
         $entityObject = new Entity();
+        $uploader     = new ImageUploader();
 
         $configs = $config->getConfig();
 
@@ -294,18 +292,15 @@ class SociallymapPlugin
         }
 
         // Try request to sociallymap on response
-        $uploader = new ImageUploader();
         try {
             $jsonData = $requester->launch($_POST['entityId'], $_POST['token'], $_POST['environment']);
- 
+
             if (empty($jsonData)) {
                 throw new Exception('No data returned from request', 1);
                 exit();
             }
 
             foreach ($jsonData as $key => $value) {
-                error_log(print_R($value, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
-
                 $contentArticle = "<p>";
                 $readmore = "" ;
 
@@ -323,7 +318,7 @@ class SociallymapPlugin
                         $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type, $entity->id);
                     }
                 }
-                
+
                 $contentArticle .= $value->content;
                 $contentArticle .= "</p>";
 
@@ -346,11 +341,11 @@ class SociallymapPlugin
                 // Check if Image thumbnail existing
                 elseif (isset($value->link) && !empty($value->link->thumbnail)) {
                     $imageSrc = $uploader->upload($value->link->thumbnail);
-                    
-                    // WHEN NO ERROR : FORMAT
+
+                    // Create the img tag
                     if (gettype($imageSrc) == "string") {
                         $imageTag = '<img class="aligncenter" src="'.$imageSrc.'" alt="">';
-                        
+
                     } else {
                         $imageTag = '';
                     }
@@ -360,17 +355,17 @@ class SociallymapPlugin
                 // Attach image accordingly to options
                 $imageAttachment = '';
                 if ($isUploaded) {
-                    // PUSH IN CONTENT
+                    // Add image in the post content
                     if (in_array($entity_image, ['content', 'both'])) {
                         $contentArticle += $imageTag;
                     }
-                    // PUSH IN THUMBNAIL
+                    // Add image as featured image
                     if (in_array($entity_image, ['thumbnail', 'both'])) {
                         $imageAttachment = $imageSrc;
                     }
                 }
-                        
-                // handle publish
+
+                // Publish the post
                 if (!$publisher->publish($title, $contentArticle, $imageAttachment, $entity_list_category, $entity_publish_type)) {
                     throw new Exception('Error from post publish', 1);
                 } else {
@@ -379,8 +374,7 @@ class SociallymapPlugin
                 }
             }
         } catch (Exception $e) {
-            error_log('Sociallymap: Error data loading', 3, plugin_dir_path(__FILE__)."logs/error.log");
-            error_log('# Error : '.$e->getMessage(), 3, plugin_dir_path(__FILE__)."logs/error.log");
+            error_log('Error : '.$e->getMessage(), 3, plugin_dir_path(__FILE__)."logs/error.log");
             exit;
         }
     }
@@ -415,7 +409,7 @@ class SociallymapPlugin
             }
             if (!isset($_POST['sociallymap_display_type'])) {
                 $_POST['sociallymap_display_type'] = "tab";
-            }   
+            }
 
             if (!isset($_POST['sociallymap_link_canonical'])) {
                 $_POST['sociallymap_link_canonical'] = 0;
@@ -438,7 +432,7 @@ class SociallymapPlugin
             exit;
         }
 
- 
+
         // ACTION ENTITY : post
         if (array_key_exists('sociallymap_postRSS', $_POST) && $_POST['sociallymap_postRSS']) {
             if (!isset($_POST['sociallymap_activate'])) {

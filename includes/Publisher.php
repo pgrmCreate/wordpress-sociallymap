@@ -20,13 +20,13 @@ class Publisher
             'post_status' => $publish_type,
             'post_author' => get_current_user_id(),
         ];
-        
+
         //temporarily disable
         remove_filter('content_save_pre', 'wp_filter_post_kses');
         remove_filter('content_filtered_save_pre', 'wp_filter_post_kses');
 
-        $idReturn = wp_insert_post($post, false);
-        if ($idReturn == 0) {
+        $newPostId = wp_insert_post($post, false);
+        if ($newPostId == 0) {
             return false;
         }
 
@@ -44,9 +44,9 @@ class Publisher
             $attach_id = wp_insert_attachment($attachment, $image, $parent_post_id);
             $attach_data = wp_generate_attachment_metadata($attach_id, $image);
             wp_update_attachment_metadata($attach_id, $attach_data);
-            set_post_thumbnail($idReturn, $attach_id);
+            set_post_thumbnail($newPostId, $attach_id);
         }
-        
+
         //bring it back once you're done posting
         add_filter('content_save_pre', 'wp_filter_post_kses');
         add_filter('content_filtered_save_pre', 'wp_filter_post_kses');

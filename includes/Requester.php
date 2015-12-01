@@ -3,20 +3,17 @@
 class Requester
 {
     public function launch($entityId, $token, $environement)
-    { 
-        error_log('Ping received: '.print_r([$entityId, $token, $environement], true), 3, plugin_dir_path(__FILE__)."../logs/error.log");
-
+    {
         if (!is_callable('curl_init')) {
             error_log("Curl no exist, request impossible..", 3, plugin_dir_path(__FILE__)."../logs/error.log");
             header("HTTP/1.0 501 Not Implemented");
             exit("Curl request impossible for wordpress server");
         }
- 
+
         $curl = curl_init();
 
         $envtype = $_ENV['URL_SOCIALLYMAP'];
         $envtype = $envtype[$environement];
-        error_log("Actuel target environnement (with base #".$environement."#): ".print_r($envtype, true), 3, plugin_dir_path(__FILE__)."../logs/error.log");
 
         $urlCreator = [
             'baseUrl' => $envtype,
@@ -34,10 +31,7 @@ class Requester
         ];
 
         curl_setopt_array($curl, $options);
-    
-        // get on UTF8
-        header('Content-type: text/html; charset=UTF-8');
-        
+
         $result = curl_exec($curl);
         $requestInfos = curl_getinfo($curl);
 
@@ -63,7 +57,7 @@ class Requester
             error_log('# Error: '.$e->getMessage().' #', 3, plugin_dir_path(__FILE__)."../logs/error.log");
             exit;
         }
-        
+
 
         return $result;
     }
