@@ -46,7 +46,7 @@ class Requester
 
             // Decode the JSON response
             $result = mb_convert_encoding($result, 'UTF-8');
-            error_log("Add debug : ".print_r(json_encode($result), true), 3, plugin_dir_path(__FILE__)."../logs/error.log");
+            error_log("Add debug : ".print_r(json_encode($result, JSON_UNESCAPED_UNICODE), true), 3, plugin_dir_path(__FILE__)."../logs/error.log");
 
 
             // The request failed
