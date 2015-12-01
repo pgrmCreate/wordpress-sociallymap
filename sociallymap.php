@@ -173,7 +173,7 @@ class SociallymapPlugin
 
         var_dump($content);
 
-        $patternUrl = '#data-article-url="([0-9a-z]+)"#i';
+        $patternUrl = '#data-article-url="(.+)"#';
         preg_match($patternUrl, $content, $matches);
         if (isset($matches[1])) {
             $entityUrl = $matches[1];
