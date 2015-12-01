@@ -175,13 +175,18 @@ class SociallymapPlugin
 
         $content = preg_replace('#data-display-type=""#', 'data-display-type="'.$display_type.'"', $content);
 
-        function relCanonical()
+        function customRelCanonical()
         {
-            echo ('<link rel="canonical" href="https://www.example.com" />');
+            echo '<link rel="canonical" href="https://www.example.com" />';
         }
 
         if ($link_canonical && is_single()) {
-            add_action('wp_head', 'relCanonical');
+            // remove the default WordPress canonical URL function
+            if (function_exists('rel_canonical')) {
+                remove_action('wp_head', 'rel_canonical');
+            }
+            // replace the default WordPress canonical URL function with your own
+            add_action('wp_head', 'customRelCanonical');
         }
 
         return $content;
