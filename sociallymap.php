@@ -301,7 +301,6 @@ class SociallymapPlugin
             }
 
             foreach ($jsonData as $key => $value) {
-                $contentArticle = "<p>";
                 $readmore = "" ;
 
                 // Check Link object existing
@@ -319,8 +318,7 @@ class SociallymapPlugin
                     }
                 }
 
-                $contentArticle .= $value->content;
-                $contentArticle .= "</p>";
+                $contentArticle = $value->content;
 
                 // add readmore to content if $readmore is not empty
                 if ($readmore != "") {
@@ -357,13 +355,16 @@ class SociallymapPlugin
                 if ($isUploaded) {
                     // Add image in the post content
                     if (in_array($entity_image, ['content', 'both'])) {
-                        $contentArticle .= $imageTag;
+                        $contentArticle = $imageTag . $contentArticle;
                     }
                     // Add image as featured image
                     if (in_array($entity_image, ['thumbnail', 'both'])) {
                         $imageAttachment = $imageSrc;
                     }
                 }
+
+                // Wrap the post content in a paragraph
+                $contentArticle = '<p>' . $contentArticle . '</p>';
 
                 // Publish the post
                 if (!$publisher->publish($title, $contentArticle, $imageAttachment, $entity_list_category, $entity_publish_type)) {
