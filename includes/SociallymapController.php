@@ -49,6 +49,10 @@ class SociallymapController
             }
             if ($value->options_id == '4') {
                 $link_canonical = $value->value;
+            } 
+
+            if ($value->options_id == '5') {
+                $image = $value->value;
             }
         }
 
@@ -57,6 +61,7 @@ class SociallymapController
         $editingEntity->options->publish_type = $publish_type;
         $editingEntity->options->display_type = $display_type;
         $editingEntity->options->link_canonical = $link_canonical;
+        $editingEntity->options->image = $image;
 
         $sendItem['editingEntity'] = $editingEntity;
 

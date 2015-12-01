@@ -351,7 +351,7 @@ class SociallymapPlugin
                 if (isset($value->media) && $value->media->type == "photo") {
                     $imageSrc = $uploader->upload($value->media->url);
 
-                    error_log('RETURN SRC : '.print_r($imageSrc, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
+                    error_log("RETURN (search at $value->media->url ), SRC : ".print_r($imageSrc, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
 
                     // WHEN NO ERROR : FORMAT
                     if (gettype($imageSrc) == "string") {
@@ -371,7 +371,7 @@ class SociallymapPlugin
                     }
                     // PUSH IN THUMBNAIL
                     if (in_array($entity_image, ['thumbnail', 'both'])) {
-                        error_log('UPLOAD VALUE SRC : '.$imageSrc, 3, plugin_dir_path(__FILE__)."logs/error.log");
+                        error_log('UPLOAD VALUE SRC : '.print_r($imageSrc, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
                         $imageAttachment = $imageSrc;
                     }
                 }
