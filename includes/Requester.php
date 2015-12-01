@@ -45,7 +45,7 @@ class Requester
             }
 
             // Decode the JSON response
-            error_log("Debug  #2\n".print_r(html_entity_decode($result), true), 3, plugin_dir_path(__FILE__)."../logs/error.log");
+            $result = json_encode($result);
 
             // The request failed
             if ($requestInfos['http_code'] !== 200) {

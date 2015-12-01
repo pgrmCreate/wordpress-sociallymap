@@ -178,6 +178,10 @@ class SociallymapPlugin
             $content = preg_replace('/<link (.+)>/', '', $content);
         }
 
+        if (is_single()) {
+            $content = "POST SEUL!!";
+        }
+
         return $content;
     }
 
