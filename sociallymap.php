@@ -60,6 +60,7 @@ class SociallymapPlugin
 
         add_action('admin_menu', [$this, 'addAdminMenu']);
         add_action('admin_menu', [$this, 'githubConfiguration']);
+        add_action('the_post', [$this, "rewriteCanonical"]);
         add_filter('the_content', [$this, "postFooter"]);
         add_filter('init', [$this, "initialization"]);
     }
@@ -138,6 +139,73 @@ class SociallymapPlugin
         add_rewrite_rule('sociallymap', 'index.php?sociallymap-plugin=1', 'top');
     }
 
+    public function rewriteCanonical($postObject)
+    {
+        $content = $postObject->post_content;
+
+        echo("INITIALISE");
+
+        if (! is_single()) {
+            return false;
+        }
+
+        global $wp_query;
+        $post = $wp_query->post;
+
+            // Search entity and look canonical option
+        $patternEntityId = '#data-entity-id="([0-9]+)"#';
+        preg_match($patternEntityId, $content, $matches);
+        if (isset($matches[1])) {
+            $idSelect = $matches[1];
+            echo("ID .... OK! [$idSelect]");
+        } else {
+            exit();
+        }
+
+        $entityPicked = $entityObject->getById($idSelect);
+
+        foreach ($entityPicked->options as $key => $value) {
+            if ($value->options_id == '4') {
+                $link_canonical = $value->value;
+            }
+        }
+
+        $patternUrl = '#data-article-url="([0-9a-z]+)"#i';
+        preg_match($patternUrl, $content, $matches);
+        if (isset($matches[1])) {
+            $entityUrl = $matches[1];
+            echo("URL .... OK! [$idSelect]");
+        } else {
+            exit();
+        }
+
+            // entity unknown
+        if (empty($entityPicked)) {
+            exit();
+        }
+
+        echo("ENTITY SERCH .... OK!");
+
+        if ($link_canonical == true) {
+            echo("CANONICAL ACTIVE!");
+                    // remove the default WordPress canonical URL function
+            if (function_exists('rel_canonical')) {
+                remove_action('wp_head', 'rel_canonical');
+            }
+
+                    // replace the default WordPress canonical URL function with your own
+            add_action('wp_head', [$this, 'customRelCanonical'], 10, 1);
+            do_action('wp_head', $entityUrl);
+        }
+
+        return $content;
+    }
+
+    public function customRelCanonical($link)
+    {
+        echo '<link rel="canonical" href="'.$link.'" />';
+    }
+
     public function postFooter($content)
     {
         global $post;
@@ -149,7 +217,11 @@ class SociallymapPlugin
 
         $pattern = '#data-entity-id="([0-9]+)"#';
         preg_match($pattern, $content, $matches);
-        $idSelect = $matches[1];
+        if (isset($matches[1])) {
+            $idSelect = $matches[1];
+        } else {
+            exit();
+        }
 
         // id unknown
         if (empty($idSelect)) {
@@ -174,22 +246,6 @@ class SociallymapPlugin
         }
 
         $content = preg_replace('#data-display-type=""#', 'data-display-type="'.$display_type.'"', $content);
-
-        function customRelCanonical()
-        {
-            echo '<link rel="canonical" href="https://www.example.com" />';
-        }
-
-        if ($link_canonical && is_single()) {
-            // remove the default WordPress canonical URL function
-            if (function_exists('rel_canonical')) {
-                remove_action('wp_head', 'rel_canonical');
-            }
-            // replace the default WordPress canonical URL function with your own
-            add_action('wp_head', 'customRelCanonical');
-        }
-
-        return $content;
     }
 
     public function addAdminMenu()
