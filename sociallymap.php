@@ -144,8 +144,6 @@ class SociallymapPlugin
         $entityObject = new Entity();
         $content = $postObject->post_content;
 
-        echo("INITIALISE");
-
         if (! is_single()) {
             return false;
         }
@@ -158,7 +156,6 @@ class SociallymapPlugin
         preg_match($patternEntityId, $content, $matches);
         if (isset($matches[1])) {
             $idSelect = $matches[1];
-            echo("ID .... OK! [$idSelect]");
         } else {
             exit();
         }
@@ -168,7 +165,6 @@ class SociallymapPlugin
         preg_match($patternUrl, $content, $matches);
         if (isset($matches[1])) {
             $entityUrl = $matches[1];
-            echo("URL .... OK! [$idSelect]");
         } else {
             exit();
         }
@@ -186,13 +182,15 @@ class SociallymapPlugin
             exit();
         }
 
-        echo("ENTITY SERCH .... OK!");
-
         if ($link_canonical) {
-            echo("CANONICAL ACTIVE!");
+
+            // remove the default WordPress canonical URL function
+            if (function_exists('rel_canonical')) {
+            }
 
             // replace the default WordPress canonical URL function with your own
             remove_action('wp_head', 'rel_canonical');
+
             add_action('wp_head', [$this, 'customRelCanonical'], 10, 1);
             do_action('wp_head', $entityUrl);
         }
