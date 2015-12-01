@@ -193,8 +193,11 @@ class SociallymapPlugin
                 remove_action('wp_head', 'rel_canonical');
             }
 
-                    // replace the default WordPress canonical URL function with your own
-            add_action('wp_head', [$this, 'customRelCanonical'], 10, 1);
+            if (!function_exists($this->customRelCanonical)) {
+                add_action('wp_head', [$this, 'customRelCanonical'], 10, 1);
+            }
+
+            // replace the default WordPress canonical URL function with your own
             do_action('wp_head', $entityUrl);
         }
 
