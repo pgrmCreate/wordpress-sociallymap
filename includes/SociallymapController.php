@@ -49,7 +49,7 @@ class SociallymapController
             }
             if ($value->options_id == '4') {
                 $link_canonical = $value->value;
-            } 
+            }
 
             if ($value->options_id == '5') {
                 $image = $value->value;
@@ -81,6 +81,8 @@ class SociallymapController
                 $data->publish_type =  $value->default_value;
             } elseif ($value->id == 2) {
                 $data->activate =  $value->default_value;
+            } elseif ($value->id == 5) {
+                $data->image =  $value->default_value;
             }
         }
 
