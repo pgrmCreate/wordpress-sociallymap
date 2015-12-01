@@ -141,6 +141,7 @@ class SociallymapPlugin
 
     public function rewriteCanonical($postObject)
     {
+        $entityObject = new Entity();
         $content = $postObject->post_content;
 
         echo("INITIALISE");
