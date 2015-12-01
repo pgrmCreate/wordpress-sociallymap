@@ -172,17 +172,11 @@ class SociallymapPlugin
             }
         }
 
-        if ($display_type == "tab") {
-            $content = preg_replace('#data-display-type="modal"#', 'data-display-type="tab"', $content);
-        } else {
-            $content = preg_replace('#data-display-type="tab"#', 'data-display-type="modal"', $content);
-        }
+        $content = preg_replace('#data-display-type=""#', 'data-display-type="'.$display_type.'"', $content);
 
         if (!$link_canonical) {
             $content = preg_replace('/<link (.+)>/', '', $content);
         }
-
-
 
         return $content;
     }
@@ -362,9 +356,6 @@ class SociallymapPlugin
                         $imageAttachment = $imageSrc;
                     }
                 }
-
-                // Wrap the post content in a paragraph
-                $contentArticle = '<p>' . $contentArticle . '</p>';
 
                 // Publish the post
                 if (!$publisher->publish($title, $contentArticle, $imageAttachment, $entity_list_category, $entity_publish_type)) {

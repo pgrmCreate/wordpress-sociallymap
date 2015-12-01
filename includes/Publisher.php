@@ -20,8 +20,8 @@ class Publisher
         ];
 
         //temporarily disable
-        //remove_filter('content_save_pre', 'wp_filter_post_kses');
-        //remove_filter('content_filtered_save_pre', 'wp_filter_post_kses');
+        remove_filter('content_save_pre', 'wp_filter_post_kses');
+        remove_filter('content_filtered_save_pre', 'wp_filter_post_kses');
 
         try {
             $newPostId = wp_insert_post($post, true);
@@ -54,7 +54,7 @@ class Publisher
         return true;
 
         //bring it back once you're done posting
-        //add_filter('content_save_pre', 'wp_filter_post_kses');
-        //add_filter('content_filtered_save_pre', 'wp_filter_post_kses');
+        add_filter('content_save_pre', 'wp_filter_post_kses');
+        add_filter('content_filtered_save_pre', 'wp_filter_post_kses');
     }
 }
