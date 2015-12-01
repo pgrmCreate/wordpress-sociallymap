@@ -141,6 +141,7 @@ class SociallymapPlugin
     public function postFooter($content)
     {
         global $post;
+        /*
         $entityObject = new Entity();
         $config = new ConfigOption();
         $configs = $config->getConfig();
@@ -177,6 +178,8 @@ class SociallymapPlugin
         if (!$link_canonical) {
             $content = preg_replace('/<link (.+)>/', '', $content);
         }
+
+        */
 
         if (is_single()) {
             $content = "POST SEUL!!";
