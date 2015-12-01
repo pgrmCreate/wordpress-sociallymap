@@ -193,6 +193,7 @@ class SociallymapPlugin
                 remove_action('wp_head', 'rel_canonical');
             }
 
+
             /*
             remove_action('wp_head', 'customRelCanonical');
             add_action('wp_head', [$this, 'customRelCanonical'], 10, 1);
