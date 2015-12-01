@@ -180,7 +180,8 @@ class SociallymapPlugin
             echo ('<link rel="canonical" href="https://www.example.com" />');
         }
 
-        if (!$link_canonical && is_single()) {
+        if ($link_canonical && is_single()) {
+            remove_action('wp_head', 'rel_canonical');
             add_action('wp_header', 'relCanonical');
         }
 
