@@ -67,6 +67,8 @@ class SociallymapPlugin
     public function initialization()
     {
         $this->loadAssets(true);
+
+        remove_action('wp_head', 'rel_canonical');
     }
 
     public static function install()
