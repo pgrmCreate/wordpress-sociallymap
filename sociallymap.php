@@ -307,7 +307,6 @@ class SociallymapPlugin
                 error_log(print_R($value, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
 
                 $contentArticle = "<p>";
-                $imagePost = "";
                 $readmore = "" ;
 
                 // Check Link object existing
@@ -317,19 +316,6 @@ class SociallymapPlugin
                     // Check if Title existing
                     if (!empty($value->link->title)) {
                         $title = $value->link->title;
-                    }
-
-                    // Check if Image thumbnail existing and media url no exist
-                    if (!empty($value->link->thumbnail)) {
-                        $imageSrc = $uploader->upload($value->link->thumbnail);
-                        
-                        // WHEN NO ERROR : FORMAT
-                        if (gettype($imagePost) == "string") {
-                            $imageTag = '<img class="aligncenter src="'.$imageSrc.'" alt="">';
-                            $isUploaded = true;
-                        } else {
-                            $imagePost = "";
-                        }
                     }
 
                     // Check if Link URL existing
@@ -347,29 +333,39 @@ class SociallymapPlugin
                 }
 
                 // Check if Media object exist
-                $isUploaded = false;
                 if (isset($value->media) && $value->media->type == "photo") {
                     $imageSrc = $uploader->upload($value->media->url);
 
                     // WHEN NO ERROR : FORMAT
                     if (gettype($imageSrc) == "string") {
-                        $imageTag = '<img class="aligncenter src="'.$imageSrc.'" alt="">';
-                        $isUploaded = true;
+                        $imageTag = '<img class="aligncenter" src="'.$imageSrc.'" alt="">';
                     } else {
-                        $imagePost = "";
+                        $imageTag = '';
                     }
                 }
+                // Check if Image thumbnail existing
+                else if (isset($value->link) && !empty($value->link->thumbnail)) {
+                    $imageSrc = $uploader->upload($value->link->thumbnail);
+                    
+                    // WHEN NO ERROR : FORMAT
+                    if (gettype($imageSrc) == "string") {
+                        $imageTag = '<img class="aligncenter" src="'.$imageSrc.'" alt="">';
+                        
+                    } else {
+                        $imageTag = '';
+                    }
+                }
+                $isUploaded = ! ($imageTag === '');
 
-                // Put options attachment image about from options
-                $imageAttachment = "";
+                // Attach image accordingly to options
+                $imageAttachment = '';
                 if ($isUploaded) {
                     // PUSH IN CONTENT
                     if (in_array($entity_image, ['content', 'both'])) {
-                        $contentArticle += $imagePost;
+                        $contentArticle += $imageTag;
                     }
                     // PUSH IN THUMBNAIL
                     if (in_array($entity_image, ['thumbnail', 'both'])) {
-                        error_log('UPLOAD VALUE SRC : '.print_r($imageSrc, true), 3, plugin_dir_path(__FILE__)."logs/error.log");
                         $imageAttachment = $imageSrc;
                     }
                 }

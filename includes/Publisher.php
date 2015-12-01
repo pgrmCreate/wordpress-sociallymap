@@ -32,17 +32,17 @@ class Publisher
 
         // attach image to post if $image is not empty
         if ($image != "") {
-            $filetype = wp_check_filetype(basename($filename), null);
+            $filetype = wp_check_filetype(basename($image), null);
             $wp_upload_dir = wp_upload_dir();
             $attachment = [
-                'guid'           => $wp_upload_dir['url'] . '/' . basename($filename),
+                'guid'           => $wp_upload_dir['url'] . '/' . basename($image),
                 'post_mime_type' => $filetype['type'],
-                'post_title'     => preg_replace('/\.[^.]+$/', '', basename($filename)),
+                'post_title'     => preg_replace('/\.[^.]+$/', '', basename($image)),
                 'post_content'   => '',
                 'post_status'    => 'inherit'
             ];
-            $attach_id = wp_insert_attachment($attachment, $filename, $parent_post_id);
-            $attach_data = wp_generate_attachment_metadata($attach_id, $filename);
+            $attach_id = wp_insert_attachment($attachment, $image, $parent_post_id);
+            $attach_data = wp_generate_attachment_metadata($attach_id, $image);
             wp_update_attachment_metadata($attach_id, $attach_data);
             set_post_thumbnail($idReturn, $attach_id);
         }
