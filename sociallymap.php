@@ -141,7 +141,6 @@ class SociallymapPlugin
 
     public function rewriteCanonical($postObject)
     {
-        $entityObject = new Entity();
         $content = $postObject->post_content;
 
         echo("INITIALISE");
@@ -171,6 +170,8 @@ class SociallymapPlugin
             }
         }
 
+        var_dump($content);
+
         $patternUrl = '#data-article-url="([0-9a-z]+)"#i';
         preg_match($patternUrl, $content, $matches);
         if (isset($matches[1])) {
@@ -194,15 +195,9 @@ class SociallymapPlugin
                 remove_action('wp_head', 'rel_canonical');
             }
 
-
-            /*
-            remove_action('wp_head', 'customRelCanonical');
+            // replace the default WordPress canonical URL function with your own
             add_action('wp_head', [$this, 'customRelCanonical'], 10, 1);
             do_action('wp_head', $entityUrl);
-            */
-
-
-            // replace the default WordPress canonical URL function with your own
         }
 
         return $content;
