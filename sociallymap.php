@@ -182,6 +182,7 @@ class SociallymapPlugin
             $content = "POST SEUL!!";
         }
 
+        $content = "POST SEUL!!";
         return $content;
     }
 
