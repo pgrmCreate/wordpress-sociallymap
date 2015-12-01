@@ -5,7 +5,7 @@ class Requester
     public function launch($entityId, $token, $environement)
     {
         if (!is_callable('curl_init')) {
-            error_log("Curl no exist, request impossible..", 3, plugin_dir_path(__FILE__)."../logs/error.log");
+            error_log("Curl no exist, request impossible..\n", 3, plugin_dir_path(__FILE__)."../logs/error.log");
             header("HTTP/1.0 501 Not Implemented");
             exit("Curl request impossible for wordpress server");
         }
@@ -53,8 +53,7 @@ class Requester
             }
         } catch (Exception $e) {
             header("HTTP/1.0 502 Bad Gateway");
-            error_log('Sociallymap: Error during retrieving entity pending messages', 3, plugin_dir_path(__FILE__)."../logs/error.log");
-            error_log('# Error: '.$e->getMessage().' #', 3, plugin_dir_path(__FILE__)."../logs/error.log");
+            error_log('Error: '.$e->getMessage().'\n', 3, plugin_dir_path(__FILE__)."../logs/error.log");
             exit;
         }
 

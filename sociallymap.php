@@ -117,7 +117,7 @@ class SociallymapPlugin
             if ($this->manageMessages($entity) == false) {
                 header("HTTP/1.0 502 Bad gateway");
                 print_r($_POST);
-                error_log("The plugin can't ping to sociallymap.", 3, plugin_dir_path(__FILE__)."logs/error.log");
+                error_log("The plugin can't ping to sociallymap.\n", 3, plugin_dir_path(__FILE__)."logs/error.log");
             } else {
                 header("HTTP/1.0 200 OK");
                 exit(json_encode([
@@ -357,7 +357,7 @@ class SociallymapPlugin
                 if ($isUploaded) {
                     // Add image in the post content
                     if (in_array($entity_image, ['content', 'both'])) {
-                        $contentArticle += $imageTag;
+                        $contentArticle .= $imageTag;
                     }
                     // Add image as featured image
                     if (in_array($entity_image, ['thumbnail', 'both'])) {
@@ -374,7 +374,7 @@ class SociallymapPlugin
                 }
             }
         } catch (Exception $e) {
-            error_log('Error : '.$e->getMessage(), 3, plugin_dir_path(__FILE__)."logs/error.log");
+            error_log('Error : '.$e->getMessage().'\n', 3, plugin_dir_path(__FILE__)."logs/error.log");
             exit;
         }
     }

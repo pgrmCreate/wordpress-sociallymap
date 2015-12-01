@@ -26,9 +26,9 @@ class Entity
 
         $entityRequest = $wpdb->prepare('SELECT * FROM '.$this->table.' WHERE id=%d', $id);
         $entity = $wpdb->get_row($entityRequest);
-        
+
         if (empty($entity)) {
-            error_log('ENTITY : NO FOUND ROW for request : '.$entityRequest, 3, plugin_dir_path(__FILE__)."../logs/error.log");
+            error_log('Entity : Not found row for request : '.$entityRequest.'\n', 3, plugin_dir_path(__FILE__)."../logs/error.log");
             exit();
         }
 
