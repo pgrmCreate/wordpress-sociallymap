@@ -45,7 +45,7 @@ class Requester
             }
 
             // Decode the JSON response
-            $result = json_encode($result);
+            $result = json_decode($result);
 
             // The request failed
             if ($requestInfos['http_code'] !== 200) {
