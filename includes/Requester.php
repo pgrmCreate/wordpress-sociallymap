@@ -4,6 +4,7 @@ class Requester
 {
     public function launch($entityId, $token, $environement)
     {
+        error_log('#####################', 3, plugin_dir_path(__FILE__)."../logs/error.log");
         if (!is_callable('curl_init')) {
             error_log("Curl no exist, request impossible..\n", 3, plugin_dir_path(__FILE__)."../logs/error.log");
             header("HTTP/1.0 501 Not Implemented");
