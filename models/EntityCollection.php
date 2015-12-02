@@ -112,17 +112,6 @@ class EntityCollection
             $listRSS[] = $entity->getById($data->id, $orderKey, $orderSense);
         }
 
-        // DEBUG
-        //       $debug_request = "
-        //        SELECT ENT.*, OPT.value , OPT.options_id
-        //        FROM $this->table_entity ENT
-        //        INNER JOIN $this->table_options OPT
-        //        ON ENT.id = OPT.entity_id";
-
-            // $debug_value = $wpdb->get_results($debug_request);
-      //       var_dump($debug_value);
-        // DEBUG
-
         return $listRSS;
     }
 

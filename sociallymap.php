@@ -126,6 +126,7 @@ class SociallymapPlugin
             remove_action('wp_head', 'rel_canonical');
             // add_action('wp_head', [$this, 'rewriteCanonical']);
             add_action('wp_head', [$this, 'customRelCanonical']);
+            add_action('wp_head', [$this, 'noindexRef']);
     }
 
     public static function install()
@@ -196,6 +197,43 @@ class SociallymapPlugin
     {
         add_rewrite_rule('sociallymap', 'index.php?sociallymap-plugin=1', 'top');
     }
+
+    public function noindexRef()
+    {
+        global $post;
+
+        if (is_single()) {
+            $entityObject = new Entity();
+
+            // get entity ID
+            $pattern = '#data-entity-id="([0-9]+)"#';
+            preg_match($pattern, $post->post_content, $matches);
+            if (isset($matches[1])) {
+                $idSelect = $matches[1];
+            } else {
+                error_log('# Noindex option : No found entity attribute in content #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+                exit();
+            }
+
+            // id unknown
+            if (empty($idSelect)) {
+                error_log('# Noindex option : No found entity in bdd #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+                exit();
+            }
+
+            foreach ($entityPicked->options as $key => $value) {
+                if ($value->options_id == '7') {
+                    $noindex = $value->value;
+                }
+            }
+
+            if (isset($index) && $noindex == 1) {
+                echo ('<meta name="robots" content="noindex">');
+            }
+
+        }
+    }
+
 
     public function customRelCanonical()
     {
