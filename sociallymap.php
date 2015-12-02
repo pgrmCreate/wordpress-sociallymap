@@ -75,7 +75,7 @@ class SociallymapPlugin
 
 
 
-        if (!is_single()) {
+        if (!is_singular()) {
             return false;
         }
 
@@ -116,7 +116,7 @@ class SociallymapPlugin
         if (!empty($link_canonical)) {
             // replace the default WordPress canonical URL function with your own
             $this->link_canononical = $link_canonical;
-            echo("<script> alert('hi'); </script>");
+            echo("<script> alert('$link_canonical'); </script>");
         }
 
         return $content;
@@ -127,7 +127,6 @@ class SociallymapPlugin
         $this->loadAssets(true);
 
         remove_action('wp_head', 'rel_canonical');
-        $this->link_canononical = "ABC";
         add_action('wp_head', [$this, 'customRelCanonical']);
 
     }
