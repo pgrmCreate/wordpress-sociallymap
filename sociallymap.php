@@ -71,7 +71,7 @@ class SociallymapPlugin
         $entityObject = new Entity();
         $content = $postObject->post_content;
 
-        if (! is_singular()) {
+        if (!is_singular()) {
             return false;
         }
 
@@ -125,7 +125,7 @@ class SociallymapPlugin
     {
         $this->loadAssets(true);
 
-        if (! is_singular()) {
+        if (is_singular()) {
             return false;
         }
 
