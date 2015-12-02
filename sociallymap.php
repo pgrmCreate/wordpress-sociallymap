@@ -73,7 +73,6 @@ class SociallymapPlugin
     {
         $entityObject = new Entity();
 
-
         // Search entity and look canonical option
         $patternEntityId = '#data-entity-id="([0-9]+)"#';
         preg_match($patternEntityId, $content, $matches);
@@ -194,13 +193,11 @@ class SociallymapPlugin
     public function customRelCanonical()
     {
         global $post;
-        if (is_singular()) {
-            echo("<script> alert('Header load!'); </script>");
-            echo("#############################################");
-            print_r($post);
-        }
 
-        echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
+        if (is_singular()) {
+            rewriteCanonical($post->content);
+            echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
+        }
     }
 
     public function postFooter($content)
@@ -394,6 +391,7 @@ class SociallymapPlugin
                         $imageTag = '';
                     }
                 }
+
                 // Check if Image thumbnail existing
                 elseif (isset($value->link) && !empty($value->link->thumbnail)) {
                     $imageSrc = $uploader->upload($value->link->thumbnail);
