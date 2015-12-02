@@ -145,7 +145,7 @@ class SociallymapPlugin
         $entityObject = new Entity();
         $content = $postObject->post_content;
 
-        if (! is_single()) {
+        if (! is_singular()) {
             return false;
         }
 
