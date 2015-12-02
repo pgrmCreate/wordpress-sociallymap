@@ -229,7 +229,7 @@ class SociallymapPlugin
                 }
             }
 
-            if (isset($index) && $noindex == 1) {
+            if (isset($noindex) && $noindex == 1) {
                 echo ('<meta name="robots" content="noindex">');
             }
 
