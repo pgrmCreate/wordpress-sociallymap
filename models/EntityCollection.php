@@ -63,6 +63,12 @@ class EntityCollection
             'value'     => $data['image']
         ];
         $option->save($dataOption, $entityID);
+
+        $dataOption = [
+            'option_id' => 5,
+            'value'     => $data['noindex']
+        ];
+        $option->save($dataOption, $entityID);
     }
 
     public function update($data)
@@ -77,16 +83,17 @@ class EntityCollection
             'activate'     => $data['activate'],
             'sm_entity_id' => $data['sm_entity_id'],
         ];
-        
+
         $entity->update($dataEntity);
 
         $optionsEntity = [
-            'idSource'       => $data['id'],
-            'category'       => $data['category'],
-            'publish_type'   => $data['publish_type'],
+            'idSource'       =>  $data['id'],
+            'category'       =>  $data['category'],
+            'publish_type'   =>  $data['publish_type'],
             'display_type'   =>  $data['display_type'],
             'link_canonical' =>  $data['link_canonical'],
             'image'          =>  $data['image'],
+            'noindex'        =>  $data['noindex'],
         ];
         $option->update($optionsEntity);
     }
