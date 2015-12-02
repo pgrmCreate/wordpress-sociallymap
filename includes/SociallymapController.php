@@ -64,6 +64,7 @@ class SociallymapController
         $editingEntity->options->display_type = $display_type;
         $editingEntity->options->link_canonical = $link_canonical;
         $editingEntity->options->image = $image;
+        $editingEntity->options->noindex = $noindex;
 
         $sendItem['editingEntity'] = $editingEntity;
 
