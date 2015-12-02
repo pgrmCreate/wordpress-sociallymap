@@ -93,11 +93,11 @@
                 </tr>
                 <tr class="form-field form-required">
                     <th>
-                        <label>>Ne pas indexer ce site</label>
+                        <label>Ne pas indexer ce site</label>
                     </th>
                     <td>
                         <input type="checkbox" name="sociallymap_noindex" class="sociallymap_formRSS_newFlux" value="1"
-                         <?php if ($editingEntity->options->noindex == "1") echo("checked"); ?> >
+                        <?php if ($editingEntity->options->noindex == "1") echo("checked"); ?> >
                     </td>
                 </tr>
                 <tr class="form-field form-required">

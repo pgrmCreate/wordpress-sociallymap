@@ -119,19 +119,6 @@ class Option
             );
         }
 
-        // UPDATE LINK CANONICAL
-        if (isset($data['noindex'])) {
-            $wpdb->update(
-                $this->table,
-                [
-                    'value' => $data['noindex'],    // string
-                ],
-                [
-                    'entity_id' => $data['idSource'],
-                    'options_id' => 7
-                ]
-            );
-        }
 
         // UPDATE IMAGE ATTACHMENT
         if (isset($data['image'])) {
@@ -147,5 +134,18 @@ class Option
             );
         }
 
+        // UPDATE LINK CANONICAL
+        if (isset($data['noindex'])) {
+            $wpdb->update(
+                $this->table,
+                [
+                    'value' => $data['noindex'],    // string
+                ],
+                [
+                    'entity_id' => $data['idSource'],
+                    'options_id' => 7
+                ]
+            );
+        }
     }
 }
