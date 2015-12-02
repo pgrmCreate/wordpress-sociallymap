@@ -104,7 +104,7 @@ class SociallymapPlugin
             exit();
         }
 
-        if (!empty($link_canonical)) {
+        if ($link_canonical) {
             // replace the default WordPress canonical URL function with your own
             $this->link_canononical = $entityUrl;
         }
@@ -169,7 +169,7 @@ class SociallymapPlugin
             if ($this->manageMessages($entity) == false) {
                 header("HTTP/1.0 502 Bad gateway");
                 print_r($_POST);
-                error_log("The plugin can't ping to sociallymap.\n", 3, plugin_dir_path(__FILE__)."logs/error.log");
+                error_log("The plugin can't ping to sociallymap.", 3, plugin_dir_path(__FILE__)."logs/error.log");
             } else {
                 header("HTTP/1.0 200 OK");
                 exit(json_encode([
