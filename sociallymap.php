@@ -27,6 +27,7 @@ class SociallymapPlugin
     private $templater;
     private $controller;
     private $config_default_value;
+    private $link_canononical;
 
     public function __construct()
     {
@@ -191,16 +192,16 @@ class SociallymapPlugin
             // replace the default WordPress canonical URL function with your own
             remove_action('wp_head', 'rel_canonical');
 
-            add_action('wp_head', [$this, 'customRelCanonical'], 10, 1);
-            do_action('wp_head', $entityUrl);
+            $this->link_canononical = $link_canonical;
+            add_action('wp_head', [$this, 'customRelCanonical']);
         }
 
         return $content;
     }
 
-    public function customRelCanonical($link)
+    public function customRelCanonical()
     {
-        echo '<link rel="canonical" href="'.$link.'" />';
+        echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
     }
 
     public function postFooter($content)
