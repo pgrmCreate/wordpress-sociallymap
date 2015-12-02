@@ -75,16 +75,12 @@ class SociallymapPlugin
 
         echo("<script> alert('TYPE: ".get_post_type($postObject->ID)."'); </script>");
 
-        if (is_page($postObject->post_name)) {
-            echo("<script> alert('Bonne page!!!'); </script>");
-        }
 
-        if (!is_singular()) {
+        if (!is_singular() && get_post_type($postObject->ID) != "post") {
             return false;
         }
 
         global $wp_query;
-        $post = $wp_query->post;
 
             // Search entity and look canonical option
         $patternEntityId = '#data-entity-id="([0-9]+)"#';
@@ -120,6 +116,7 @@ class SociallymapPlugin
         if (!empty($link_canonical)) {
             // replace the default WordPress canonical URL function with your own
             $this->link_canononical = $entityUrl;
+            $this->link_canononical = "force";
             echo("<script> alert('$entityUrl'); </script>");
         }
 
