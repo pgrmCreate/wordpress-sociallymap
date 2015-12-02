@@ -75,7 +75,7 @@ class SociallymapPlugin
 
 
 
-        if (!is_singular()) {
+        if (!is_singular($postObject->ID)) {
             return false;
         }
 
