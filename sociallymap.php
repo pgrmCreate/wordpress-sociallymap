@@ -124,9 +124,11 @@ class SociallymapPlugin
     {
         $this->loadAssets(true);
 
-        remove_action('wp_head', 'rel_canonical');
-        // add_action('wp_head', [$this, 'rewriteCanonical']);
-        add_action('wp_head', [$this, 'customRelCanonical']);
+        if (is_singular()) {
+            remove_action('wp_head', 'rel_canonical');
+            // add_action('wp_head', [$this, 'rewriteCanonical']);
+            add_action('wp_head', [$this, 'customRelCanonical']);
+        }
     }
 
     public static function install()
@@ -202,11 +204,8 @@ class SociallymapPlugin
     {
         global $post;
 
-        if (is_singular()) {
-            error_log('Content article: '.print_r($post->post_content, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
-            $this->rewriteCanonical($post->post_content);
-            echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
-        }
+        $this->rewriteCanonical($post->post_content);
+        echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
     }
 
     public function postFooter($content)
@@ -249,6 +248,8 @@ class SociallymapPlugin
         }
 
         $content = preg_replace('#data-display-type=""#', 'data-display-type="'.$display_type.'"', $content);
+
+        return $content;
     }
 
     public function addAdminMenu()

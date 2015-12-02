@@ -6,7 +6,7 @@ class DbBuilder
     private $table_options;
     private $table_entity_options;
     private $table_entity;
-    
+
 
     public function __construct()
     {
@@ -72,6 +72,11 @@ class DbBuilder
             $this->wpdb->insert($this->table_options, [
             'label' => 'image',
             'default_value' => 'content',
+            ], ['%s', '%s']);
+
+            $this->wpdb->insert($this->table_options, [
+            'label' => 'readmore_label',
+            'default_value' => 'lire la suite',
             ], ['%s', '%s']);
         }
 
