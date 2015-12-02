@@ -74,6 +74,9 @@ class SociallymapPlugin
         $content = $postObject->post_content;
 
 
+        if (is_page($postObject->ID)) {
+            echo("<script> alert('Bonne page!!!'); </script>");
+        }
 
         if (!is_singular($postObject->ID)) {
             return false;
