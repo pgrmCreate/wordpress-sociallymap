@@ -13,7 +13,7 @@
 	</h1>
 	<form method="post" class="sociallymap_formRSS">
 		<input type="hidden" name="sociallymap_postRSS" value="1"/>
-	
+
 		<table class="form-table">
 			<tbody>
 				<tr class="form-field form-required">
@@ -39,11 +39,11 @@
 						<label>Categorie cible de la publication</label>
 					</th>
 					<td>
-						<?php foreach (get_categories(['hide_empty' => 0]) as $key => $value) { ?>	
+						<?php foreach (get_categories(['hide_empty' => 0]) as $key => $value) { ?>
 							<label>
 							<?php echo $value->name;?>
 								<input name="sociallymap_category[]" type="checkbox" value="<?php echo get_cat_ID($value->name);?>"
-								<?php if($value->cat_ID === $default_value->category) echo "checked" ?> >	
+								<?php if($value->cat_ID === $default_value->category) echo "checked" ?> >
 							</label>
 							<?php } ?>
 					</td>
@@ -99,6 +99,15 @@
 					<td>
 						<input type="checkbox" name="sociallymap_link_canonical" class="sociallymap_formRSS_newFlux"
 						 value="1" checked>
+					</td>
+				</tr>
+				<tr class="form-field form-required">
+					<th>
+						<label>Ne pas indexer ce site</label>
+					</th>
+					<td>
+						<input type="checkbox" name="sociallymap_noindex" class="sociallymap_formRSS_newFlux"
+						 value="1">
 					</td>
 				</tr>
 			</tbody>

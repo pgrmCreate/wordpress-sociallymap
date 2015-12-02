@@ -52,7 +52,7 @@ class Option
         // UPDATE CATEGORY
         if (isset($data['category'])) {
             $currentCatsRequest = "
-                SELECT value FROM $this->table 
+                SELECT value FROM $this->table
                 WHERE entity_id = $data[idSource]
                 AND options_id = 1";
             $options = $wpdb->get_results($currentCatsRequest);
@@ -63,7 +63,7 @@ class Option
             }
 
             if ($optCats != $data['category']) {
-                $wpdb->delete( $this->table, [
+                $wpdb->delete($this->table, [
                     'entity_id'     => $data['idSource'],
                     'options_id'     => 1]);
 
@@ -115,6 +115,20 @@ class Option
                 [
                     'entity_id' => $data['idSource'],
                     'options_id' => 4
+                ]
+            );
+        }
+
+        // UPDATE LINK CANONICAL
+        if (isset($data['noindex'])) {
+            $wpdb->update(
+                $this->table,
+                [
+                    'value' => $data['noindex'],    // string
+                ],
+                [
+                    'entity_id' => $data['idSource'],
+                    'options_id' => 7
                 ]
             );
         }

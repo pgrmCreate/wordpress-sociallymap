@@ -116,7 +116,6 @@ class SociallymapPlugin
             // replace the default WordPress canonical URL function with your own
             $this->link_canononical = $entityUrl;
         }
-
         return $content;
     }
 
@@ -127,7 +126,6 @@ class SociallymapPlugin
             remove_action('wp_head', 'rel_canonical');
             // add_action('wp_head', [$this, 'rewriteCanonical']);
             add_action('wp_head', [$this, 'customRelCanonical']);
-
     }
 
     public static function install()
@@ -203,8 +201,10 @@ class SociallymapPlugin
     {
         global $post;
 
-        $this->rewriteCanonical($post->post_content);
-        echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
+        if (is_single()) {
+            $this->rewriteCanonical($post->post_content);
+            echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
+        }
     }
 
     public function prePosting($content)
@@ -473,9 +473,11 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_display_type'])) {
                 $_POST['sociallymap_display_type'] = "tab";
             }
-
             if (!isset($_POST['sociallymap_link_canonical'])) {
                 $_POST['sociallymap_link_canonical'] = 0;
+            }
+            if (!isset($_POST['sociallymap_noindex'])) {
+                $_POST['sociallymap_noindex'] = 0;
             }
 
             $data = [
@@ -486,6 +488,7 @@ class SociallymapPlugin
                 'display_type'   => $_POST['sociallymap_display_type'],
                 'publish_type'   => $_POST['sociallymap_publish_type'],
                 'link_canonical' => $_POST['sociallymap_link_canonical'],
+                'noindex'        => $_POST['sociallymap_noindex'],
                 'image'          => $_POST['sociallymap_image'],
                 'id'             => $_GET['id'],
             ];
@@ -507,6 +510,9 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_link_canonical'])) {
                 $_POST['sociallymap_link_canonical'] = 0;
             }
+            if (!isset($_POST['sociallymap_noindex'])) {
+                $_POST['sociallymap_noindex'] = 0;
+            }
 
             $data = [
                 'name'           => $_POST['sociallymap_name'],
@@ -516,6 +522,7 @@ class SociallymapPlugin
                 'publish_type'   => $_POST['sociallymap_publish_type'],
                 'display_type'   => $_POST['sociallymap_display_type'],
                 'link_canonical' => $_POST['sociallymap_link_canonical'],
+                'noindex'        => $_POST['sociallymap_noindex'],
                 'image'          => $_POST['sociallymap_image'],
             ];
 

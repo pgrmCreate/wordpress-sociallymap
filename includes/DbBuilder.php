@@ -78,6 +78,11 @@ class DbBuilder
             'label' => 'readmore_label',
             'default_value' => 'lire la suite',
             ], ['%s', '%s']);
+
+            $this->wpdb->insert($this->table_options, [
+            'label' => 'no index article',
+            'default_value' => 0,
+            ], ['%s', '%d']);
         }
 
         if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity_options'") != $this->table_entity_options) {

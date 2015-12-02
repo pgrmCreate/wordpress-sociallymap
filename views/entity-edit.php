@@ -18,7 +18,7 @@
                         <label>Label</label>
                     </th>
                     <td>
-                        <input name="sociallymap_label" value="<?php echo($editingEntity->name); ?>" 
+                        <input name="sociallymap_label" value="<?php echo($editingEntity->name); ?>"
                         class="sociallymap_formRSS_newFlux" placeholder="Mon entité">
                     </td>
                 </tr>
@@ -27,7 +27,7 @@
                         <label>Identifiant de l'entité</label>
                     </th>
                     <td>
-                        <input name="sociallymap_entityId" value="<?php echo($editingEntity->sm_entity_id); ?>" 
+                        <input name="sociallymap_entityId" value="<?php echo($editingEntity->sm_entity_id); ?>"
                         class="sociallymap_formRSS_newFlux" placeholder="Mon entité">
                     </td>
                 </tr>
@@ -36,10 +36,10 @@
                         <label>Catégorie cible de la publication</label>
                     </th>
                     <td>
-                        <?php foreach (get_categories(['hide_empty' => 0]) as $key => $value) { ?>    
+                        <?php foreach (get_categories(['hide_empty' => 0]) as $key => $value) { ?>
                             <label class="listCats">
                             <?php echo $value->name;?>
-                                <input  name="sociallymap_category[]" type="checkbox" 
+                                <input  name="sociallymap_category[]" type="checkbox"
                                         value="<?php echo get_cat_ID($value->name);?>"
                                 <?php
                                 foreach ($editingEntity->options->category as $key => $currentOption) {
@@ -47,7 +47,7 @@
                                         echo "checked";
                                     }
                                 }
-                                ?> >    
+                                ?> >
                             </label>
                         <?php } ?>
                     </td>
@@ -93,27 +93,36 @@
                 </tr>
                 <tr class="form-field form-required">
                     <th>
+                        <label>>Ne pas indexer ce site</label>
+                    </th>
+                    <td>
+                        <input type="checkbox" name="sociallymap_noindex" class="sociallymap_formRSS_newFlux" value="1"
+                         <?php if ($editingEntity->options->noindex == "1") echo("checked"); ?> >
+                    </td>
+                </tr>
+                <tr class="form-field form-required">
+                    <th>
                         <label>Type de publication</label>
                     </th>
                     <td>
                         <select name="sociallymap_publish_type">
-                            <option value ="publish" 
+                            <option value ="publish"
                                 <?php if ($editingEntity->options->publish_type == 'publish') echo('selected'); ?>>
                                 Publier
                             </option>
-                            <option value ="draft" 
+                            <option value ="draft"
                                 <?php if ($editingEntity->options->publish_type == 'draft') echo('selected'); ?>>
                                 Brouillon
                             </option>
-                            <option value ="pending" 
+                            <option value ="pending"
                                 <?php if ($editingEntity->options->publish_type == 'pending') echo('selected'); ?>>
                                 En attente de relecture
                             </option>
-                            <option value ="private" 
+                            <option value ="private"
                                 <?php if ($editingEntity->options->publish_type == 'private') echo('selected'); ?>>
                                 Privée
                             </option>
-                            <option value ="future" 
+                            <option value ="future"
                                 <?php if ($editingEntity->options->publish_type == 'future') echo('selected'); ?>>
                                 En attente de publication
                             </option>
