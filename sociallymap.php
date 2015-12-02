@@ -114,7 +114,7 @@ class SociallymapPlugin
         if ($link_canonical) {
             // replace the default WordPress canonical URL function with your own
             $this->link_canononical = $link_canonical;
-            add_action('wp_head', 'customRelCanonical');
+
         }
 
         return $content;
@@ -126,6 +126,7 @@ class SociallymapPlugin
 
         if (is_single()) {
             remove_action('wp_head', 'rel_canonical');
+            add_action('wp_head', 'customRelCanonical');
         }
     }
 
