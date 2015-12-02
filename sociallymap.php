@@ -79,7 +79,8 @@ class SociallymapPlugin
         if (isset($matches[1])) {
             $idSelect = $matches[1];
         } else {
-            exit();
+            error_log('# Rewrite link canonical : No found entity #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+            return false;
         }
 
 
@@ -88,7 +89,8 @@ class SociallymapPlugin
         if (isset($matches[1])) {
             $entityUrl = $matches[1];
         } else {
-            exit();
+            error_log('# Rewrite link canonical : No found url in content #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+            return false;
         }
 
         $entityPicked = $entityObject->getById($idSelect);
@@ -101,7 +103,8 @@ class SociallymapPlugin
 
         // entity unknown
         if (empty($entityPicked)) {
-            exit();
+            error_log('# Rewrite link canonical : Entity Unknown #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+            return false;
         }
 
         if ($link_canonical) {
