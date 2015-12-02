@@ -75,6 +75,7 @@ class SociallymapPlugin
 
         if (empty($content)) {
             error_log('# Rewrite link canonical : No content in entry #'.print_r($content, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
+            return false;
         }
 
         // Search entity and look canonical option
@@ -202,6 +203,7 @@ class SociallymapPlugin
         global $post;
 
         if (is_singular()) {
+            error_log('Content article: '.print_r($post, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
             $this->rewriteCanonical($post->content);
             echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
         }
