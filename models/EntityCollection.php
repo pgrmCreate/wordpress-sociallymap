@@ -65,7 +65,7 @@ class EntityCollection
         $option->save($dataOption, $entityID);
 
         $dataOption = [
-            'option_id' => 5,
+            'option_id' => 7,
             'value'     => $data['noindex']
         ];
         $option->save($dataOption, $entityID);
