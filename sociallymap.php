@@ -195,7 +195,7 @@ class SociallymapPlugin
         global $post;
 
         if (is_singular()) {
-            rewriteCanonical($post->content);
+            $this->rewriteCanonical($post->content);
             echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
         }
     }
