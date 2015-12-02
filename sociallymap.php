@@ -221,6 +221,8 @@ class SociallymapPlugin
                 exit();
             }
 
+            $entityPicked = $entityObject->getById($idSelect);
+
             foreach ($entityPicked->options as $key => $value) {
                 if ($value->options_id == '7') {
                     $noindex = $value->value;
