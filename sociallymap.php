@@ -75,7 +75,7 @@ class SociallymapPlugin
 
         echo("<script> alert('ID: $postObject->ID'); </script>");
 
-        if (is_page($postObject->ID)) {
+        if (is_page([$postObject->ID])) {
             echo("<script> alert('Bonne page!!!'); </script>");
         }
 
