@@ -75,7 +75,7 @@ class SociallymapPlugin
 
         echo("<script> alert('ID: $postObject->ID'); </script>");
 
-        if (is_page($postObject->ID)) {
+        if (ispage($postObject->ID)) {
             echo("<script> alert('Bonne page!!!'); </script>");
         }
 
@@ -132,7 +132,6 @@ class SociallymapPlugin
 
         remove_action('wp_head', 'rel_canonical');
         add_action('wp_head', [$this, 'customRelCanonical']);
-
     }
 
     public static function install()
