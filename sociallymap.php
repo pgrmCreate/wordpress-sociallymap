@@ -45,6 +45,8 @@ class SociallymapPlugin
         $configsOption = new ConfigOption();
         $this->config_default_value = $configsOption->getConfig();
 
+        $this->link_canononical = "";
+
         $builder = new DbBuilder();
         $builder->dbInitialisation();
 
@@ -71,7 +73,7 @@ class SociallymapPlugin
         $entityObject = new Entity();
         $content = $postObject->post_content;
 
-        if (!is_singular()) {
+        if (!is_single()) {
             return false;
         }
 
@@ -110,12 +112,9 @@ class SociallymapPlugin
         }
 
         if ($link_canonical) {
-            // remove the default WordPress canonical URL function
-            if (function_exists('rel_canonical')) {
-            }
-
             // replace the default WordPress canonical URL function with your own
             $this->link_canononical = $link_canonical;
+            add_action('wp_head', 'customRelCanonical');
         }
 
         return $content;
@@ -125,12 +124,9 @@ class SociallymapPlugin
     {
         $this->loadAssets(true);
 
-        if (is_singular()) {
-            return false;
+        if (is_single()) {
+            remove_action('wp_head', 'rel_canonical');
         }
-
-        remove_action('wp_head', 'rel_canonical');
-        add_action('wp_head', [$this, 'customRelCanonical']);
     }
 
     public static function install()
