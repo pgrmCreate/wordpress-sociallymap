@@ -21,6 +21,7 @@ require_once(plugin_dir_path(__FILE__).'models/Entity.php');
 require_once(plugin_dir_path(__FILE__).'models/Option.php');
 require_once(plugin_dir_path(__FILE__).'models/ConfigOption.php');
 
+
 class SociallymapPlugin
 {
     private $wpdb;
@@ -63,26 +64,17 @@ class SociallymapPlugin
 
         add_action('admin_menu', [$this, 'addAdminMenu']);
         add_action('admin_menu', [$this, 'githubConfiguration']);
-        add_action('the_post', [$this, "rewriteCanonical"]);
+        // add_action('the_post', [$this, "rewriteCanonical"]);
         add_filter('the_content', [$this, "postFooter"]);
         add_filter('init', [$this, "initialization"]);
     }
 
-    public function rewriteCanonical($postObject)
+    public function rewriteCanonical($content)
     {
         $entityObject = new Entity();
-        $content = $postObject->post_content;
-
-        echo("<script> alert('TYPE: ".get_post_type($postObject->ID)."'); </script>");
 
 
-        if (!is_singular() && get_post_type($postObject->ID) != "post") {
-            return false;
-        }
-
-        global $wp_query;
-
-            // Search entity and look canonical option
+        // Search entity and look canonical option
         $patternEntityId = '#data-entity-id="([0-9]+)"#';
         preg_match($patternEntityId, $content, $matches);
         if (isset($matches[1])) {
@@ -116,8 +108,6 @@ class SociallymapPlugin
         if (!empty($link_canonical)) {
             // replace the default WordPress canonical URL function with your own
             $this->link_canononical = $entityUrl;
-            $this->link_canononical = "force";
-            echo("<script> alert('$entityUrl'); </script>");
         }
 
         return $content;
@@ -128,6 +118,7 @@ class SociallymapPlugin
         $this->loadAssets(true);
 
         remove_action('wp_head', 'rel_canonical');
+        // add_action('wp_head', [$this, 'rewriteCanonical']);
         add_action('wp_head', [$this, 'customRelCanonical']);
     }
 
@@ -202,6 +193,13 @@ class SociallymapPlugin
 
     public function customRelCanonical()
     {
+        global $post;
+        if (is_singular()) {
+            echo("<script> alert('Header load!'); </script>");
+            echo("#############################################");
+            print_r($post);
+        }
+
         echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
     }
 
