@@ -5,7 +5,7 @@ class Requester
     public function launch($entityId, $token, $environement)
     {
         if (!is_callable('curl_init')) {
-            error_log("Curl no exist, request impossible..\n", 3, plugin_dir_path(__FILE__)."../logs/error.log");
+            error_log("Curl no exist, request impossible..", 3, plugin_dir_path(__FILE__)."../logs/error.log");
             header("HTTP/1.0 501 Not Implemented");
             exit("Curl request impossible for wordpress server");
         }
@@ -46,8 +46,6 @@ class Requester
 
             // Decode the JSON response
             $result = json_decode($result);
-            error_log('Result : '.print_r($result, true), 3, plugin_dir_path(__FILE__)."../logs/error.log");
-
 
             // The request failed
             if ($requestInfos['http_code'] !== 200) {

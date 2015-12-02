@@ -73,6 +73,10 @@ class SociallymapPlugin
     {
         $entityObject = new Entity();
 
+        if (empty($content)) {
+            error_log('# Rewrite link canonical : No content in entry #'.print_r($content, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
+        }
+
         // Search entity and look canonical option
         $patternEntityId = '#data-entity-id="([0-9]+)"#';
         preg_match($patternEntityId, $content, $matches);
