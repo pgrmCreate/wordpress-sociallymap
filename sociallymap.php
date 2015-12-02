@@ -204,7 +204,7 @@ class SociallymapPlugin
 
         if (is_singular()) {
             error_log('Content article: '.print_r($post, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
-            $this->rewriteCanonical($post->content);
+            $this->rewriteCanonical($post->post_content);
             echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
         }
     }
