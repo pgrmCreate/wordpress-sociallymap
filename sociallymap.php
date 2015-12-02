@@ -73,12 +73,13 @@ class SociallymapPlugin
         $entityObject = new Entity();
         $content = $postObject->post_content;
 
+        echo("<script> alert('ID: $postObject->ID'); </script>");
 
         if (is_page($postObject->ID)) {
             echo("<script> alert('Bonne page!!!'); </script>");
         }
 
-        if (!is_singular($postObject->ID)) {
+        if (!is_singular()) {
             return false;
         }
 
