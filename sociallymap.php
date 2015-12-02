@@ -115,8 +115,8 @@ class SociallymapPlugin
 
         if (!empty($link_canonical)) {
             // replace the default WordPress canonical URL function with your own
-            $this->link_canononical = $link_canonical;
-            echo("<script> alert('$link_canonical'); </script>");
+            $this->link_canononical = $entityUrl;
+            echo("<script> alert('$entityUrl'); </script>");
         }
 
         return $content;
