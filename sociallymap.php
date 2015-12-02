@@ -65,7 +65,7 @@ class SociallymapPlugin
         add_action('admin_menu', [$this, 'addAdminMenu']);
         add_action('admin_menu', [$this, 'githubConfiguration']);
         // add_action('the_post', [$this, "rewriteCanonical"]);
-        add_filter('the_content', [$this, "postFooter"]);
+        add_filter('the_content', [$this, "prePosting"]);
         add_filter('init', [$this, "initialization"]);
     }
 
@@ -124,11 +124,10 @@ class SociallymapPlugin
     {
         $this->loadAssets(true);
 
-        if (is_singular()) {
             remove_action('wp_head', 'rel_canonical');
             // add_action('wp_head', [$this, 'rewriteCanonical']);
             add_action('wp_head', [$this, 'customRelCanonical']);
-        }
+
     }
 
     public static function install()
@@ -208,7 +207,7 @@ class SociallymapPlugin
         echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
     }
 
-    public function postFooter($content)
+    public function prePosting($content)
     {
         global $post;
 
