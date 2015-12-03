@@ -102,6 +102,15 @@
                 </tr>
                 <tr class="form-field form-required">
                     <th>
+                        <label>Ne pas suivre les liens (moteur de recherche)</label>
+                    </th>
+                    <td>
+                        <input type="checkbox" name="sociallymap_nofolow" class="sociallymap_formRSS_newFlux" value="1"
+                        <?php if ($editingEntity->options->nofolow == "1") echo("checked"); ?> >
+                    </td>
+                </tr>
+                <tr class="form-field form-required">
+                    <th>
                         <label>Type de publication</label>
                     </th>
                     <td>

@@ -519,6 +519,9 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_noindex'])) {
                 $_POST['sociallymap_noindex'] = 0;
             }
+            if (!isset($_POST['sociallymap_nofolow'])) {
+                $_POST['sociallymap_nofolow'] = 0;
+            }
 
             $data = [
                 'name'           => $_POST['sociallymap_label'],
@@ -529,6 +532,7 @@ class SociallymapPlugin
                 'publish_type'   => $_POST['sociallymap_publish_type'],
                 'link_canonical' => $_POST['sociallymap_link_canonical'],
                 'noindex'        => $_POST['sociallymap_noindex'],
+                'nofolow'        => $_POST['sociallymap_nofolow'],
                 'image'          => $_POST['sociallymap_image'],
                 'id'             => $_GET['id'],
             ];
@@ -553,6 +557,9 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_noindex'])) {
                 $_POST['sociallymap_noindex'] = 0;
             }
+            if (!isset($_POST['sociallymap_nofolow'])) {
+                $_POST['sociallymap_nofolow'] = 0;
+            }
 
             $data = [
                 'name'           => $_POST['sociallymap_name'],
@@ -563,6 +570,7 @@ class SociallymapPlugin
                 'display_type'   => $_POST['sociallymap_display_type'],
                 'link_canonical' => $_POST['sociallymap_link_canonical'],
                 'noindex'        => $_POST['sociallymap_noindex'],
+                'nofolow'        => $_POST['sociallymap_nofolow'],
                 'image'          => $_POST['sociallymap_image'],
             ];
 

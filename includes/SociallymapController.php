@@ -56,6 +56,9 @@ class SociallymapController
             if ($value->options_id == '7') {
                 $noindex = $value->value;
             }
+            if ($value->options_id == '8') {
+                $nofolow = $value->value;
+            }
         }
 
         $editingEntity->options = new stdClass;
@@ -65,6 +68,7 @@ class SociallymapController
         $editingEntity->options->link_canonical = $link_canonical;
         $editingEntity->options->image = $image;
         $editingEntity->options->noindex = $noindex;
+        $editingEntity->options->nofolow = $nofolow;
 
         $sendItem['editingEntity'] = $editingEntity;
 
@@ -88,6 +92,8 @@ class SociallymapController
                 $data->image =  $value->default_value;
             } elseif ($value->id == 7) {
                 $data->noindex =  $value->default_value;
+            } elseif ($value->id == 8) {
+                $data->nofolow =  $value->default_value;
             }
         }
 

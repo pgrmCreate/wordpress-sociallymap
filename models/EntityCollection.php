@@ -69,6 +69,12 @@ class EntityCollection
             'value'     => $data['noindex']
         ];
         $option->save($dataOption, $entityID);
+
+        $dataOption = [
+            'option_id' => 8,
+            'value'     => $data['nofolow']
+        ];
+        $option->save($dataOption, $entityID);
     }
 
     public function update($data)
@@ -94,6 +100,7 @@ class EntityCollection
             'link_canonical' =>  $data['link_canonical'],
             'image'          =>  $data['image'],
             'noindex'        =>  $data['noindex'],
+            'nofolow'        =>  $data['nofolow'],
         ];
         $option->update($optionsEntity);
     }

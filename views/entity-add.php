@@ -110,6 +110,15 @@
 						 value="1">
 					</td>
 				</tr>
+				<tr class="form-field form-required">
+					<th>
+						<label>Ne pas suivre les liens (nofolow)</label>
+					</th>
+					<td>
+						<input type="checkbox" name="sociallymap_nofolow" class="sociallymap_formRSS_newFlux"
+						 value="1">
+					</td>
+				</tr>
 			</tbody>
 		</table>
 

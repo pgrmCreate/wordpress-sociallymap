@@ -147,5 +147,19 @@ class Option
                 ]
             );
         }
+
+        // UPDATE LINK NOFOLOW
+        if (isset($data['noindex'])) {
+            $wpdb->update(
+                $this->table,
+                [
+                    'value' => $data['nofolow'],    // string
+                ],
+                [
+                    'entity_id' => $data['idSource'],
+                    'options_id' => 7
+                ]
+            );
+        }
     }
 }
