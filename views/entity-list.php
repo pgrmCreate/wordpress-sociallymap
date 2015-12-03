@@ -24,7 +24,7 @@
 						</th>
 
 						<th scope="col" id="entityId" class="manage-column column-username column-primary sortable desc"
-						colspan="2">
+						colspan="4">
 							<span class="sm-link-entity">Identifiant de l'entité sociallymap</span>
 						</th>
 
@@ -39,7 +39,7 @@
 						</th>
 
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
-						colspan="2">
+						colspan="1">
 							<span class="sm-link-entity">Active</span>
 						</th>
 
@@ -74,7 +74,7 @@
 									</div>
 								</td>
 
-								<td colspan="2">
+								<td colspan="4">
 									<?php echo $value->sm_entity_id; ?>
 								</td>
 
@@ -98,7 +98,7 @@
 									<?php echo (get_user_by('id', $value->author_id)->user_nicename); ?>
 								</td>
 
-								<td colspan="2">
+								<td colspan="1">
 									<input type="checkbox" disabled <?php if($value->activate == true) echo "checked"; ?> >
 								</td>
 
@@ -138,7 +138,7 @@
 						</th>
 
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
-						colspan="2">
+						colspan="1">
 							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
 								<span>Active</span>
 								<span class="sorting-indicator"></span>
