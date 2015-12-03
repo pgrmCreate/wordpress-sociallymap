@@ -229,10 +229,15 @@ class SociallymapPlugin
                 }
             }
 
-            if (isset($noindex) && $noindex == 1) {
-                echo ('<meta name="robots" content="noindex">');
+            if (isset($noindex) && isset($nofolow)) {
+                if ($noindex == 1 && $nofolow == 1) {
+                    echo ('<meta name="robots" content="noindex,follow">');
+                } elseif ($noindex == 0 && $nofolow == 1) {
+                    echo ('<meta name="robots" content="follow">');
+                } elseif ($noindex == 1 && $nofolow == 0) {
+                    echo ('<meta name="robots" content="noindex">');
+                }
             }
-
         }
     }
 
