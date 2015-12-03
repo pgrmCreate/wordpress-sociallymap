@@ -20,7 +20,7 @@
 					<tr>
 						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
 						colspan="2">
-							<a href="">
+							<a>
 								<span>Nom de l'entité</span>
 								<span class="sorting-indicator"></span>
 							</a>
@@ -28,7 +28,7 @@
 
 						<th scope="col" id="entityId" class="manage-column column-username column-primary sortable desc"
 						colspan="2">
-							<a href="">
+							<a>
 								<span>Identifiant de l'entité sociallymap</span>
 								<span class="sorting-indicator"></span>
 							</a>
@@ -36,7 +36,7 @@
 
 						<th scope="col" id="category" class="manage-column column-name sortable desc"
 						colspan="2">
-							<a href="">
+							<a>
 								<span>Catégorie</span>
 								<span class="sorting-indicator"></span>
 							</a>
@@ -44,7 +44,7 @@
 
 						<th scope="col" id="author" class="manage-column column-email sortable desc"
 						colspan="2">
-							<a href="">
+							<a>
 								<span>Auteur</span>
 								<span class="sorting-indicator"></span>
 							</a>
@@ -52,7 +52,7 @@
 
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
 						colspan="2">
-							<a href="">
+							<a>
 								<span>Active</span>
 								<span class="sorting-indicator"></span>
 							</a>
@@ -60,7 +60,7 @@
 
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
 						colspan="2">
-							<a href="">
+							<a>
 								<span>Dernière publication</span>
 								<span class="sorting-indicator"></span>
 							</a>
