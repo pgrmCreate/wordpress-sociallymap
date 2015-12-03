@@ -20,25 +20,31 @@
 					<tr>
 						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
 						colspan="2">
-							<span>Nom de l'entité</span>
-							<span class="sorting-indicator"></span>
+							<a href="">
+								<span>Nom de l'entité</span>
+								<span class="sorting-indicator"></span>
+							</a>
 						</th>
 
 						<th scope="col" id="entityId" class="manage-column column-username column-primary sortable desc"
 						colspan="2">
-							<span>Identifiant de l'entité sociallymap</span>
-							<span class="sorting-indicator"></span>
+							<a href="">
+								<span>Identifiant de l'entité sociallymap</span>
+								<span class="sorting-indicator"></span>
+							</a>
 						</th>
 
 						<th scope="col" id="category" class="manage-column column-name sortable desc"
 						colspan="2">
-							<span>Catégorie</span>
-							<span class="sorting-indicator"></span>
+							<a href="">
+								<span>Catégorie</span>
+								<span class="sorting-indicator"></span>
+							</a>
 						</th>
 
 						<th scope="col" id="author" class="manage-column column-email sortable desc"
 						colspan="2">
-							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
+							<a href="">
 								<span>Auteur</span>
 								<span class="sorting-indicator"></span>
 							</a>
@@ -46,14 +52,17 @@
 
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
 						colspan="2">
-							<span>Active</span>
-							<span class="sorting-indicator"></span>
+							<a href="">
+								<span>Active</span>
+								<span class="sorting-indicator"></span>
+							</a>
 						</th>
 
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
 						colspan="2">
-							<span>Dernière publication</span>
-							<span class="sorting-indicator"></span>
+							<a href="">
+								<span>Dernière publication</span>
+								<span class="sorting-indicator"></span>
 							</a>
 						</th>
 					</tr>
