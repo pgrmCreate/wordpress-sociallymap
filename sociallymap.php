@@ -202,45 +202,49 @@ class SociallymapPlugin
     {
         global $post;
 
-        if (is_single()) {
-            $entityObject = new Entity();
+        if (!is_single()) {
+            return false;
+        }
 
-            // get entity ID
-            $pattern = '#data-entity-id="([0-9]+)"#';
-            preg_match($pattern, $post->post_content, $matches);
-            if (isset($matches[1])) {
-                $idSelect = $matches[1];
-            } else {
-                error_log('# Noindex option : No found entity attribute in content #', 3, plugin_dir_path(__FILE__).'logs/error.log');
-                exit();
+        $entityObject = new Entity();
+
+        // get entity ID
+        $pattern = '#data-entity-id="([0-9]+)"#';
+        preg_match($pattern, $post->post_content, $matches);
+        if (isset($matches[1])) {
+            $idSelect = $matches[1];
+        } else {
+            error_log('# Noindex option : No found entity attribute in content #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+            exit();
+        }
+
+        // id unknown
+        if (empty($idSelect)) {
+            error_log('# Noindex option : No found entity in bdd #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+            exit();
+        }
+
+        $entityPicked = $entityObject->getById($idSelect);
+        $noindex = 0;
+        $nofolow = 0;
+
+        foreach ($entityPicked->options as $key => $value) {
+            if ($value->options_id == '7') {
+                $noindex = $value->value;
             }
-
-            // id unknown
-            if (empty($idSelect)) {
-                error_log('# Noindex option : No found entity in bdd #', 3, plugin_dir_path(__FILE__).'logs/error.log');
-                exit();
+            if ($value->options_id == '8') {
+                $nofolow = $value->value;
             }
+        }
 
-            $entityPicked = $entityObject->getById($idSelect);
-            $noindex = 0;
-            $nofolow = 0;
+         error_log("# Status ref : index:$noindex ; nofolow:$nofolow #", 3, plugin_dir_path(__FILE__).'logs/error.log');
 
-            foreach ($entityPicked->options as $key => $value) {
-                if ($value->options_id == '7') {
-                    $noindex = $value->value;
-                }
-                if ($value->options_id == '8') {
-                    $nofolow = $value->value;
-                }
-            }
-
-            if ($noindex == 1 && $nofolow == 1) {
-                echo ('<meta name="robots" content="noindex,follow">');
-            } elseif ($noindex == 0 && $nofolow == 1) {
-                echo ('<meta name="robots" content="follow">');
-            } elseif ($noindex == 1 && $nofolow == 0) {
-                echo ('<meta name="robots" content="noindex">');
-            }
+        if ($noindex == 1 && $nofolow == 1) {
+            echo ('<meta name="robots" content="noindex,follow">');
+        } elseif ($noindex == 0 && $nofolow == 1) {
+            echo ('<meta name="robots" content="follow">');
+        } elseif ($noindex == 1 && $nofolow == 0) {
+            echo ('<meta name="robots" content="noindex">');
         }
     }
 
