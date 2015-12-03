@@ -20,26 +20,20 @@
 					<tr>
 						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
 						colspan="2">
-							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=login&amp;order=asc">
-								<span>Nom de l'entité</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							<span>Nom de l'entité</span>
+							<span class="sorting-indicator"></span>
 						</th>
 
 						<th scope="col" id="entityId" class="manage-column column-username column-primary sortable desc"
 						colspan="2">
-							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=login&amp;order=asc">
-								<span>Identifiant de l'entité sociallymap</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							<span>Identifiant de l'entité sociallymap</span>
+							<span class="sorting-indicator"></span>
 						</th>
 
 						<th scope="col" id="category" class="manage-column column-name sortable desc"
 						colspan="2">
-							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=name&amp;order=asc">
-								<span>Catégorie</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							<span>Catégorie</span>
+							<span class="sorting-indicator"></span>
 						</th>
 
 						<th scope="col" id="author" class="manage-column column-email sortable desc"
@@ -52,19 +46,16 @@
 
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
 						colspan="2">
-							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
-								<span>Active</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							<span>Active</span>
+							<span class="sorting-indicator"></span>
 						</th>
 
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
 						colspan="2">
-							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
-								<span>Dernière publication</span>
-								<span class="sorting-indicator"></span>
+							<span>Dernière publication</span>
+							<span class="sorting-indicator"></span>
 							</a>
-						</th>		
+						</th>
 					</tr>
 				</thead>
 				<tbody id="the-list" data-wp-lists="list:user">
@@ -82,7 +73,7 @@
 										</span>
 										|
 										<span class="delete">
-											<button value="<?php echo $value->id; ?>" type="submit" name="submit" 
+											<button value="<?php echo $value->id; ?>" type="submit" name="submit"
 											class="sm-link-action-style">
 												<a>
 													Effacer
@@ -98,7 +89,7 @@
 
 								<td colspan="2">
 									<ul class="display-list-cat">
-									<?php 
+									<?php
 										$listCat = [];
 										foreach ($value->options as $key => $category) {
 											if($category->options_id == '1') {
@@ -110,7 +101,7 @@
 										}
 									?>
 									</ul>
-								</td>			
+								</td>
 
 								<td colspan="2">
 									<?php echo (get_user_by('id', $value->author_id)->user_nicename); ?>
@@ -161,7 +152,7 @@
 								<span>Active</span>
 								<span class="sorting-indicator"></span>
 							</a>
-						</th>			
+						</th>
 
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
 						colspan="2">
@@ -169,8 +160,8 @@
 								<span>Dernière publication</span>
 								<span class="sorting-indicator"></span>
 							</a>
-						</th>	
-					</tr>					
+						</th>
+					</tr>
 				</tfoot>
 				<?php endif; ?>
 			<form>
