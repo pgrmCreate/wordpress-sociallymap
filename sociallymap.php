@@ -237,8 +237,6 @@ class SociallymapPlugin
             }
         }
 
-         error_log("# Status ref : index:$noindex ; nofolow:$nofolow #", 3, plugin_dir_path(__FILE__).'logs/error.log');
-
         if ($noindex == 1 && $nofolow == 1) {
             echo ('<meta name="robots" content="noindex,follow">');
         } elseif ($noindex == 0 && $nofolow == 1) {
@@ -382,6 +380,9 @@ class SociallymapPlugin
 
         $configs = $config->getConfig();
 
+        // get author id
+        $author = $entity->author_id;
+
         // The entity is not active
         if (!$entity->activate) {
             exit;
@@ -481,7 +482,7 @@ class SociallymapPlugin
                 }
 
                 // Publish the post
-                if (!$publisher->publish($title, $contentArticle, $imageAttachment, $entity_list_category, $entity_publish_type)) {
+                if (!$publisher->publish($title, $contentArticle, $author, $imageAttachment, $entity_list_category, $entity_publish_type)) {
                     throw new Exception('Error from post publish', 1);
                 } else {
                     $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);

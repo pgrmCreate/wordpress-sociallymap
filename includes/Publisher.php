@@ -2,7 +2,7 @@
 
 class Publisher
 {
-    public function publish($title, $content, $image, $category = 1, $publish_type = 'draft')
+    public function publish($title, $content, $author, $image, $category = 1, $publish_type = 'draft')
     {
         $listCats = [];
         if (is_array($category)) {
@@ -16,7 +16,7 @@ class Publisher
             'post_content' => $content,
             'post_category' => $listCats,
             'post_status' => $publish_type,
-            'post_author' => get_current_user_id(),
+            'post_author' => $author,
         ];
 
         //temporarily disable
