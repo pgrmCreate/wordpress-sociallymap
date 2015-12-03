@@ -416,6 +416,8 @@ class SociallymapPlugin
         try {
             $jsonData = $requester->launch($_POST['entityId'], $_POST['token'], $_POST['environment']);
 
+            error_log('Data send by sociallymap : '.$jsonData, 3, plugin_dir_path(__FILE__).'logs/error.log');
+
             if (empty($jsonData)) {
                 throw new Exception('No data returned from request', 1);
                 exit();

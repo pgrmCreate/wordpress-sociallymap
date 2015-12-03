@@ -5,9 +5,9 @@
     $entityId = $data['entityId'];
     $readmore = $data['readmore'];
 
-    if($readmore == "") {
-    	$readmore = "Lire la suite";
-    }
+if ($readmore == "") {
+    $readmore = "Lire la suite";
+}
 
 ?>
 
