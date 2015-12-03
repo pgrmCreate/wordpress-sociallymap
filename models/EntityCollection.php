@@ -65,6 +65,12 @@ class EntityCollection
         $option->save($dataOption, $entityID);
 
         $dataOption = [
+            'option_id' => 6,
+            'value'     => $data['readmore']
+        ];
+        $option->save($dataOption, $entityID);
+
+        $dataOption = [
             'option_id' => 7,
             'value'     => $data['noindex']
         ];
@@ -101,6 +107,7 @@ class EntityCollection
             'image'          =>  $data['image'],
             'noindex'        =>  $data['noindex'],
             'nofolow'        =>  $data['nofolow'],
+            'readmore'        =>  $data['readmore'],
         ];
         $option->update($optionsEntity);
     }

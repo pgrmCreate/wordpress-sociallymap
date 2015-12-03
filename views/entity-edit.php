@@ -138,6 +138,15 @@
                         </select>
                     </td>
                 </tr>
+                <tr class="form-field">
+                    <th>
+                        <label>Libellé (suite d'article)</label>
+                    </th>
+                    <td>
+                        <input name="sociallymap_label" value="<?php echo($editingEntity->options->readmore); ?>"
+                        class="sociallymap_formRSS_newFlux" placeholder="Lire la suite">
+                    </td>
+                </tr>
             </tbody>
         </table>
 

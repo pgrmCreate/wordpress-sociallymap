@@ -134,6 +134,20 @@ class Option
             );
         }
 
+        // UPDATE IMAGE ATTACHMENT
+        if (isset($data['image'])) {
+            $wpdb->update(
+                $this->table,
+                [
+                    'value' => $data['readmore'],    // string
+                ],
+                [
+                    'entity_id' => $data['idSource'],
+                    'options_id' => 6
+                ]
+            );
+        }
+
         // UPDATE LINK CANONICAL
         if (isset($data['noindex'])) {
             $wpdb->update(

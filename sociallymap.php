@@ -547,6 +547,7 @@ class SociallymapPlugin
                 'noindex'        => $_POST['sociallymap_noindex'],
                 'nofolow'        => $_POST['sociallymap_nofolow'],
                 'image'          => $_POST['sociallymap_image'],
+                'readmore'          => $_POST['sociallymap_readmore'],
                 'id'             => $_GET['id'],
             ];
 
@@ -584,6 +585,7 @@ class SociallymapPlugin
                 'link_canonical' => $_POST['sociallymap_link_canonical'],
                 'noindex'        => $_POST['sociallymap_noindex'],
                 'nofolow'        => $_POST['sociallymap_nofolow'],
+                'readmore'        => $_POST['sociallymap_readmore'],
                 'image'          => $_POST['sociallymap_image'],
             ];
 

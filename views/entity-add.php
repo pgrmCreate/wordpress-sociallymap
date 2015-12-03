@@ -119,6 +119,15 @@
 						 value="1">
 					</td>
 				</tr>
+				<tr class="form-field">
+					<th>
+						<label>Libellé suite d'article</label>
+					</th>
+					<td>
+						<input type="text" placeholder="Lire la suite" name="sociallymap_readmore"
+						class="sociallymap_formRSS_newFlux">
+					</td>
+				</tr>
 			</tbody>
 		</table>
 

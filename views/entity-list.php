@@ -18,34 +18,34 @@
 				<input type="hidden" name="sociallymap_deleteRSS" value="1"/>
 				<thead>
 					<tr>
-						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
+						<th scope="col" id="RSS" class="manage-column column-username"
 						colspan="2">
-							<span class="sm-link-entity">Nom de l'entité</span>
+							Nom de l'entité
 						</th>
 
-						<th scope="col" id="entityId" class="manage-column column-username column-primary sortable desc"
+						<th scope="col" id="entityId" class="manage-column column-username"
 						colspan="4">
-							<span class="sm-link-entity">Identifiant de l'entité sociallymap</span>
+							Identifiant de l'entité sociallymap
 						</th>
 
-						<th scope="col" id="category" class="manage-column column-name sortable desc"
+						<th scope="col" id="category" class="manage-column column-name"
 						colspan="2">
-							<span class="sm-link-entity">Catégorie</span>
+							Catégorie
 						</th>
 
-						<th scope="col" id="author" class="manage-column column-email sortable desc"
+						<th scope="col" id="author" class="manage-column column-email"
 						colspan="2">
-							<span class="sm-link-entity">Auteur</span>
+							Auteur
 						</th>
 
-						<th scope="col" id="action" class="manage-column column-email sortable desc"
+						<th scope="col" id="action" class="manage-column column-email"
 						colspan="1">
-							<span class="sm-link-entity">Active</span>
+							Active
 						</th>
 
-						<th scope="col" id="action" class="manage-column column-email sortable desc"
+						<th scope="col" id="action" class="manage-column column-email"
 						colspan="2">
-							<span class="sm-link-entity">Dernière publication</span>
+							Dernière publication
 						</th>
 					</tr>
 				</thead>
@@ -110,47 +110,37 @@
 						}
 						?>
 				</tbody>
-				<?php if ((int)count((array)$listRss) > 1) : ?>
+				<?php if ((int)count((array)$listRss) > 3) : ?>
 				<tfoot>
 					<tr>
-						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
+						<th scope="col" id="RSS" class="manage-column column-username"
+						colspan="2">
+							Nom de l'entité
+						</th>
+
+						<th scope="col" id="entityId" class="manage-column column-username"
 						colspan="4">
-							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=login&amp;order=asc">
-								<span>Nom de l'entité</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							Identifiant de l'entité sociallymap
 						</th>
 
-						<th scope="col" id="category" class="manage-column column-name sortable desc"
+						<th scope="col" id="category" class="manage-column column-name"
 						colspan="2">
-							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=name&amp;order=asc">
-								<span>Catégorie</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							Catégorie
 						</th>
 
-						<th scope="col" id="author" class="manage-column column-email sortable desc"
+						<th scope="col" id="author" class="manage-column column-email"
 						colspan="2">
-							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
-								<span>Auteur</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							Auteur
 						</th>
 
-						<th scope="col" id="action" class="manage-column column-email sortable desc"
+						<th scope="col" id="action" class="manage-column column-email"
 						colspan="1">
-							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
-								<span>Active</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							Active
 						</th>
 
-						<th scope="col" id="action" class="manage-column column-email sortable desc"
+						<th scope="col" id="action" class="manage-column column-email"
 						colspan="2">
-							<a href="http://localhost/plugins/wordpress/sociallymap/wp-admin/users.php?orderby=email&amp;order=asc">
-								<span>Dernière publication</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							Dernière publication
 						</th>
 					</tr>
 				</tfoot>
