@@ -143,7 +143,7 @@
                         <label>Libellé (suite d'article)</label>
                     </th>
                     <td>
-                        <input name="sociallymap_label" value="<?php echo($editingEntity->options->readmore); ?>"
+                        <input name="sociallymap_readmore" value="<?php echo($editingEntity->options->readmore); ?>"
                         class="sociallymap_formRSS_newFlux" placeholder="Lire la suite">
                     </td>
                 </tr>
