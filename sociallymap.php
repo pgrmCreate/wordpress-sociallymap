@@ -507,13 +507,14 @@ class SociallymapPlugin
                     throw new Exception('Error from post publish', 1);
                 } else {
                     $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
-                    return true;
                 }
             }
         } catch (Exception $e) {
             error_log('Error : '.$e->getMessage().'\n', 3, plugin_dir_path(__FILE__).'logs/error.log');
             exit;
         }
+
+        return true;
     }
 
     public function loadTemplate($params)
