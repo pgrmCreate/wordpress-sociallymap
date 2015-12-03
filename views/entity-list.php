@@ -20,50 +20,32 @@
 					<tr>
 						<th scope="col" id="RSS" class="manage-column column-username column-primary sortable desc"
 						colspan="2">
-							<a>
-								<span>Nom de l'entité</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							<span class="sm-link-entity">Nom de l'entité</span>
 						</th>
 
 						<th scope="col" id="entityId" class="manage-column column-username column-primary sortable desc"
 						colspan="2">
-							<a>
-								<span>Identifiant de l'entité sociallymap</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							<span class="sm-link-entity">Identifiant de l'entité sociallymap</span>
 						</th>
 
 						<th scope="col" id="category" class="manage-column column-name sortable desc"
 						colspan="2">
-							<a>
-								<span>Catégorie</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							<span class="sm-link-entity">Catégorie</span>
 						</th>
 
 						<th scope="col" id="author" class="manage-column column-email sortable desc"
 						colspan="2">
-							<a>
-								<span>Auteur</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							<span class="sm-link-entity">Auteur</span>
 						</th>
 
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
 						colspan="2">
-							<a>
-								<span>Active</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							<span class="sm-link-entity">Active</span>
 						</th>
 
 						<th scope="col" id="action" class="manage-column column-email sortable desc"
 						colspan="2">
-							<a>
-								<span>Dernière publication</span>
-								<span class="sorting-indicator"></span>
-							</a>
+							<span class="sm-link-entity">Dernière publication</span>
 						</th>
 					</tr>
 				</thead>

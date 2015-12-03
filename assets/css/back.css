@@ -83,3 +83,7 @@ label.sociallymap_label > [type="checkbox"] {
 		content: "|";
 		color: #ccc;
 }
+
+.sm-link-entity {
+	color: rgb(0, 115, 170);;
+}
