@@ -18,6 +18,15 @@
 			<tbody>
 				<tr class="form-field form-required">
 					<th>
+						<label>Entité active</label>
+					</th>
+					<td>
+						<input type="checkbox" name="sociallymap_activate" class="sociallymap_formRSS_newFlux"
+						 value="1" checked>
+					</td>
+				</tr>
+				<tr class="form-field form-required">
+					<th>
 						<label>Label</label>
 					</th>
 					<td>
@@ -76,16 +85,7 @@
 				</tr>
 				<tr class="form-field form-required">
 					<th>
-						<label>Actif</label>
-					</th>
-					<td>
-						<input type="checkbox" name="sociallymap_activate" class="sociallymap_formRSS_newFlux"
-						 value="1" checked>
-					</td>
-				</tr>
-				<tr class="form-field form-required">
-					<th>
-						<label>Afficher dans une fenêtre modale</label>
+						<label>Afficher les articles dans une fenêtre modale</label>
 					</th>
 					<td>
 						<input type="checkbox" name="sociallymap_display_type" class="sociallymap_formRSS_newFlux"
@@ -94,7 +94,7 @@
 				</tr>
 				<tr class="form-field form-required">
 					<th>
-						<label>Lien canonique</label>
+						<label>Inclure les balises de liens canoniques</label>
 					</th>
 					<td>
 						<input type="checkbox" name="sociallymap_link_canonical" class="sociallymap_formRSS_newFlux"
@@ -103,7 +103,7 @@
 				</tr>
 				<tr class="form-field form-required">
 					<th>
-						<label>Ne pas indexer ce site</label>
+						<label>Ne pas indexer les articles publiés via Sociallymap dans les moteurs de recherche</label>
 					</th>
 					<td>
 						<input type="checkbox" name="sociallymap_noindex" class="sociallymap_formRSS_newFlux"
@@ -134,7 +134,7 @@
 		<p class="submit sociallymap_valid-submit">
 			<button type="submit" name="submit" id="submit" class="button button-primary">
 				<i class="dashicons-before dashicons-plus-alt sociallymap-icon-button"></i>
-				Ajouter
+				Enregistrer
 			</button>
 		</p>
 	</form>
