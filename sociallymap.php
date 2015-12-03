@@ -454,7 +454,7 @@ class SociallymapPlugin
                 if($summary == "") {
                     $contentArticle = $value->content;
                 } else {
-                    $contentArticle = $value->summary;
+                    $contentArticle = $summary;
                 }
 
                 // add readmore to content if $readmore is not empty
