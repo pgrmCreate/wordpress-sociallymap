@@ -143,6 +143,8 @@ class SociallymapPlugin
         global $wp_query;
 
         if ($wp_query->get('sociallymap-plugin')) {
+            error_log("New ping", 3, plugin_dir_path(__FILE__)."logs/error.log");
+
             // We don't have the right parameters
             if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
                 header("HTTP/1.0 400 Bad Request");
@@ -376,8 +378,11 @@ class SociallymapPlugin
         $config       = new ConfigOption();
         $entityObject = new Entity();
         $uploader     = new ImageUploader();
+        $summary = "";
 
         $configs = $config->getConfig();
+
+        error_log('Try request with that : '.print_r($_POST, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
 
         // get author id
         $author = $entity->author_id;
@@ -439,6 +444,8 @@ class SociallymapPlugin
                     if (!empty($value->link->url)) {
                         $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type, $entity->id, $readmore_label);
                     }
+
+
                 }
 
                 $contentArticle = $value->content;
@@ -456,6 +463,7 @@ class SociallymapPlugin
                     if (gettype($imageSrc) == "string") {
                         $imageTag = '<img class="aligncenter" src="'.$imageSrc.'" alt="">';
                     } else {
+                        error_log('Error upload : '.print_r($imageSrc, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
                         $imageTag = '';
                     }
                 }
