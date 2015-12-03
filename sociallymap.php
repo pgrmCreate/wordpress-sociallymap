@@ -535,6 +535,9 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_nofolow'])) {
                 $_POST['sociallymap_nofolow'] = 0;
             }
+            if (!isset($_POST['sociallymap_readmore'])) {
+                $_POST['sociallymap_readmore'] = "";
+            }
 
             $data = [
                 'name'           => $_POST['sociallymap_label'],
@@ -547,7 +550,7 @@ class SociallymapPlugin
                 'noindex'        => $_POST['sociallymap_noindex'],
                 'nofolow'        => $_POST['sociallymap_nofolow'],
                 'image'          => $_POST['sociallymap_image'],
-                'readmore'          => $_POST['sociallymap_readmore'],
+                'readmore'       => $_POST['sociallymap_readmore'],
                 'id'             => $_GET['id'],
             ];
 
@@ -573,6 +576,9 @@ class SociallymapPlugin
             }
             if (!isset($_POST['sociallymap_nofolow'])) {
                 $_POST['sociallymap_nofolow'] = 0;
+            }
+            if (!isset($_POST['sociallymap_readmore'])) {
+                $_POST['sociallymap_readmore'] = "";
             }
 
             $data = [
