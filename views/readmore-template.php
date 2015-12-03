@@ -3,6 +3,11 @@
     $url = $data['url'];
     $display_type = $data['display_type'];
     $entityId = $data['entityId'];
+    $readmore = $data['readmore'];
+
+    if($readmore == "") {
+    	$readmore = "Lire la suite";
+    }
 
 ?>
 
@@ -12,7 +17,7 @@
 	data-fancybox-type="iframe"
 	href="<?php echo ($url); ?>"
 	data-article-url="<?php echo ($url); ?>"
-	target="_blank" data-display-type="">Lire la suite</a>
+	target="_blank" data-display-type=""><?php echo $readmore; ?></a>
 </p>
 
 

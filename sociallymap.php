@@ -246,7 +246,6 @@ class SociallymapPlugin
         }
     }
 
-
     public function customRelCanonical()
     {
         global $post;
@@ -390,6 +389,7 @@ class SociallymapPlugin
 
         // Retrieve the entity categories
         $entity_list_category = [];
+        $readmore_label = "";
         foreach ($entity->options as $key => $value) {
             if ($value->options_id == 1) {
                 $entity_list_category[] = $value->value;
@@ -405,6 +405,10 @@ class SociallymapPlugin
 
             if ($value->options_id == 5) {
                 $entity_image = $value->value;
+            }
+
+            if ($value->options_id == 6) {
+                $readmore_label = $value->value;
             }
         }
 
@@ -431,7 +435,7 @@ class SociallymapPlugin
 
                     // Check if Link URL existing
                     if (!empty($value->link->url)) {
-                        $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type, $entity->id);
+                        $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type, $entity->id, $readmore_label);
                     }
                 }
 

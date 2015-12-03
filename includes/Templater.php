@@ -24,7 +24,7 @@ class Templater
         return $view;
     }
 
-    public function loadReadMore($url, $display_type, $entityId)
+    public function loadReadMore($url, $display_type, $entityId, $readmore)
     {
         load_plugin_textdomain('sociallymap', false, "../".basename(dirname(__FILE__)));
 
@@ -32,6 +32,7 @@ class Templater
             'url' => $url,
             'display_type' => $display_type,
             'entityId' => $entityId,
+            'readmore' => $readmore,
         ]);
 
         ob_start();
