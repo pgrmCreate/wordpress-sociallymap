@@ -440,6 +440,10 @@ class SociallymapPlugin
                         $title = $value->link->title;
                     }
 
+                    if (!empty($value->link->summary)) {
+                        $summary = $value->link->summary;
+                    }
+
                     // Check if Link URL existing
                     if (!empty($value->link->url)) {
                         $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type, $entity->id, $readmore_label);
@@ -447,8 +451,11 @@ class SociallymapPlugin
 
 
                 }
-
-                $contentArticle = $value->content;
+                if($summary == "") {
+                    $contentArticle = $value->content;
+                } else {
+                    $contentArticle = $value->summary;
+                }
 
                 // add readmore to content if $readmore is not empty
                 if ($readmore != "") {
