@@ -222,6 +222,8 @@ class SociallymapPlugin
             }
 
             $entityPicked = $entityObject->getById($idSelect);
+            $noindex = 0;
+            $nofolow = 0;
 
             foreach ($entityPicked->options as $key => $value) {
                 if ($value->options_id == '7') {
@@ -232,14 +234,12 @@ class SociallymapPlugin
                 }
             }
 
-            if (isset($noindex) && isset($nofolow)) {
-                if ($noindex == 1 && $nofolow == 1) {
-                    echo ('<meta name="robots" content="noindex,follow">');
-                } elseif ($noindex == 0 && $nofolow == 1) {
-                    echo ('<meta name="robots" content="follow">');
-                } elseif ($noindex == 1 && $nofolow == 0) {
-                    echo ('<meta name="robots" content="noindex">');
-                }
+            if ($noindex == 1 && $nofolow == 1) {
+                echo ('<meta name="robots" content="noindex,follow">');
+            } elseif ($noindex == 0 && $nofolow == 1) {
+                echo ('<meta name="robots" content="follow">');
+            } elseif ($noindex == 1 && $nofolow == 0) {
+                echo ('<meta name="robots" content="noindex">');
             }
         }
     }
@@ -269,19 +269,19 @@ class SociallymapPlugin
         if (isset($matches[1])) {
             $idSelect = $matches[1];
         } else {
-            exit();
+            return $content;
         }
 
         // id unknown
         if (empty($idSelect)) {
-            exit();
+            return $content;
         }
 
         $entityPicked = $entityObject->getById($idSelect);
 
         // entity unknown
         if (empty($entityPicked)) {
-            exit();
+            return $content;
         }
 
         foreach ($entityPicked->options as $key => $value) {
