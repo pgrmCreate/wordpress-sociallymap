@@ -227,6 +227,9 @@ class SociallymapPlugin
                 if ($value->options_id == '7') {
                     $noindex = $value->value;
                 }
+                if ($value->options_id == '8') {
+                    $nofolow = $value->value;
+                }
             }
 
             if (isset($noindex) && isset($nofolow)) {
