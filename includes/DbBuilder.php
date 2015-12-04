@@ -17,7 +17,7 @@ class DbBuilder
         $this->table_options = $this->wpdb->prefix . "sm_options";
         $this->table_entity_options = $this->wpdb->prefix . "sm_entity_options";
         $this->table_entity = $this->wpdb->prefix . "sm_entities";
-        $this->table_publisher = $this->wpdb->prefix . "sm_published";
+        $this->table_published = $this->wpdb->prefix . "sm_published";
     }
 
     public function dbInitialisation()
