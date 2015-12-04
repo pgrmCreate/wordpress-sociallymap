@@ -464,7 +464,7 @@ class SociallymapPlugin
                     if (gettype($imageSrc) == "string") {
                         $imageTag = '<img class="aligncenter" src="'.$imageSrc.'" alt="">';
                     } else {
-                        error_log('Error upload : '.print_r($imageSrc, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
+                        error_log(PHP_EOL.'Error upload (for '.$value->media->url.': '.print_r($imageSrc, true).PHP_EOL, 3, plugin_dir_path(__FILE__).'logs/error.log');
                         $imageTag = '';
                     }
                 } elseif (isset($value->link) && !empty($value->link->thumbnail)) {
@@ -474,6 +474,7 @@ class SociallymapPlugin
                     // Create the img tag
                     if (gettype($imageSrc) == "string") {
                         $imageTag = '<img class="aligncenter" src="'.$imageSrc.'" alt="">';
+                        error_log(PHP_EOL.'Error upload (for '.$value->media->url.': '.print_r($imageSrc, true).PHP_EOL, 3, plugin_dir_path(__FILE__).'logs/error.log');
 
                     } else {
                         $imageTag = '';
@@ -525,7 +526,6 @@ class SociallymapPlugin
 
         $this->controller->$params();
     }
-
 
     public function entityManager()
     {
