@@ -32,7 +32,7 @@ class Published
         $publishedRequest = 'SELECT * FROM '.$this->table.' WHERE message_id='.$idMessage;
         $articlesPublished = $wpdb->get_results($entitiesRequest);
 
-        if (empty($articlesPublished)) {
+        if (count((array)$articlesPublished) > 0) {
             return false;
         } else {
             return true;
