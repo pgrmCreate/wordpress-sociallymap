@@ -30,7 +30,7 @@ class Published
         global $wpdb;
 
 
-        $publishedRequest = 'SELECT * FROM '.$this->table.' WHERE message_id='.$idMessage;
+        $publishedRequest = 'SELECT * FROM '.$this->table.' WHERE message_id="'.$idMessage.'"';
         $articlesPublished = $wpdb->get_results($publishedRequest);
         error_log(PHP_EOL.'## OK DEBUG; Request : '.$publishedRequest.PHP_EOL.'=>value return: '.PHP_EOL.print_r($articlesPublished, true).PHP_EOL.' =>counter :'.count((array)$articlesPublished).PHP_EOL, 3, plugin_dir_path(__FILE__)."../logs/error.log");
 
