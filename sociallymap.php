@@ -420,8 +420,6 @@ class SociallymapPlugin
         try {
             $jsonData = $requester->launch($_POST['entityId'], $_POST['token'], $_POST['environment']);
 
-            error_log('Data send by sociallymap : '.print_r($jsonData, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
-
             if (empty($jsonData)) {
                 throw new Exception('No data returned from request', 1);
                 exit();
@@ -512,7 +510,7 @@ class SociallymapPlugin
                 } else {
                     $entityObject->updateHistoryPublisher($entity->id, $entity->counter);
                     // save published article
-                    $published->add($newPostId, $entity->id, $articlePublished);
+                    $published->add($guid, $entity->id, $articlePublished);
                 }
             }
         } catch (Exception $e) {
