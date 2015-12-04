@@ -506,7 +506,7 @@ class SociallymapPlugin
                 }
 
                 // Publish the post
-                $articlePublished = $publisher->publish($title, $contentArticle, $author, $imageAttachment, $entity_list_category, $entity_publish_type;
+                $articlePublished = $publisher->publish($title, $contentArticle, $author, $imageAttachment, $entity_list_category, $entity_publish_type);
                 if (!$articlePublished) {
                     throw new Exception('Error from post publish', 1);
                 } else {
