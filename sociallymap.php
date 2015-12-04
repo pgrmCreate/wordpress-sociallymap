@@ -380,6 +380,8 @@ class SociallymapPlugin
         $uploader     = new ImageUploader();
         $published    = new Published();
         $summary      = "";
+        $title        = "";
+
 
         $configs = $config->getConfig();
 
@@ -430,7 +432,6 @@ class SociallymapPlugin
 
                 // Check Link object existing
                 if (!isset($value->link)) {
-                    $title = "";
                 } else {
                     // Check if Title existing
                     if (!empty($value->link->title)) {
@@ -448,12 +449,8 @@ class SociallymapPlugin
 
 
                 }
-                if($summary == "") {
-                    $contentArticle = $value->content;
-                } else {
-                    $contentArticle = $summary;
-                }
 
+                $contentArticle = $summary;
                 // add readmore to content if $readmore is not empty
                 if ($readmore != "") {
                     $contentArticle .= $readmore;
@@ -499,11 +496,12 @@ class SociallymapPlugin
 
                 // Check if article was post
                 $messageId = $value->guid;
-                if($published->isPublished($messageId)) {
+                if ($published->isPublished($messageId)) {
                     throw new Exception('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 1);
                 }
 
                 // Publish the post
+                $title = $value->content;
                 $articlePublished = $publisher->publish($title, $contentArticle, $author, $imageAttachment, $entity_list_category, $entity_publish_type);
                 if (!$articlePublished) {
                     throw new Exception('Error from post publish', 1);
@@ -527,6 +525,8 @@ class SociallymapPlugin
 
         $this->controller->$params();
     }
+
+    public function () {}
 
     public function entityManager()
     {
