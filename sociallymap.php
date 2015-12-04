@@ -526,7 +526,6 @@ class SociallymapPlugin
         $this->controller->$params();
     }
 
-    public function () {}
 
     public function entityManager()
     {
