@@ -33,9 +33,9 @@ class Published
         $articlesPublished = $wpdb->get_results($entitiesRequest);
 
         if (count((array)$articlesPublished) > 0) {
-            return false;
-        } else {
             return true;
+        } else {
+            return false;
         }
     }
 
