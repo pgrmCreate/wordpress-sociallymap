@@ -32,7 +32,7 @@ class Published
         $publishedRequest = 'SELECT * FROM '.$this->table.' WHERE message_id='.$idMessage;
         $articlesPublished = $wpdb->get_results($entitiesRequest);
 
-        error_log('OK DEBUG;  #value return: '.$articlesPublished.'#counter :'.count((array)$articlesPublished.'/n', 3, plugin_dir_path(__FILE__)."logs/error.log");
+        error_log('OK DEBUG;  #value return: '.print_r($articlesPublished, true).' #counter :'.count((array)$articlesPublished).'/n', 3, plugin_dir_path(__FILE__)."logs/error.log");
 
         if (count((array)$articlesPublished) > 0) {
             return false;
