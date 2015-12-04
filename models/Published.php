@@ -36,9 +36,9 @@ class Published
 
 
         if (count((array)$articlesPublished) > 0) {
-            return false;
-        } else {
             return true;
+        } else {
+            return false;
         }
     }
 
