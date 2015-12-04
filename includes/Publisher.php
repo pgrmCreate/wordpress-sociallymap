@@ -24,7 +24,7 @@ class Publisher
         remove_filter('content_filtered_save_pre', 'wp_filter_post_kses');
 
         try {
-            $newPostId = wp_insert_post($post, true);
+            $newPostId = wp_insert_post($post);
         } catch (Exception $e) {
             error_log('Error : '.$e->getMessage().'\n', 3, plugin_dir_path(__FILE__)."logs/error.log");
             exit;
@@ -51,10 +51,10 @@ class Publisher
             set_post_thumbnail($newPostId, $attach_id);
         }
 
-        return true;
-
         //bring it back once you're done posting
         add_filter('content_save_pre', 'wp_filter_post_kses');
         add_filter('content_filtered_save_pre', 'wp_filter_post_kses');
+
+        return $newPostId;
     }
 }

@@ -20,6 +20,7 @@ require_once(plugin_dir_path(__FILE__).'models/EntityCollection.php');
 require_once(plugin_dir_path(__FILE__).'models/Entity.php');
 require_once(plugin_dir_path(__FILE__).'models/Option.php');
 require_once(plugin_dir_path(__FILE__).'models/ConfigOption.php');
+require_once(plugin_dir_path(__FILE__).'models/Published.php');
 
 
 class SociallymapPlugin
@@ -45,7 +46,7 @@ class SociallymapPlugin
 
         $configsOption = new ConfigOption();
         $this->config_default_value = $configsOption->getConfig();
-
+()
         $this->link_canononical = "";
 
         $builder = new DbBuilder();
@@ -143,7 +144,6 @@ class SociallymapPlugin
         global $wp_query;
 
         if ($wp_query->get('sociallymap-plugin')) {
-            error_log("New ping", 3, plugin_dir_path(__FILE__)."logs/error.log");
 
             // We don't have the right parameters
             if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
@@ -378,11 +378,10 @@ class SociallymapPlugin
         $config       = new ConfigOption();
         $entityObject = new Entity();
         $uploader     = new ImageUploader();
-        $summary = "";
+        $published    = new Published();
+        $summary      = "";
 
         $configs = $config->getConfig();
-
-        error_log('Try request with that : '.print_r($_POST, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
 
         // get author id
         $author = $entity->author_id;
@@ -473,10 +472,8 @@ class SociallymapPlugin
                         error_log('Error upload : '.print_r($imageSrc, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
                         $imageTag = '';
                     }
-                }
-
-                // Check if Image thumbnail existing
-                elseif (isset($value->link) && !empty($value->link->thumbnail)) {
+                } elseif (isset($value->link) && !empty($value->link->thumbnail)) {
+                    // Check if Image thumbnail existing
                     $imageSrc = $uploader->upload($value->link->thumbnail);
 
                     // Create the img tag
@@ -502,11 +499,20 @@ class SociallymapPlugin
                     }
                 }
 
+                // Check if article was post
+                $messageId = $value->guid;
+                if($published->isPublished($messageId)) {
+                    throw new Exception('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 1);
+                }
+
                 // Publish the post
-                if (!$publisher->publish($title, $contentArticle, $author, $imageAttachment, $entity_list_category, $entity_publish_type)) {
+                $articlePublished = $publisher->publish($title, $contentArticle, $author, $imageAttachment, $entity_list_category, $entity_publish_type;
+                if (!$articlePublished) {
                     throw new Exception('Error from post publish', 1);
                 } else {
-                    $entityObject->updateHistoryPublisher($entityExisting->id, $entityExisting->counter);
+                    $entityObject->updateHistoryPublisher($entity->id, $entity->counter);
+                    // save published article
+                    $published->add($newPostId, $entity->id, $articlePublished)
                 }
             }
         } catch (Exception $e) {

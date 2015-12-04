@@ -6,6 +6,7 @@ class DbBuilder
     private $table_options;
     private $table_entity_options;
     private $table_entity;
+    private $table_published;
 
 
     public function __construct()
@@ -16,6 +17,7 @@ class DbBuilder
         $this->table_options = $this->wpdb->prefix . "sm_options";
         $this->table_entity_options = $this->wpdb->prefix . "sm_entity_options";
         $this->table_entity = $this->wpdb->prefix . "sm_entities";
+        $this->table_publisher = $this->wpdb->prefix . "sm_published";
     }
 
     public function dbInitialisation()
@@ -23,6 +25,18 @@ class DbBuilder
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
         $charset_collate = $this->wpdb->get_charset_collate();
+
+        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_published'") != $this->table_published) {
+            $sql = "CREATE TABLE $this->table_published (
+                id mediumint(9) NOT NULL AUTO_INCREMENT,
+                entity_id varchar(255),
+                message_id varchar(255),
+                post_id varchar(255),
+                UNIQUE KEY id (id)
+                ) $charset_collate;";
+
+            dbDelta($sql);
+        }
 
         if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity'") != $this->table_entity) {
             $sql = "CREATE TABLE $this->table_entity (
@@ -110,5 +124,6 @@ class DbBuilder
         $wpdb->query("DROP TABLE IF EXISTS $this->table_options");
         $wpdb->query("DROP TABLE IF EXISTS $this->table_entity_options");
         $wpdb->query("DROP TABLE IF EXISTS $this->table_entity");
+        $wpdb->query("DROP TABLE IF EXISTS $this->table_published");
     }
 }
