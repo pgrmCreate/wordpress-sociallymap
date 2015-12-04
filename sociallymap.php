@@ -510,7 +510,7 @@ class SociallymapPlugin
                 } else {
                     $entityObject->updateHistoryPublisher($entity->id, $entity->counter);
                     // save published article
-                    $published->add($guid, $entity->id, $articlePublished);
+                    $published->add($messageId, $entity->id, $articlePublished);
                 }
             }
         } catch (Exception $e) {
