@@ -18,16 +18,16 @@
     </li>
     <li>
         <?php
-        if ($_GET["page"] == "sociallymap-rss-list") {
+        if ($_GET["page"] == "sociallymap-rss-add") {
         ?>
              <span>
-                 Mes entités
+                Ajouter une entité
              </span>
         <?php
         } else {
         ?>
-             <a href="?page=sociallymap-rss-list">
-                 Mes entités
+             <a href="?page=sociallymap-rss-add">
+                Ajouter une entités
              </a>
         <?php
         }
