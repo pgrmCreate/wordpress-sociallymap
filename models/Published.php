@@ -21,7 +21,7 @@ class Published
         if (empty($articlesPublished)) {
             return false;
         } else {
-            return $listRSS;
+            return $articlesPublished;
         }
     }
 
@@ -32,7 +32,7 @@ class Published
 
         $publishedRequest = 'SELECT * FROM '.$this->table.' WHERE message_id='.$idMessage;
         $articlesPublished = $wpdb->get_results($entitiesRequest);
-        error_log('OK DEBUG;  #value return: '.print_r($articlesPublished, true).' #counter :'.count((array)$articlesPublished).'/n', 3, plugin_dir_path(__FILE__)."../logs/error.log");
+        error_log(PHP_EOL.'OK DEBUG;  #value return: '.PHP_EOL.print_r($articlesPublished, true).' #counter :'.count((array)$articlesPublished).PHP_EOL, 3, plugin_dir_path(__FILE__)."../logs/error.log");
 
 
         if (count((array)$articlesPublished) > 0) {
