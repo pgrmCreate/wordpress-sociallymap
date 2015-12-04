@@ -46,7 +46,7 @@ class SociallymapPlugin
 
         $configsOption = new ConfigOption();
         $this->config_default_value = $configsOption->getConfig();
-()
+
         $this->link_canononical = "";
 
         $builder = new DbBuilder();
