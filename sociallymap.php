@@ -276,7 +276,7 @@ class SociallymapPlugin
         }
 
         // id unknown
-        if (empty($idSelect)) {
+        if (!isset($idSelect) || empty($idSelect)) {
             return $content;
         }
 
