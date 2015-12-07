@@ -49,7 +49,7 @@ class ImageUploader
             $file_array = [];
             $file_array['name'] = "";
             foreach ($matches as $key => $value) {
-                if($key != 1) {
+                if($key != 0) {
                     $file_array['name'] .= $value;
                 }
             }
