@@ -29,7 +29,7 @@ class Entity
 
         if (empty($entity)) {
             error_log('Entity : Not found row for request : '.$entityRequest.'', 3, plugin_dir_path(__FILE__)."../logs/error.log");
-            exit();
+            return 0;
         }
 
         $optionsRequest = 'SELECT options_id, value FROM '.$wpdb->prefix.'sm_entity_options WHERE entity_id = '.$id;
