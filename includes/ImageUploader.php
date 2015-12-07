@@ -25,7 +25,7 @@ class ImageUploader
             return join('/', array_map('rawurlencode', explode('/', $match[1])));
         }, $targetUrl);
 
-        $targetUrl = $allExeptLast.'/'.$targetUrl;
+        $targetUrl = implode("/", $allExeptLast).'/'.$targetUrl;
 
         error_log(PHP_EOL.'# TRY UPLOAD => '.$targetUrl.PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
         $file = media_sideload_image($targetUrl, 0, null, 'src');
