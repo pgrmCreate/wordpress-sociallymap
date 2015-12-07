@@ -8,6 +8,8 @@ class ImageUploader
         $urlbase = parse_url($targetUrl, PHP_URL_SCHEME).parse_url($targetUrl, PHP_URL_HOST);
         parse_str($parts['query'], $query);
 
+        error_log(PHP_EOL.'# Base url ? => '.$urlbase.PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
+
         if (isset($query['url']) && $urlbase == 'https://external.xx.fbcdn.net') {
             $targetUrl = $query['url'];
             error_log(PHP_EOL.'# WARNING UPLOAD #'.PHP_EOL.'UPLOAD '.$query['url'].PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
