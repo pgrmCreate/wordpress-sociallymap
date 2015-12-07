@@ -27,13 +27,17 @@ class Entity
         $entityRequest = $wpdb->prepare('SELECT * FROM '.$this->table.' WHERE id=%d', $id);
         $entity = $wpdb->get_row($entityRequest);
 
-        if (empty($entity)) {
+        if (!isset($entity) || empty($entity)) {
             error_log('Entity : Not found row for request : '.$entityRequest.'', 3, plugin_dir_path(__FILE__)."../logs/error.log");
             return 0;
         }
 
         $optionsRequest = 'SELECT options_id, value FROM '.$wpdb->prefix.'sm_entity_options WHERE entity_id = '.$id;
         $options = $wpdb->get_results($optionsRequest);
+
+        if (!isset($options) || empty($options)) {
+            return 0;
+        }
 
         $entity->options = $options;
 
