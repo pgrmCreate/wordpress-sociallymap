@@ -5,7 +5,7 @@ class ImageUploader
     public function upload($targetUrl)
     {
         $parts = parse_url($targetUrl);
-        $urlbase = parse_url($targetUrl, PHP_URL_SCHEME).parse_url($targetUrl, PHP_URL_HOST);
+        $urlbase = parse_url($targetUrl, PHP_URL_SCHEME).'://'.parse_url($targetUrl, PHP_URL_HOST);
         parse_str($parts['query'], $query);
 
         error_log(PHP_EOL.'# Base url ? => '.$urlbase.PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
