@@ -47,7 +47,7 @@ class ImageUploader
             }
 
             $file_array = [];
-            $file_array['name'] = "fjsdjfiosdjfoisdf.png";
+            $file_array['name'] = md5(microtime().rand()).".png";
 
             // Download file to temp location.
             $file_array['tmp_name'] = download_url($file);
