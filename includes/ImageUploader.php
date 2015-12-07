@@ -47,12 +47,7 @@ class ImageUploader
             }
 
             $file_array = [];
-            $file_array['name'] = "";
-            foreach ($matches as $key => $value) {
-                if($key != 0) {
-                    $file_array['name'] .= $value;
-                }
-            }
+            $file_array['name'] = "fjsdjfiosdjfoisdf";
 
             // Download file to temp location.
             $file_array['tmp_name'] = download_url($file);
