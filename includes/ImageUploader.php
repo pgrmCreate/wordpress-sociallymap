@@ -19,9 +19,13 @@ class ImageUploader
             error_log(PHP_EOL.'# ERROR UPLOAD #'.PHP_EOL.'MESSAGE ERR : '.print_r($file->errors, true).PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
         }
 
+        $allExeptLast = explode('/', $targetUrl);
+        array_pop($allExeptLast);
         $targetUrl = preg_replace_callback('#https?://.+/([^?]+)#', function ($match) {
             return join('/', array_map('rawurlencode', explode('/', $match[1])));
         }, $targetUrl);
+
+        $targetUrl = $allExeptLast.'/'.$targetUrl;
 
         error_log(PHP_EOL.'# TRY UPLOAD => '.$targetUrl.PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
         $file = media_sideload_image($targetUrl, 0, null, 'src');
