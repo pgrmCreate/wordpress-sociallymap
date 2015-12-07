@@ -262,8 +262,6 @@ class SociallymapPlugin
     {
         global $post;
 
-        return $content;
-
         $entityObject = new Entity();
         $link_canonical = false;
 
