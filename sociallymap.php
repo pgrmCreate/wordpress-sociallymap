@@ -382,7 +382,6 @@ class SociallymapPlugin
         $summary      = "";
         $title        = "";
 
-
         $configs = $config->getConfig();
 
         // get author id
@@ -427,6 +426,8 @@ class SociallymapPlugin
                 exit();
             }
 
+            error_log(PHP_EOL.'See return data : '.print_r($jsonData, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
+
             foreach ($jsonData as $key => $value) {
                 $readmore = "" ;
 
@@ -446,8 +447,6 @@ class SociallymapPlugin
                     if (!empty($value->link->url)) {
                         $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type, $entity->id, $readmore_label);
                     }
-
-
                 }
 
                 $contentArticle = $summary;
@@ -464,7 +463,6 @@ class SociallymapPlugin
                     if (gettype($imageSrc) == "string") {
                         $imageTag = '<img class="aligncenter" src="'.$imageSrc.'" alt="">';
                     } else {
-                        error_log(PHP_EOL.'Error upload (for '.$value->media->url.': '.print_r($imageSrc, true).PHP_EOL, 3, plugin_dir_path(__FILE__).'logs/error.log');
                         $imageTag = '';
                     }
                 } elseif (isset($value->link) && !empty($value->link->thumbnail)) {
@@ -474,7 +472,6 @@ class SociallymapPlugin
                     // Create the img tag
                     if (gettype($imageSrc) == "string") {
                         $imageTag = '<img class="aligncenter" src="'.$imageSrc.'" alt="">';
-                        error_log(PHP_EOL.'Error upload (for '.$value->media->url.': '.print_r($imageSrc, true).PHP_EOL, 3, plugin_dir_path(__FILE__).'logs/error.log');
 
                     } else {
                         $imageTag = '';
