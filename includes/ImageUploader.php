@@ -13,12 +13,11 @@ class ImageUploader
 
         if (isset($query['url']) && $urlbase == 'https://external.xx.fbcdn.net') {
             $targetUrl = $query['url'];
+
             // encode file name
-            $parts = parse_url($targetUrl);
-            if (!empty($parts['path'])) {
-                $parts['path'] = join('/', array_map('rawurlencode', explode('/', $parts['url'])));
-            }
-            $targetUrl = http_build_url($parts);
+            $targetUrl = preg_replace_callback('#https?://.+/([^?]+)#', function ($match) {
+                return join('/', array_map('rawurlencode', explode('/', $match[1])));
+            }, $targetUrl);
         }
 
         if (!gettype($file) == "string") {
