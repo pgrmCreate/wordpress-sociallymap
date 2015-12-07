@@ -30,6 +30,8 @@ class ImageUploader
         error_log(PHP_EOL.'# TRY UPLOAD => '.$targetUrl.PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
         $file = $this->uploadWordpress($targetUrl, 0, null, 'src');
 
+        error_log(PHP_EOL.'# RESULT UPLOAD => '.print_r($file, true).PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
+
         return $file;
     }
 
