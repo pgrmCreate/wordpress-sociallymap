@@ -283,7 +283,7 @@ class SociallymapPlugin
         $entityPicked = $entityObject->getById($idSelect);
 
         // entity unknown
-        if (empty($entityPicked)) {
+        if (!isset($entityPicked) || empty($entityPicked)) {
             return $content;
         }
 
