@@ -447,6 +447,7 @@ class SociallymapPlugin
 
                     // Check if Link URL existing
                     if (!empty($value->link->url)) {
+                        $readmore_label = htmlentities($readmore_label)
                         $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type, $entity->id, $readmore_label);
                     }
                 }
@@ -454,7 +455,6 @@ class SociallymapPlugin
                 $contentArticle = $summary;
                 // add readmore to content if $readmore is not empty
                 if ($readmore != "") {
-                    $readmore = htmlentities($readmore);
                     $contentArticle .= $readmore;
                 }
 
