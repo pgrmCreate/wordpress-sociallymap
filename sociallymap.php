@@ -266,7 +266,12 @@ class SociallymapPlugin
         $link_canonical = false;
 
         $pattern = '#data-entity-id="([0-9]+)"#';
-        preg_match($pattern, $content, $matches);
+        $returnSearch = preg_match($pattern, $content, $matches);
+
+        if ($returnSearch == 0 || $returnSearch == false) {
+            return $content;
+        }
+
         if (isset($matches[1])) {
             $idSelect = $matches[1];
         } else {
