@@ -268,7 +268,7 @@ class SociallymapPlugin
         $pattern = '#data-entity-id="([0-9]+)"#';
         $returnSearch = preg_match($pattern, $content, $matches);
 
-        if ($returnSearch == 0 || $returnSearch == false) {
+        if ($returnSearch != 1) {
             return $content;
         }
 
