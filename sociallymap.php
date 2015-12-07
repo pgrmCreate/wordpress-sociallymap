@@ -263,8 +263,6 @@ class SociallymapPlugin
         global $post;
 
         $entityObject = new Entity();
-        $config = new ConfigOption();
-        $configs = $config->getConfig();
         $link_canonical = false;
 
         $pattern = '#data-entity-id="([0-9]+)"#';
