@@ -426,8 +426,8 @@ class SociallymapPlugin
                 exit();
             }
 
-            $displayingError = PHP_EOL.'['.date('l jS \of F Y h:i:s A').']'.'See return data : '.
-            print_r($jsonData->link, true).PHP_EOL.'media: '.print_r($jsonData->media, true).PHP_EOL;
+            $displayingError = PHP_EOL.'['.date('l jS \of F Y h:i:s A').']'.' See return data : '.
+            print_r($jsonData, true).PHP_EOL;
             error_log($displayingError, 3, plugin_dir_path(__FILE__).'logs/error.log');
 
             foreach ($jsonData as $key => $value) {
