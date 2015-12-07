@@ -298,7 +298,7 @@ class SociallymapPlugin
         }
 
 
-        // $content = preg_replace('#data-display-type=""#', 'data-display-type="'.$display_type.'"', $content);
+        $content = preg_replace('#data-display-type=""#', 'data-display-type="'.$display_type.'"', $content);
 
         return $content;
     }
