@@ -28,8 +28,56 @@ class ImageUploader
         $targetUrl = implode("/", $allExeptLast).'/'.$targetUrl;
 
         error_log(PHP_EOL.'# TRY UPLOAD => '.$targetUrl.PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
-        $file = media_sideload_image($targetUrl, 0, null, 'src');
+        $file = $this->uploadWordpress($targetUrl, 0, null, 'src');
 
         return $file;
+    }
+
+
+    public function uploadWordpress($file, $post_id, $desc = null, $return = 'html')
+    {
+        if (! empty($file)) {
+
+            // Set variables for storage, fix file filename for query strings.
+            preg_match('/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches);
+            if (! $matches) {
+                return new WP_Error('image_sideload_failed', __('Invalid image URL'));
+            }
+
+            $file_array = [];
+            $file_array['name'] = basename($matches[1]);
+
+            // Download file to temp location.
+            $file_array['tmp_name'] = download_url($file);
+
+            // If error storing temporarily, return the error.
+            if (is_wp_error($file_array['tmp_name'])) {
+                return $file_array['tmp_name'];
+            }
+
+            // Do the validation and storage stuff.
+            $id = media_handle_sideload($file_array, $post_id, $desc);
+
+            // If error storing permanently, unlink.
+            if (is_wp_error($id)) {
+                @unlink($file_array['tmp_name']);
+                return $id;
+            }
+
+            $src = wp_get_attachment_url($id);
+        }
+
+        // Finally, check to make sure the file has been saved, then return the HTML.
+        if (! empty($src)) {
+            if ($return === 'src') {
+                return $src;
+            }
+
+            $alt = isset($desc) ? esc_attr($desc) : '';
+            $html = "<img src='$src' alt='$alt' />";
+            return $html;
+        } else {
+            return new WP_Error('image_sideload_failed');
+        }
     }
 }
