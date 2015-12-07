@@ -454,6 +454,7 @@ class SociallymapPlugin
                 $contentArticle = $summary;
                 // add readmore to content if $readmore is not empty
                 if ($readmore != "") {
+                    $readmore = htmlentities($readmore);
                     $contentArticle .= $readmore;
                 }
 
