@@ -217,13 +217,13 @@ class SociallymapPlugin
             $idSelect = $matches[1];
         } else {
             error_log('# Noindex option : No found entity attribute in content #', 3, plugin_dir_path(__FILE__).'logs/error.log');
-            exit();
+            return false;
         }
 
         // id unknown
         if (empty($idSelect)) {
             error_log('# Noindex option : No found entity in bdd #', 3, plugin_dir_path(__FILE__).'logs/error.log');
-            exit();
+            return false;
         }
 
         $entityPicked = $entityObject->getById($idSelect);
