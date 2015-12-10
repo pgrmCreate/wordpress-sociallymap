@@ -567,9 +567,7 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_readmore'])) {
                 $_POST['sociallymap_readmore'] = "";
             } else {
-                $formatedLabel = $_POST['sociallymap_readmore'];
-                $formatedLabel = str_replace('\\', '', $formatedLabel);
-                $_POST['sociallymap_readmore'] = $formatedLabel;
+                $_POST['sociallymap_readmore'] = stripslashes($_POST['sociallymap_readmore']);
             }
 
             $data = [
