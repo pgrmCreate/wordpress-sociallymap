@@ -36,7 +36,7 @@ class Templater
         ]);
 
         ob_start();
-            load_template($this->urlBase.'readmore-template.php');
+            load_template($this->urlBase.'readmore-template.php', false);
             $readmore = ob_get_contents();
         ob_end_clean();
 
