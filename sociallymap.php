@@ -519,8 +519,8 @@ class SociallymapPlugin
                 $title = $value->content;
                 $articlePublished = $publisher->publish($title, $contentArticle, $author, $imageAttachment, $entity_list_category, $entity_publish_type);
                 if (!$articlePublished) {
-                    // throw new Exception('Error from post publish', 1);
-                    error_log('Error from post publish', 3, plugin_dir_path(__FILE__).'logs/error.log');
+                    throw new Exception('Error from post publish', 1);
+                    // error_log('Error from post publish', 3, plugin_dir_path(__FILE__).'logs/error.log');
                 } else {
                     $entityObject->updateHistoryPublisher($entity->id, $entity->counter);
                     // save published article
