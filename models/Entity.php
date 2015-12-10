@@ -15,7 +15,7 @@ class Entity
     {
         global $wpdb;
 
-        $wpdb->insert($this->table, $data);
+        $wpdb->prepare($wpdb->insert($this->table, $data));
 
         return $wpdb->insert_id;
     }

@@ -511,8 +511,8 @@ class SociallymapPlugin
                 // Check if article was post
                 $messageId = $value->guid;
                 if ($published->isPublished($messageId)) {
-                    // throw new Exception('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 1);
-                    error_log('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 3, plugin_dir_path(__FILE__).'logs/error.log');
+                    throw new Exception('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 1);
+                    // error_log('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 3, plugin_dir_path(__FILE__).'logs/error.log');
                 }
 
                 // Publish the post
@@ -546,7 +546,13 @@ class SociallymapPlugin
         $entityCollection = new EntityCollection();
         $entityOption = new ConfigOption();
         $config = $entityOption->getConfig();
-        $linkToList = $_SERVER['SERVER_PROTOCOL'].$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';
+
+        // check http or https
+        if (isset($_SERVER['HTTPS'])) {
+            $linkToList = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';
+        } else {
+            $linkToList = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';
+        }
 
         // ACTION ENTITY : delete
         if (array_key_exists('sociallymap_deleteRSS', $_POST) && $_POST['sociallymap_deleteRSS']) {
@@ -603,12 +609,26 @@ class SociallymapPlugin
 
         // ACTION ENTITY : post
         if (array_key_exists('sociallymap_postRSS', $_POST) && $_POST['sociallymap_postRSS']) {
-            if (!isset($_POST['sociallymap_name'])) {
-                $_POST['sociallymap_name'] = "mon entité";
+            $isValid = true;
+
+            if (isset($_POST['sociallymap_name']) && empty($_POST['sociallymap_name'])) {
+                $isValid = false;
             }
+            if (isset($_POST['sociallymap_entityId']) && empty($_POST['sociallymap_entityId'])) {
+                $isValid = false;
+            }
+
+            echo("OKEYYYYYYYYYYY");
+            echo($_POST['sociallymap_name']);
+            echo($_POST['sociallymap_entityId']);
+            echo($isValid);
 
             if (!isset($_POST['sociallymap_activate'])) {
                 $_POST['sociallymap_activate'] = 0;
+            }
+
+            if (!isset($_POST['sociallymap_category'])) {
+                $_POST['sociallymap_category'] = '';
             }
             if (!isset($_POST['sociallymap_display_type'])) {
                 $_POST['sociallymap_display_type'] = "tab";
@@ -624,6 +644,11 @@ class SociallymapPlugin
             }
             if (!isset($_POST['sociallymap_readmore'])) {
                 $_POST['sociallymap_readmore'] = "";
+            }
+
+            if ($isValid == false) {
+                $_POST['sociallymap_isNotValid'] = true;
+                return false;
             }
 
             $data = [
