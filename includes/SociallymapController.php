@@ -54,7 +54,7 @@ class SociallymapController
                 $image = $value->value;
             }
             if ($value->options_id == '6') {
-                $readmore = $value->value;
+                $readmore = stripslashes($value->value);
             }
             if ($value->options_id == '7') {
                 $noindex = $value->value;
