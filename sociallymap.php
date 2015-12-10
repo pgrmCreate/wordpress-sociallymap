@@ -562,6 +562,13 @@ class SociallymapPlugin
 
         // ACTION ENTITY : update
         if (array_key_exists('sociallymap_updateRSS', $_POST) && $_POST['sociallymap_updateRSS']) {
+            if (isset($_POST['sociallymap_name']) && empty($_POST['sociallymap_name'])) {
+                $isValid = false;
+            }
+            if (isset($_POST['sociallymap_entityId']) && empty($_POST['sociallymap_entityId'])) {
+                $isValid = false;
+            }
+
             if (!isset($_POST['sociallymap_activate'])) {
                 $_POST['sociallymap_activate'] = 0;
             }
@@ -617,11 +624,6 @@ class SociallymapPlugin
             if (isset($_POST['sociallymap_entityId']) && empty($_POST['sociallymap_entityId'])) {
                 $isValid = false;
             }
-
-            echo("OKEYYYYYYYYYYY");
-            echo($_POST['sociallymap_name']);
-            echo($_POST['sociallymap_entityId']);
-            echo($isValid);
 
             if (!isset($_POST['sociallymap_activate'])) {
                 $_POST['sociallymap_activate'] = 0;

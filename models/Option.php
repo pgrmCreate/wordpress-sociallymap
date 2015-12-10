@@ -37,11 +37,11 @@ class Option
     {
         global $wpdb;
 
-        $wpdb->insert($this->table, [
+        $wpdb->prepare($wpdb->insert($this->table, [
             'entity_id'  => $idSource,
             'options_id' => $data['option_id'],
             'value'      => $data['value'],
-            ]);
+            ]));
     }
 
     public function update($data)

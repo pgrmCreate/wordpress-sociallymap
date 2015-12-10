@@ -3,6 +3,22 @@
     $editingEntity = $data['data']['editingEntity'];
 ?>
 
+<?php
+if (isset($_POST['sociallymap_isNotValid'])) {
+?>
+<div id="message" class="error notice is-dismissible">
+    <p>
+        Veuillez remplir les champs correctement
+    </p>
+    <button type="button" class="notice-dismiss">
+        <span class="screen-reader-text">Cacher l'information</span>
+    </button>
+</div>
+<?php
+}
+?>
+
+
 <div class="wrap">
     <h1>
         Editer une nouvelle entité
