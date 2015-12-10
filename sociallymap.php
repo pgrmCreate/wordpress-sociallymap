@@ -452,9 +452,14 @@ class SociallymapPlugin
                     // Check if Link URL existing
                     if (!empty($value->link->url)) {
                         $readmore_label = stripslashes($readmore_label);
-                        error_log('*** Folow read more *** '.print_r([$value->link->url, $entity_display_type, $entity->id,
-                        $readmore_label], true), 3, plugin_dir_path(__FILE__).'logs/error.log');
-                        $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type, $entity->id, $readmore_label);
+                        //error_log('*** Folow read more *** '.print_r([$value->link->url, $entity_display_type, $entity->id, $readmore_label], true), 3, plugin_dir_path(__FILE__).'logs/error.log');
+                        $readmore = $this->templater->loadReadMore(
+                            $value->link->url,
+                            $entity_display_type,
+                            $entity->id,
+                            $readmore_label
+                        );
+                        error_log('Readmore after receiving template: '.$readmore);
                     } else {
                         error_log('This article not contain url', 3, plugin_dir_path(__FILE__).'logs/error.log');
                     }
@@ -462,7 +467,7 @@ class SociallymapPlugin
 
                 $contentArticle = $summary;
                 // add readmore to content if $readmore is not empty
-                if ($readmore != "") {
+                if ($readmore != '') {
                     $contentArticle .= $readmore;
                 }
 

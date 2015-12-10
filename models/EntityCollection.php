@@ -30,12 +30,13 @@ class EntityCollection
             'name'                   => $data['name'],
             'last_published_message' => date('Y-m-d H:i:s'),
         ];
+
         $entityID = $entity->save($dataEntity);
 
         foreach ($data['category'] as $key => $value) {
             $dataOption = [
-            'option_id' => 1,
-            'value'     => $value
+                'option_id' => 1,
+                'value'     => $value,
             ];
             $option->save($dataOption, $entityID);
         }
