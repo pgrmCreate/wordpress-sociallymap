@@ -505,14 +505,16 @@ class SociallymapPlugin
                 // Check if article was post
                 $messageId = $value->guid;
                 if ($published->isPublished($messageId)) {
-                    throw new Exception('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 1);
+                    // throw new Exception('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 1);
+                    error_log('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 3, plugin_dir_path(__FILE__).'logs/error.log');
                 }
 
                 // Publish the post
                 $title = $value->content;
                 $articlePublished = $publisher->publish($title, $contentArticle, $author, $imageAttachment, $entity_list_category, $entity_publish_type);
                 if (!$articlePublished) {
-                    throw new Exception('Error from post publish', 1);
+                    // throw new Exception('Error from post publish', 1);
+                    error_log('Error from post publish', 3, plugin_dir_path(__FILE__).'logs/error.log');
                 } else {
                     $entityObject->updateHistoryPublisher($entity->id, $entity->counter);
                     // save published article
