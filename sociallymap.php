@@ -546,7 +546,7 @@ class SociallymapPlugin
         $entityCollection = new EntityCollection();
         $entityOption = new ConfigOption();
         $config = $entityOption->getConfig();
-        $linkToList = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';
+        $linkToList = $_SERVER['SERVER_PROTOCOL'].$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';
 
         // ACTION ENTITY : delete
         if (array_key_exists('sociallymap_deleteRSS', $_POST) && $_POST['sociallymap_deleteRSS']) {
@@ -603,6 +603,10 @@ class SociallymapPlugin
 
         // ACTION ENTITY : post
         if (array_key_exists('sociallymap_postRSS', $_POST) && $_POST['sociallymap_postRSS']) {
+            if (!isset($_POST['sociallymap_name'])) {
+                $_POST['sociallymap_name'] = "mon entité";
+            }
+
             if (!isset($_POST['sociallymap_activate'])) {
                 $_POST['sociallymap_activate'] = 0;
             }
