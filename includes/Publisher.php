@@ -26,7 +26,7 @@ class Publisher
         try {
             $newPostId = wp_insert_post($post);
         } catch (Exception $e) {
-            error_log('Error : '.$e->getMessage(), 3, plugin_dir_path(__FILE__)."logs/error.log");
+            error_log('Error :'.$e->getMessage(), 3, plugin_dir_path(__FILE__)."logs/error.log");
             exit;
         }
 

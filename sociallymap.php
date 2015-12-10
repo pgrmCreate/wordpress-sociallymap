@@ -567,6 +567,9 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_readmore'])) {
                 $_POST['sociallymap_readmore'] = "";
             }
+            else {
+                $_POST['sociallymap_readmore'] = htmlentities($_POST['sociallymap_readmore']);
+            }
 
             $data = [
                 'name'           => $_POST['sociallymap_label'],
@@ -620,7 +623,7 @@ class SociallymapPlugin
                 'link_canonical' => $_POST['sociallymap_link_canonical'],
                 'noindex'        => $_POST['sociallymap_noindex'],
                 'nofolow'        => $_POST['sociallymap_nofolow'],
-                'readmore'        => $_POST['sociallymap_readmore'],
+                'readmore'       => $_POST['sociallymap_readmore'],
                 'image'          => $_POST['sociallymap_image'],
             ];
 
