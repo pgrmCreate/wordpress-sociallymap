@@ -29,10 +29,10 @@ class Templater
         load_plugin_textdomain('sociallymap', false, "../".basename(dirname(__FILE__)));
 
         set_query_var('data', [
-            'url' => $url,
+            'url'          => $url,
             'display_type' => $display_type,
-            'entityId' => $entityId,
-            'readmore' => $readmore,
+            'entityId'     => $entityId,
+            'readmore'     => $readmore,
         ]);
 
         ob_start();
