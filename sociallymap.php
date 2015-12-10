@@ -432,7 +432,7 @@ class SociallymapPlugin
 
             $displayingError = PHP_EOL.'['.date('l jS \of F Y h:i:s A').']'.' See return data : '.
             print_r($jsonData, true).PHP_EOL;
-            error_log($displayingError, 3, plugin_dir_path(__FILE__).'logs/error.log');
+            // error_log($displayingError, 3, plugin_dir_path(__FILE__).'logs/error.log');
 
             foreach ($jsonData as $key => $value) {
                 $readmore = "" ;
@@ -451,8 +451,11 @@ class SociallymapPlugin
 
                     // Check if Link URL existing
                     if (!empty($value->link->url)) {
-                        $readmore_label = htmlentities($readmore_label);
+                        $readmore_label = stripslashes($readmore_label);
                         $readmore = $this->templater->loadReadMore($value->link->url, $entity_display_type, $entity->id, $readmore_label);
+                        error_log('Load readmore : '.print_r($readmore, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
+                    } else {
+                        error_log('This article not contain url', 3, plugin_dir_path(__FILE__).'logs/error.log');
                     }
                 }
 
