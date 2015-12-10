@@ -459,7 +459,7 @@ class SociallymapPlugin
                             $entity->id,
                             $readmore_label
                         );
-                        error_log('Readmore after receiving template: '.$readmore);
+                        error_log('Readmore after receiving template: '.$readmore, 3, plugin_dir_path(__FILE__).'logs/error.log');
                     } else {
                         error_log('This article not contain url', 3, plugin_dir_path(__FILE__).'logs/error.log');
                     }
