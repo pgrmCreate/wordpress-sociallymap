@@ -499,7 +499,13 @@ class SociallymapPlugin
 
                 $uploadVideo = false;
                 if (isset($value->media) && $value->media->type == "video") {
+                    $videoUploader = new VideoUploader();
+                    $mediaVideo = $videoUploader->upload($value->media);
 
+                    if ($mediaVideo != false) {
+                        echo("#########################");
+                        echo($mediaVideo);
+                    }
                 }
 
                 // If imageTag is '' so is false else isUpload is true
