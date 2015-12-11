@@ -438,8 +438,7 @@ class SociallymapPlugin
                 $readmore = "" ;
 
                 // Check Link object existing
-                if (!isset($value->link)) {
-                } else {
+                if (isset($value->link)) {
                     // Check if Title existing
                     if (!empty($value->link->title)) {
                         $title = $value->link->title;
@@ -496,6 +495,8 @@ class SociallymapPlugin
                     }
                 }
 
+
+
                 // If imageTag is '' so is false else isUpload is true
                 $isUploaded = ! ($imageTag === '');
 
@@ -549,7 +550,6 @@ class SociallymapPlugin
             }
         } catch (Exception $e) {
             error_log('Error : '.$e->getMessage(), 3, plugin_dir_path(__FILE__).'logs/error.log');
-            exit;
         }
         return true;
     }
