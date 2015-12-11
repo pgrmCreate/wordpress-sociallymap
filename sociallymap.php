@@ -460,7 +460,6 @@ class SociallymapPlugin
                             $entity->id,
                             $readmore_label
                         );
-                        error_log('Readmore after receiving template: '.$readmore, 3, plugin_dir_path(__FILE__).'logs/error.log');
                     } else {
                         error_log('This article not contain url', 3, plugin_dir_path(__FILE__).'logs/error.log');
                     }
@@ -503,9 +502,12 @@ class SociallymapPlugin
                     $mediaVideo = $videoUploader->upload($value->media);
 
                     if ($mediaVideo != false) {
-                        echo("#########################");
-                        echo($mediaVideo);
                     }
+                        error_log(
+                            '# UPLOAD VIDEO =>'.print_r($mediaVideo, true),
+                            3,
+                            plugin_dir_path(__FILE__).'logs/error.log'
+                        );
                 }
 
                 // If imageTag is '' so is false else isUpload is true
