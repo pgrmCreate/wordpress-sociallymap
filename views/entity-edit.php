@@ -147,10 +147,6 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                                 <?php if ($editingEntity->options->publish_type == 'private') echo('selected'); ?>>
                                 Privée
                             </option>
-                            <option value ="future"
-                                <?php if ($editingEntity->options->publish_type == 'future') echo('selected'); ?>>
-                                En attente de publication
-                            </option>
                         </select>
                     </td>
                 </tr>

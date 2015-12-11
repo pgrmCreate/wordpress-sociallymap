@@ -79,7 +79,6 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                             <option value="draft" <?php if ($default_value->publish_type == 'draft') echo ('selected');?>>Brouillon</option>
                             <option value="pending" <?php if ($default_value->publish_type == 'pending') echo ('selected');?>>En attente de relecture</option>
                             <option value="private" <?php if ($default_value->publish_type == 'private') echo ('selected');?>>Privée</option>
-                            <option value="future" <?php if ($default_value->publish_type == 'future') echo ('selected');?>>En attente de publication</option>
                         </select>
                     </td>
                 </tr>
