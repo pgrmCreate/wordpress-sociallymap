@@ -14,6 +14,7 @@ require_once(plugin_dir_path(__FILE__).'includes/DbBuilder.php');
 require_once(plugin_dir_path(__FILE__).'includes/Publisher.php');
 require_once(plugin_dir_path(__FILE__).'includes/Requester.php');
 require_once(plugin_dir_path(__FILE__).'includes/ImageUploader.php');
+require_once(plugin_dir_path(__FILE__).'includes/VideoUploader.php');
 require_once(plugin_dir_path(__FILE__).'includes/GithubUpdater.php');
 require_once(plugin_dir_path(__FILE__).'includes/SociallymapController.php');
 require_once(plugin_dir_path(__FILE__).'models/EntityCollection.php');
@@ -252,7 +253,7 @@ class SociallymapPlugin
     {
         global $post;
 
-        if (is_single()) {
+        if (is_single() && $this->link_canononical != "") {
             $this->rewriteCanonical($post->post_content);
             echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
         }
@@ -496,7 +497,10 @@ class SociallymapPlugin
                     }
                 }
 
+                $uploadVideo = false;
+                if (isset($value->media) && $value->media->type == "video") {
 
+                }
 
                 // If imageTag is '' so is false else isUpload is true
                 $isUploaded = ! ($imageTag === '');
