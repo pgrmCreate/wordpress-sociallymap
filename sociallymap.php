@@ -401,7 +401,6 @@ class SociallymapPlugin
         $entity_list_category = [];
         $readmore_label = "";
         foreach ($entity->options as $key => $value) {
-            $contentArticle = "";
             if ($value->options_id == 1) {
                 $entity_list_category[] = $value->value;
             }
@@ -438,6 +437,7 @@ class SociallymapPlugin
 
             foreach ($jsonData as $key => $value) {
                 $summary = "";
+                $contentArticle = "";
 
                 // Check Link object existing
                 if (isset($value->link)) {
@@ -496,20 +496,16 @@ class SociallymapPlugin
                     }
                 }
 
+                // check if video exist
                 $uploadVideo = false;
-                error_log("ready for upload ? we will see that..", 3, plugin_dir_path(__FILE__).'logs/error.log');
                 if (isset($value->media) && $value->media->type == "video") {
                     $videoUploader = new VideoUploader();
                     $mediaVideo = $videoUploader->upload($value->media->url);
 
                     if ($mediaVideo != false) {
+                        $contentArticle .= $mediaVideo;
+                        error_log("UPLOAD VIDEO : ".$mediaVideo, 3, plugin_dir_path(__FILE__).'logs/error.log');
                     }
-
-                    error_log(
-                        '# UPLOAD VIDEO =>'.print_r($mediaVideo, true),
-                        3,
-                        plugin_dir_path(__FILE__).'logs/error.log'
-                    );
                 }
 
                 // If imageTag is '' so is false else isUpload is true
