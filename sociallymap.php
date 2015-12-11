@@ -400,6 +400,7 @@ class SociallymapPlugin
         $entity_list_category = [];
         $readmore_label = "";
         foreach ($entity->options as $key => $value) {
+            $contentArticle = "";
             if ($value->options_id == 1) {
                 $entity_list_category[] = $value->value;
             }
