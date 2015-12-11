@@ -436,7 +436,7 @@ class SociallymapPlugin
             error_log($displayingError, 3, plugin_dir_path(__FILE__).'logs/error.log');
 
             foreach ($jsonData as $key => $value) {
-                $readmore = "" ;
+                $summary = "";
 
                 // Check Link object existing
                 if (isset($value->link)) {
