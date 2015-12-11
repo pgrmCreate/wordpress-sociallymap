@@ -471,6 +471,8 @@ class SociallymapPlugin
                     $contentArticle .= $readmore;
                 }
 
+                $imageTag = '';
+                $imageSrc = '';
                 // Check if Media object exist
                 if (isset($value->media) && $value->media->type == "photo") {
                     $imageSrc = $uploader->upload($value->media->url);
@@ -493,6 +495,8 @@ class SociallymapPlugin
                         $imageTag = '';
                     }
                 }
+
+                // If imageTag is '' so is false else isUplaod is true
                 $isUploaded = ! ($imageTag === '');
 
                 // Attach image accordingly to options

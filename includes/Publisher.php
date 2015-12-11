@@ -35,7 +35,7 @@ class Publisher
         }
 
         // attach image to post if $image is not empty
-        if ($image != "") {
+        if ($image != '') {
             $filetype = wp_check_filetype(basename($image), null);
             $wp_upload_dir = wp_upload_dir();
             $attachment = [
