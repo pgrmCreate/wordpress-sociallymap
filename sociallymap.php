@@ -496,7 +496,7 @@ class SociallymapPlugin
                     }
                 }
 
-                // If imageTag is '' so is false else isUplaod is true
+                // If imageTag is '' so is false else isUpload is true
                 $isUploaded = ! ($imageTag === '');
 
                 // Attach image accordingly to options
@@ -513,22 +513,38 @@ class SociallymapPlugin
                 }
 
                 // Check if article was post
+                $canBePublish = true;
                 $messageId = $value->guid;
                 if ($published->isPublished($messageId)) {
-                    throw new Exception('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 1);
-                    // error_log('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 3, plugin_dir_path(__FILE__).'logs/error.log');
+                    // throw new Exception('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 1);
+                    error_log(
+                        'Message of sociallymap existing, so he is not publish (id message='.$messageId.')',
+                        3,
+                        plugin_dir_path(__FILE__).'logs/error.log'
+                    );
+                    $canBePublish = false;
                 }
 
                 // Publish the post
                 $title = $value->content;
-                $articlePublished = $publisher->publish($title, $contentArticle, $author, $imageAttachment, $entity_list_category, $entity_publish_type);
-                if (!$articlePublished) {
-                    throw new Exception('Error from post publish', 1);
-                    // error_log('Error from post publish', 3, plugin_dir_path(__FILE__).'logs/error.log');
-                } else {
-                    $entityObject->updateHistoryPublisher($entity->id, $entity->counter);
-                    // save published article
-                    $published->add($messageId, $entity->id, $articlePublished);
+                if ($canBePublish == true) {
+                        $articlePublished = $publisher->publish(
+                            $title,
+                            $contentArticle,
+                            $author,
+                            $imageAttachment,
+                            $entity_list_category,
+                            $entity_publish_type
+                        );
+
+                        if (!$articlePublished) {
+                            // throw new Exception('Error from post publish', 1);
+                            error_log('Error from post publish', 3, plugin_dir_path(__FILE__).'logs/error.log');
+                        } else {
+                            $entityObject->updateHistoryPublisher($entity->id, $entity->counter);
+                            // save published article
+                            $published->add($messageId, $entity->id, $articlePublished);
+                        }
                 }
             }
         } catch (Exception $e) {
