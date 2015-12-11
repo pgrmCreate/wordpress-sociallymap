@@ -497,17 +497,19 @@ class SociallymapPlugin
                 }
 
                 $uploadVideo = false;
+                error_log("ready for upload ? we will see that..", 3, plugin_dir_path(__FILE__).'logs/error.log');
                 if (isset($value->media) && $value->media->type == "video") {
                     $videoUploader = new VideoUploader();
-                    $mediaVideo = $videoUploader->upload($value->media);
+                    $mediaVideo = $videoUploader->upload($value->media->url);
 
                     if ($mediaVideo != false) {
                     }
-                        error_log(
-                            '# UPLOAD VIDEO =>'.print_r($mediaVideo, true),
-                            3,
-                            plugin_dir_path(__FILE__).'logs/error.log'
-                        );
+
+                    error_log(
+                        '# UPLOAD VIDEO =>'.print_r($mediaVideo, true),
+                        3,
+                        plugin_dir_path(__FILE__).'logs/error.log'
+                    );
                 }
 
                 // If imageTag is '' so is false else isUpload is true
