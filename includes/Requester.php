@@ -16,7 +16,7 @@ class Requester
         $envtype = $envtype[$environement];
 
         if (empty($envtype)) {
-            $envtype = "http://app.sociallymap.com"
+            $envtype = "http://app.sociallymap.com";
         }
 
         $urlCreator = [
