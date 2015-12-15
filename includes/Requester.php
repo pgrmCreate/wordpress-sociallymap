@@ -23,6 +23,8 @@ class Requester
         $targetUrl = $urlCreator['baseUrl'].'/raw-exporter/'.$urlCreator['entityId'].
         '/feed?token='.$urlCreator['token'];
 
+        error_log("Request CURL at ".$targetUrl.PHP_EOL, 3, plugin_dir_path(__FILE__)."../logs/error.log");
+
         $options = [
             // Return the transfer, don't display it
             CURLOPT_RETURNTRANSFER => true,
