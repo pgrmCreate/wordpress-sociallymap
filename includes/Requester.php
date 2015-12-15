@@ -15,11 +15,17 @@ class Requester
         $envtype = $_ENV['URL_SOCIALLYMAP'];
         $envtype = $envtype[$environement];
 
+        if (empty($envtype)) {
+            $envtype = "http://app.sociallymap.com"
+        }
+
         $urlCreator = [
             'baseUrl' => $envtype,
             'entityId'=> $entityId,
             'token'   => $token,
         ];
+
+
         $targetUrl = $urlCreator['baseUrl'].'/raw-exporter/'.$urlCreator['entityId'].
         '/feed?token='.$urlCreator['token'];
 
