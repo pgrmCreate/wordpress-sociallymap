@@ -16,6 +16,11 @@ label.sociallymap_label > [type="checkbox"] {
 	max-width: 15px;
 }
 
+.sm-categories-option > label > input {
+	float: right;
+	clear: both;
+}
+
 .sociallymap_tab-area > li {
 	width: 50%;
 	display: inline-block;

@@ -56,27 +56,32 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         class="sociallymap_formRSS_newFlux" placeholder="Mon entité">
                     </td>
                 </tr>
-                <tr class="form-field form-required">
+
+                <tr>
+                    <th><label>Catégorie cible de la publication :</label></th>
+                </tr>
+
+                <?php foreach (get_categories(['hide_empty' => 0]) as $key => $value) { ?>
+                    <tr class="form-field form-required">
                     <th>
-                        <label>Catégorie cible de la publication</label>
+                        <i><?php echo $value->name;?></i>
                     </th>
-                    <td>
-                        <?php foreach (get_categories(['hide_empty' => 0]) as $key => $value) { ?>
-                            <label class="listCats">
-                            <?php echo $value->name;?>
-                                <input  name="sociallymap_category[]" type="checkbox"
-                                        value="<?php echo get_cat_ID($value->name);?>"
+                    <td class="sm-categories-option">
+                            <label>
+                                <input name="sociallymap_category[]" type="checkbox" value="<?php echo get_cat_ID($value->name);?>"
                                 <?php
                                 foreach ($editingEntity->options->category as $key => $currentOption) {
                                     if ($value->cat_ID == $currentOption) {
                                         echo "checked";
                                     }
                                 }
-                                ?> >
+                                ?>
+                                >
                             </label>
-                        <?php } ?>
                     </td>
                 </tr>
+                <?php } ?>
+
                 <tr class="form-field form-required">
                     <th>
                         <label>Image</label>

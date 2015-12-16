@@ -55,20 +55,37 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <input type="text" placeholder="Identifiant de l'entité sociallymap" name="sociallymap_entityId" >
                     </td>
                 </tr>
-                <tr class="form-field form-required">
+
+                <tr>
+                    <th><label>Catégorie cible de la publication :</label></th>
+                </tr>
+
+                <?php foreach (get_categories(['hide_empty' => 0]) as $key => $value) { ?>
+                    <tr class="form-field form-required">
                     <th>
-                        <label>Categorie cible de la publication</label>
+                        <i><?php echo $value->name;?></i>
                     </th>
-                    <td>
-                        <?php foreach (get_categories(['hide_empty' => 0]) as $key => $value) { ?>
+                    <td class="sm-categories-option">
                             <label>
-                            <?php echo $value->name;?>
                                 <input name="sociallymap_category[]" type="checkbox" value="<?php echo get_cat_ID($value->name);?>"
                                 <?php if($value->cat_ID === $default_value->category) echo "checked" ?> >
                             </label>
-                            <?php } ?>
                     </td>
                 </tr>
+                <?php } ?>
+
+
+                <tr class="form-field form-required">
+                    <th>
+                        <label>Identifiant de l'entité sociallymap</label>
+                    </th>
+                    <td>
+                        <input type="text" placeholder="Identifiant de l'entité sociallymap" name="sociallymap_entityId" >
+                    </td>
+                </tr>
+
+
+
                 <tr class="form-field form-required">
                     <th>
                         <label>Publier en mode</label>
