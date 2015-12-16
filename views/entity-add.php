@@ -26,7 +26,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
             Voir la liste des entités
         </a>
     </h1>
-    <form method="post" class="sociallymap_formRSS">
+    <form method="post">
         <input type="hidden" name="sociallymap_postRSS" value="1"/>
 
         <table class="form-table">
@@ -139,7 +139,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
             </tbody>
         </table>
 
-        <p class="submit sociallymap_valid-submit">
+        <p class="submit">
             <button type="submit" name="submit" id="submit" class="button button-primary">
                 <i class="dashicons-before dashicons-plus-alt sociallymap-icon-button"></i>
                 Enregistrer
