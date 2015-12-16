@@ -74,18 +74,6 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                 </tr>
                 <?php } ?>
 
-
-                <tr class="form-field form-required">
-                    <th>
-                        <label>Identifiant de l'entité sociallymap</label>
-                    </th>
-                    <td>
-                        <input type="text" placeholder="Identifiant de l'entité sociallymap" name="sociallymap_entityId" >
-                    </td>
-                </tr>
-
-
-
                 <tr class="form-field form-required">
                     <th>
                         <label>Publier en mode</label>
