@@ -139,7 +139,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                 </tr>
                 <tr class="form-field form-required">
                     <th>
-                        <label>Ne pas suivre les liens (nofolow)</label>
+                        <label>Ne pas suivre les liens (nofollow)</label>
                     </th>
                     <td>
                         <input type="checkbox" name="sociallymap_nofolow" value="1">
