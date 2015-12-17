@@ -4,20 +4,9 @@ class ImageUploader
 {
     public function upload($targetUrl)
     {
-        // check target url not empty
-        if (empty($targetUrl)) {
-            error_log(PHP_EOL.'# WARNING : Upload class called but target URL is empty #'.PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
-            return 0;
-        }
-
-        // $targetUrl = urldecode($targetUrl);
-
         $parts = parse_url($targetUrl);
         $urlbase = parse_url($targetUrl, PHP_URL_SCHEME).'://'.parse_url($targetUrl, PHP_URL_HOST);
         parse_str($parts['query'], $query);
-        var_dump($parts['query']);
-        var_dump($query['url']);
-
 
         // check for facebook
         if (isset($query['url']) && $urlbase == 'https://external.xx.fbcdn.net') {
@@ -49,6 +38,7 @@ class ImageUploader
     public function uploadWordpress($file, $post_id, $desc = null, $return = 'html')
     {
         if (! empty($file)) {
+
             // Set variables for storage, fix file filename for query strings.
             preg_match('/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches);
             if (! $matches) {
@@ -56,13 +46,11 @@ class ImageUploader
             }
 
             $file_array = [];
-            $file_array['name'] = md5(microtime().rand()).'.'.$matches[1];
+            error_log(PHP_EOL.'# EXTENTION FILE DESCRIVE #'.PHP_EOL.print_r($matches, true).PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
+            $file_array['name'] = md5(microtime().rand()).".png";
 
             // Download file to temp location.
             $file_array['tmp_name'] = download_url($file);
-
-            error_log(PHP_EOL.'# DETAIL UPLOAD TMP #'.PHP_EOL.print_r($file_array['tmp_name'], true).PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
-
 
             // If error storing temporarily, return the error.
             if (is_wp_error($file_array['tmp_name'])) {
@@ -74,7 +62,6 @@ class ImageUploader
 
             // If error storing permanently, unlink.
             if (is_wp_error($id)) {
-                error_log(PHP_EOL.'# UPLOAD ERROR : #'.PHP_EOL.print_r($file_array['tmp_name'], true).PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
                 @unlink($file_array['tmp_name']);
                 return $id;
             }
@@ -90,7 +77,6 @@ class ImageUploader
 
             $alt = isset($desc) ? esc_attr($desc) : '';
             $html = "<img src='$src' alt='$alt' />";
-            error_log(PHP_EOL.'# DETAIL UPLOAD TMP #'.PHP_EOL.print_r($file_array['tmp_name'], true).PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
             return $html;
         } else {
             return new WP_Error('image_sideload_failed');

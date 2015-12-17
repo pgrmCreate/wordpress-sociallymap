@@ -66,10 +66,8 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <i><?php echo $value->name;?></i>
                     </th>
                     <td class="sm-categories-option">
-                            <label>
                                 <input name="sociallymap_category[]" type="checkbox" value="<?php echo get_cat_ID($value->name);?>"
                                 <?php if($value->cat_ID === $default_value->category) echo "checked" ?> >
-                            </label>
                     </td>
                 </tr>
                 <?php } ?>

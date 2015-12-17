@@ -122,6 +122,7 @@ class EntityCollection
         $entitiesRequest = 'SELECT * FROM '.$this->table_entity;
         $entities = $wpdb->get_results($entitiesRequest);
 
+
         // LOAD ENTITIES
         foreach ($entities as $data) {
             $listRSS[] = $entity->getById($data->id, $orderKey, $orderSense);

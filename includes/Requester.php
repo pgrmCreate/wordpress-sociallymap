@@ -4,6 +4,7 @@ class Requester
 {
     public function launch($entityId, $token, $environement)
     {
+        error_log("Token : # ".$token.PHP_EOL, 3, plugin_dir_path(__FILE__)."../logs/error.log");
         if (!is_callable('curl_init')) {
             error_log("Curl no exist, request impossible..", 3, plugin_dir_path(__FILE__)."../logs/error.log");
             header("HTTP/1.0 501 Not Implemented");
@@ -43,8 +44,14 @@ class Requester
         $result = curl_exec($curl);
         $requestInfos = curl_getinfo($curl);
 
+
         // Close the curl session and free allocated memory
         curl_close($curl);
+        $logfilename = sprintf('dump-curl-%s.log', time());
+        $logfilenamedecode = sprintf('dump-curl-decode-%s.log', time());
+        error_log("*** ".$result, 3, plugin_dir_path(__FILE__).'../'.$logfilename);
+        error_log("**- ".print_r(json_decode($result), true), 3, plugin_dir_path(__FILE__).'../'.$logfilenamedecode);
+
 
         try {
             // If the response isn't a string

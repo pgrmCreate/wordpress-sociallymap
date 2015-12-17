@@ -1,6 +1,7 @@
 <?php
 
-class VideoUploader {
+class VideoUploader
+{
 
     public function upload($url)
     {
