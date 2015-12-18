@@ -535,6 +535,10 @@ class SociallymapPlugin
                 if (isset($value->media) && $value->media->type == "video") {
                     $videoUploader = new VideoUploader();
                     $mediaVideo = $videoUploader->upload($value->media->url);
+                    $mediaVideo = '<video width="320" height="240" controls>
+                    <source src="'.$mediaVideo.'" type="video/mp4">
+                    <div class="sm-video-nosupport"></div>
+                    </video>';
 
                     if ($mediaVideo != false) {
                         $contentArticle .= $mediaVideo;

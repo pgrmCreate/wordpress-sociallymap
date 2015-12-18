@@ -1,3 +1,8 @@
+.sm-video-nosupport:before {
+	content: "Votre naviguateur ne supporte pas le format vidéo";
+	position: relative;
+}
+
 .sm-modal-container {
 	position: fixed;
 	top: 0;

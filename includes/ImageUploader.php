@@ -14,7 +14,7 @@ class ImageUploader
         }
 
 
-        preg_match('/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $url, $matches);
+        preg_match('/[^\?]+\.(jpeg|jpg|jpe|gif|png)\b/i', $url, $matches);
         $currentExtension = '.'.$matches[1];
         $currentFileName = $idMessage.$currentExtension;
         $currentLinkLocation = plugin_dir_path(__FILE__).'../tmp/'.$currentFileName;
@@ -23,6 +23,8 @@ class ImageUploader
         $fp = fopen($currentLinkLocation, 'w+');
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
         curl_exec($ch);
         curl_close($ch);
         fclose($fp);
