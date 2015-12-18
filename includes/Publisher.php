@@ -45,7 +45,7 @@ class Publisher
                 'post_content'   => '',
                 'post_status'    => 'inherit'
             ];
-            $attach_id = wp_insert_attachment($attachment, $image, $parent_post_id);
+            $attach_id = wp_insert_attachment($attachment, $image, $attachment);
             $attach_data = wp_generate_attachment_metadata($attach_id, $image);
             wp_update_attachment_metadata($attach_id, $attach_data);
             set_post_thumbnail($newPostId, $attach_id);

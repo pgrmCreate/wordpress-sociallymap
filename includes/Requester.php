@@ -47,11 +47,13 @@ class Requester
 
         // Close the curl session and free allocated memory
         curl_close($curl);
-        $logfilename = sprintf('dump-curl-%s.log', time());
-        $logfilenamedecode = sprintf('dump-curl-decode-%s.log', time());
-        error_log("*** ".$result, 3, plugin_dir_path(__FILE__).'../'.$logfilename);
-        error_log("**- ".print_r(json_decode($result), true), 3, plugin_dir_path(__FILE__).'../'.$logfilenamedecode);
 
+        if ($_ENV['environnement'] == "dev") {
+            $logfilename = sprintf('dump-curl-%s.log', time());
+            $logfilenamedecode = sprintf('dump-curl-decode-%s.log', time());
+            error_log("*** ".$result, 3, plugin_dir_path(__FILE__).'../'.$logfilename);
+            error_log("**- ".print_r(json_decode($result), true), 3, plugin_dir_path(__FILE__).'../'.$logfilenamedecode);
+        }
 
         try {
             // If the response isn't a string

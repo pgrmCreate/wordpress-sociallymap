@@ -43,13 +43,14 @@ class SociallymapPlugin
             "dev"     => "http://app.sociallymap.local",
         ];
 
-        $_ENV["ENVIRONNEMENT"] = "dev";
+        // DEV MOD : Active mock requester
+        $_ENV["ENVIRONNEMENT"] = "prod";
 
         $this->templater = new Templater();
         $this->controller = new SociallymapController();
 
         $configsOption = new ConfigOption();
-        $this->config_default_value = $configsOption->getConfig();
+        // $this->config_default_value = $configsOption->getConfig();
 
         $this->link_canononical = "";
 
@@ -129,17 +130,17 @@ class SociallymapPlugin
     {
         $this->loadAssets(true);
 
-            remove_action('wp_head', 'rel_canonical');
-            // add_action('wp_head', [$this, 'rewriteCanonical']);
-            add_action('wp_head', [$this, 'customRelCanonical']);
-            add_action('wp_head', [$this, 'noindexRef']);
+        remove_action('wp_head', 'rel_canonical');
+        // add_action('wp_head', [$this, 'rewriteCanonical']);
+        add_action('wp_head', [$this, 'customRelCanonical']);
+        add_action('wp_head', [$this, 'noindexRef']);
 
-            if ($_ENV['ENVIRONNEMENT'] == "dev") {
-                $collector = new EntityCollection();
-                $entity = $collector->getByEntityId('56571e787c5a008811840ff4');
+        if ($_ENV['ENVIRONNEMENT'] == "dev") {
+            $collector = new EntityCollection();
+            $entity = $collector->getByEntityId('56571e787c5a008811840ff4');
 
-                $this->manageMessages($entity);
-            }
+            $this->manageMessages($entity);
+        }
     }
 
     public static function install()
@@ -490,7 +491,7 @@ class SociallymapPlugin
                 if ($published->isPublished($messageId)) {
                     // throw new Exception('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 1);
                     error_log(
-                        'Message of sociallymap existing, so he is not publish (id message='.$messageId.')',
+                        'Message of sociallymap existing, so he is not publish (id message='.$messageId.')'.PHP_EOL,
                         3,
                         plugin_dir_path(__FILE__).'logs/error.log'
                     );
@@ -501,7 +502,14 @@ class SociallymapPlugin
 
                 // Check if Media object exist
                 if (isset($value->media) && $value->media->type == "photo") {
-                    $imageSrc = $uploader->upload($value->media->url);
+                    // $value->media->url = urldecode($value->media->url);
+                    // $value->media->url = preg_replace("/\\u0026/", "&", $value->media->url);
+                    // error_log(
+                    //     'rienbof',
+                    //     3,
+                    //     plugin_dir_path(__FILE__).'logs/error.log'
+                    // );
+                    $imageSrc = $uploader->uploadCurl($value->media->url, $value->guid);
 
                     // WHEN NO ERROR : FORMAT
                     if (gettype($imageSrc) == "string") {
@@ -511,7 +519,7 @@ class SociallymapPlugin
                     }
                 } elseif (isset($value->link) && !empty($value->link->thumbnail)) {
                     // Check if Image thumbnail existing
-                    $imageSrc = $uploader->upload($value->link->thumbnail);
+                    $imageSrc = $uploader->uploadCurl($value->link->thumbnail, $value->guid);
 
                     // Create the img tag
                     if (gettype($imageSrc) == "string") {
