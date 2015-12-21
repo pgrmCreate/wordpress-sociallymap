@@ -5,10 +5,24 @@ class ImageUploader
     public function uploadCurl($url, $idMessage)
     {
         $parts = parse_url($url);
+
         $urlbase = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST);
-        parse_str($parts['query'], $query);
+
+        $keyAccept = 'query';
+        if (!isset($parts['query'])) {
+            $keyAccept = 'path';
+        }
+
+        parse_str($parts[$keyAccept], $query);
+
+        if ($_ENV['ENVIRONNEMENT'] == "dev") {
+            var_dump($parts);
+            var_dump($url);
+            var_dump($query);
+        }
+
         // check for facebook
-        if (isset($query['url']) && $urlbase == 'https://external.xx.fbcdn.net') {
+        if ($urlbase == 'https://external.xx.fbcdn.net') {
             $url = $query['url'];
             error_log(PHP_EOL.'# WARNING UPLOAD #'.PHP_EOL.'UPLOAD '.$query['url'].PHP_EOL, 3, plugin_dir_path(__FILE__).'../logs/error.log');
         }
@@ -25,6 +39,7 @@ class ImageUploader
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
+        curl_setopt($ch, CURLOPT_UPLOAD, false);
         curl_exec($ch);
         curl_close($ch);
         fclose($fp);
