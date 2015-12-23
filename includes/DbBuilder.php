@@ -3,10 +3,10 @@
 class DbBuilder
 {
     private $wpdb;
-    private $table_options;
-    private $table_entity_options;
-    private $table_entity;
-    private $table_published;
+    private $tableOptions;
+    private $tableEntityOptions;
+    private $tableEntity;
+    private $tablePublished;
 
 
     public function __construct()
@@ -14,32 +14,32 @@ class DbBuilder
         global $wpdb;
         $this->wpdb = $wpdb;
 
-        $this->table_options = $this->wpdb->prefix . "sm_options";
-        $this->table_entity_options = $this->wpdb->prefix . "sm_entity_options";
-        $this->table_entity = $this->wpdb->prefix . "sm_entities";
-        $this->table_published = $this->wpdb->prefix . "sm_published";
+        $this->tableOptions = $this->wpdb->prefix ."sm_options";
+        $this->tableEntityOptions = $this->wpdb->prefix ."sm_entity_options";
+        $this->tableEntity = $this->wpdb->prefix ."sm_entities";
+        $this->tablePublished = $this->wpdb->prefix ."sm_published";
     }
 
     public function dbInitialisation()
     {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-        $charset_collate = $this->wpdb->get_charset_collate();
+        $charsetCollate = $this->wpdb->get_charset_collate();
 
-        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_published'") != $this->table_published) {
-            $sql = "CREATE TABLE $this->table_published (
+        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->tablePublished'") != $this->tablePublished) {
+            $sql = "CREATE TABLE $this->tablePublished (
                 id mediumint(9) NOT NULL AUTO_INCREMENT,
                 entity_id varchar(255),
                 message_id varchar(255),
                 post_id varchar(255),
                 UNIQUE KEY id (id)
-                ) $charset_collate;";
+                ) $charsetCollate;";
 
             dbDelta($sql);
         }
 
-        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity'") != $this->table_entity) {
-            $sql = "CREATE TABLE $this->table_entity (
+        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->tableEntity'") != $this->tableEntity) {
+            $sql = "CREATE TABLE $this->tableEntity (
                 id mediumint(9) NOT NULL AUTO_INCREMENT,
                 sm_entity_id varchar(255),
                 activate boolean,
@@ -48,70 +48,70 @@ class DbBuilder
                 counter integer DEFAULT 0,
                 last_published_message datetime,
                 UNIQUE KEY id (id)
-                ) $charset_collate;";
+                ) $charsetCollate;";
 
             dbDelta($sql);
         }
 
-        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_options'") != $this->table_options) {
-            $sql = "CREATE TABLE $this->table_options (
+        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->tableOptions'") != $this->tableOptions) {
+            $sql = "CREATE TABLE $this->tableOptions (
                 id mediumint(9) NOT NULL AUTO_INCREMENT,
                 default_value varchar(255),
                 label varchar(255),
                 UNIQUE KEY id (id)
-                ) $charset_collate;";
+                ) $charsetCollate;";
 
             dbDelta($sql);
 
-            $this->wpdb->insert($this->table_options, [
+            $this->wpdb->insert($this->tableOptions, [
             'label' => 'category',
             'default_value' => 0,
             ], ['%s', '%d']);
 
-            $this->wpdb->insert($this->table_options, [
+            $this->wpdb->insert($this->tableOptions, [
             'label' => 'display_type',
             'default_value' => 'tab',
             ], ['%s', '%s']);
 
-            $this->wpdb->insert($this->table_options, [
+            $this->wpdb->insert($this->tableOptions, [
             'label' => 'publish_type',
             'default_value' => 'draft',
             ], ['%s', '%s']);
 
-            $this->wpdb->insert($this->table_options, [
+            $this->wpdb->insert($this->tableOptions, [
             'label' => 'link_canonical',
             'default_value' => '1',
             ], ['%s', '%d']);
 
-            $this->wpdb->insert($this->table_options, [
+            $this->wpdb->insert($this->tableOptions, [
             'label' => 'image',
             'default_value' => 'content',
             ], ['%s', '%s']);
 
-            $this->wpdb->insert($this->table_options, [
+            $this->wpdb->insert($this->tableOptions, [
             'label' => 'readmore_label',
             'default_value' => 'lire la suite',
             ], ['%s', '%s']);
 
-            $this->wpdb->insert($this->table_options, [
+            $this->wpdb->insert($this->tableOptions, [
             'label' => 'no index article',
             'default_value' => 0,
             ], ['%s', '%d']);
 
-            $this->wpdb->insert($this->table_options, [
+            $this->wpdb->insert($this->tableOptions, [
             'label' => 'no folow',
             'default_value' => 0,
             ], ['%s', '%d']);
         }
 
-        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->table_entity_options'") != $this->table_entity_options) {
-            $sql = "CREATE TABLE $this->table_entity_options (
+        if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->tableEntityOptions'") != $this->tableEntityOptions) {
+            $sql = "CREATE TABLE $this->tableEntityOptions (
                 id mediumint(9) NOT NULL AUTO_INCREMENT,
                 entity_id mediumint(9),
                 options_id mediumint(9),
                 value text,
                 UNIQUE KEY id (id)
-                ) $charset_collate;";
+                ) $charsetCollate;";
 
             dbDelta($sql);
         }
@@ -121,9 +121,9 @@ class DbBuilder
     {
         global $wpdb;
 
-        $wpdb->query("DROP TABLE IF EXISTS $this->table_options");
-        $wpdb->query("DROP TABLE IF EXISTS $this->table_entity_options");
-        $wpdb->query("DROP TABLE IF EXISTS $this->table_entity");
-        $wpdb->query("DROP TABLE IF EXISTS $this->table_published");
+        $wpdb->query("DROP TABLE IF EXISTS $this->tableOptions");
+        $wpdb->query("DROP TABLE IF EXISTS $this->tableEntityOptions");
+        $wpdb->query("DROP TABLE IF EXISTS $this->tableEntity");
+        $wpdb->query("DROP TABLE IF EXISTS $this->tablePublished");
     }
 }

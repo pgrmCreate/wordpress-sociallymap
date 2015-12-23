@@ -13,9 +13,10 @@ require_once(plugin_dir_path(__FILE__).'includes/Templater.php');
 require_once(plugin_dir_path(__FILE__).'includes/DbBuilder.php');
 require_once(plugin_dir_path(__FILE__).'includes/Publisher.php');
 require_once(plugin_dir_path(__FILE__).'includes/Requester.php');
+require_once(plugin_dir_path(__FILE__).'includes/Logger.php');
 require_once(plugin_dir_path(__FILE__).'includes/MockRequester.php');
-require_once(plugin_dir_path(__FILE__).'includes/ImageUploader.php');
-require_once(plugin_dir_path(__FILE__).'includes/VideoUploader.php');
+require_once(plugin_dir_path(__FILE__).'includes/FileDownloader.php');
+require_once(plugin_dir_path(__FILE__).'includes/VideoDownloader.php');
 require_once(plugin_dir_path(__FILE__).'includes/GithubUpdater.php');
 require_once(plugin_dir_path(__FILE__).'includes/SociallymapController.php');
 require_once(plugin_dir_path(__FILE__).'models/EntityCollection.php');
@@ -37,6 +38,8 @@ class SociallymapPlugin
     {
         global $wpdb;
         $this->wpdb = $wpdb;
+        $environment = '';
+        $_ENV['URL_SOCIALLYMAP'] =
         $_ENV["URL_SOCIALLYMAP"] = [
             "prod"    => "http://app.sociallymap.com",
             "staging" => "http://app.sociallymap-staging.com",
@@ -44,7 +47,7 @@ class SociallymapPlugin
         ];
 
         // DEV MOD : Active mock requester
-        $_ENV["ENVIRONNEMENT"] = "prod";
+        $_ENV["ENVIRONNEMENT"] = "dev";
 
         $this->templater = new Templater();
         $this->controller = new SociallymapController();
@@ -81,7 +84,7 @@ class SociallymapPlugin
         $entityObject = new Entity();
 
         if (empty($content)) {
-            error_log('# Rewrite link canonical : No content in entry #'.print_r($content, true), 3, plugin_dir_path(__FILE__).'logs/error.log');
+            Logger::alert('Rewrite link canonical : No content in entry');
             return false;
         }
 
@@ -91,7 +94,7 @@ class SociallymapPlugin
         if (isset($matches[1])) {
             $idSelect = $matches[1];
         } else {
-            error_log('# Rewrite link canonical : No found entity #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+            Logger::alert('Rewrite link canonical : No found entity');
             return false;
         }
 
@@ -101,7 +104,7 @@ class SociallymapPlugin
         if (isset($matches[1])) {
             $entityUrl = $matches[1];
         } else {
-            error_log('# Rewrite link canonical : No found url in content #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+            Logger::alert('Rewrite link canonical : No found url in content');
             return false;
         }
 
@@ -115,7 +118,7 @@ class SociallymapPlugin
 
         // entity unknown
         if (empty($entityPicked)) {
-            error_log('# Rewrite link canonical : Entity Unknown #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+            Logger::alert('Rewrite link canonical : Entity Unknown');
             return false;
         }
 
@@ -133,7 +136,7 @@ class SociallymapPlugin
         remove_action('wp_head', 'rel_canonical');
         // add_action('wp_head', [$this, 'rewriteCanonical']);
         add_action('wp_head', [$this, 'customRelCanonical']);
-        add_action('wp_head', [$this, 'noindexRef']);
+        add_action('wp_head', [$this, 'noIndexRef']);
 
         if ($_ENV['ENVIRONNEMENT'] == "dev") {
             $collector = new EntityCollection();
@@ -174,11 +177,13 @@ class SociallymapPlugin
                 if (empty($entity)) {
                     header("HTTP/1.0 404 Not Found");
                     exit(json_encode([
-                        'error' => "entityId inconnu"]));
+                        'error' => "entityId inconnu"
+                    ]));
                 } else {
                     header("HTTP/1.0 200 OK");
                     exit(json_encode([
-                        'message' => "ok"]));
+                        'message' => "ok"
+                    ]));
                 }
             }
 
@@ -191,12 +196,13 @@ class SociallymapPlugin
             // Try to retrieve the pending messages
             if ($this->manageMessages($entity) == false) {
                 header("HTTP/1.0 502 Bad gateway");
-                print_r($_POST);
-                error_log("The plugin can't ping to sociallymap.", 3, plugin_dir_path(__FILE__)."logs/error.log");
+                // print_r($_POST);
+                Logger::error("The plugin can't ping to sociallymap");
             } else {
                 header("HTTP/1.0 200 OK");
                 exit(json_encode([
-                    'message' => "ok"]));
+                    'message' => "ok"
+                ]));
             }
 
         }
@@ -213,7 +219,7 @@ class SociallymapPlugin
         add_rewrite_rule('sociallymap', 'index.php?sociallymap-plugin=1', 'top');
     }
 
-    public function noindexRef()
+    public function noIndexRef()
     {
         global $post;
 
@@ -229,36 +235,50 @@ class SociallymapPlugin
         if (isset($matches[1])) {
             $idSelect = $matches[1];
         } else {
-            error_log('# Noindex option : No found entity attribute in content #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+            Logger::alert('noIndex option : No found entity attribute in content');
+
             return false;
         }
 
         // id unknown
         if (empty($idSelect)) {
-            error_log('# Noindex option : No found entity in bdd #', 3, plugin_dir_path(__FILE__).'logs/error.log');
+            Logger::alert('noIndex option : No found entity in bdd');
             return false;
         }
 
         $entityPicked = $entityObject->getById($idSelect);
-        $noindex = 0;
-        $nofolow = 0;
+        $noIndex = 0;
+        $follow = 1;
 
         foreach ($entityPicked->options as $key => $value) {
             if ($value->options_id == '7') {
-                $noindex = $value->value;
+                $noIndex = $value->value;
             }
             if ($value->options_id == '8') {
-                $nofolow = $value->value;
+                $follow = !$value->value;
             }
         }
 
-        if ($noindex == 1 && $nofolow == 1) {
-            echo ('<meta name="robots" content="noindex,follow">');
-        } elseif ($noindex == 0 && $nofolow == 1) {
-            echo ('<meta name="robots" content="follow">');
-        } elseif ($noindex == 1 && $nofolow == 0) {
-            echo ('<meta name="robots" content="noindex">');
+        // @todo manage conditions
+        $contentArr = [];
+        if ($noIndex) {
+            $contentArr[] = 'noIndex';
         }
+        if ($follow) {
+            $contentArr[] = 'follow';
+        }
+
+        echo '<meta name="robots" content="' . implode(', ', $contentArr) . '">';
+
+
+
+        // if ($noIndex == 1 && $noFollow == 1) {
+        //     echo ('<meta name="robots" content="noIndex,follow">');
+        // } elseif ($noIndex == 0 && $noFollow == 1) {
+        //     echo ('<meta name="robots" content="follow">');
+        // } elseif ($noIndex == 1 && $noFollow == 0) {
+        //     echo ('<meta name="robots" content="noIndex">');
+        // }
     }
 
     public function customRelCanonical()
@@ -271,7 +291,7 @@ class SociallymapPlugin
         }
     }
 
-    public function prePosting ($content)
+    public function prePosting($content)
     {
         global $post;
 
@@ -378,16 +398,16 @@ class SociallymapPlugin
     }
 
     public function manageMessages($entity)
-        {
+    {
         $requester      = new Requester();
         $publisher      = new Publisher();
         $config         = new ConfigOption();
         $entityObject   = new Entity();
-        $uploader       = new ImageUploader();
+        $downloader     = new FileDownloader();
         $published      = new Published();
         $summary        = "";
         $title          = "";
-        $readmore_label = "";
+        $readmoreLabel = "";
 
         $configs = $config->getConfig();
 
@@ -400,27 +420,28 @@ class SociallymapPlugin
         }
 
         // Retrieve the entity categories
-        $entity_list_category = [];
-        $readmore_label = "";
+        $entityListCategory = [];
+        $readmoreLabel = "";
+
         foreach ($entity->options as $key => $value) {
             if ($value->options_id == 1) {
-                $entity_list_category[] = $value->value;
+                $entityListCategory[] = $value->value;
             }
 
             if ($value->options_id == 2) {
-                $entity_display_type = $value->value;
+                $entityDisplayType = $value->value;
             }
 
             if ($value->options_id == 3) {
-                $entity_publish_type = $value->value;
+                $entityPublishType = $value->value;
             }
 
             if ($value->options_id == 5) {
-                $entity_image = $value->value;
+                $entityImage = $value->value;
             }
 
             if ($value->options_id == 6) {
-                $readmore_label = $value->value;
+                $readmoreLabel = $value->value;
             }
         }
 
@@ -429,25 +450,21 @@ class SociallymapPlugin
             if ($_ENV["ENVIRONNEMENT"] === 'dev') {
                 $requester    = new MockRequester();
                 $jsonData = $requester->getMessages();
-                // var_dump($jsonData);
-                // die();
             } else {
                 $jsonData = $requester->launch($_POST['entityId'], $_POST['token'], $_POST['environment']);
             }
-
 
             if (empty($jsonData)) {
                 throw new Exception('No data returned from request', 1);
                 exit();
             }
 
-            $displayingError = PHP_EOL.'['.date('l jS \of F Y h:i:s A').']'.' See return data : '.
-            print_r($jsonData, true).PHP_EOL;
-            error_log($displayingError, 3, plugin_dir_path(__FILE__).'logs/error.log');
+            Logger::info('See return data', $jsonData);
 
             foreach ($jsonData as $key => $value) {
                 $summary = "";
                 $contentArticle = "";
+                $readmore = '';
 
                 // Check Link object existing
                 if (isset($value->link)) {
@@ -462,17 +479,16 @@ class SociallymapPlugin
 
                     // Check if Link URL existing
                     if (!empty($value->link->url)) {
-                        $readmore_label = stripslashes($readmore_label);
-                        //error_log('*** Folow read more *** '.print_r([$value->link->url, $entity_display_type, $entity->id, $readmore_label], true), 3, plugin_dir_path(__FILE__).'logs/error.log');
+                        $readmoreLabel = stripslashes($readmoreLabel);
 
                         $readmore = $this->templater->loadReadMore(
                             $value->link->url,
-                            $entity_display_type,
+                            $entityDisplayType,
                             $entity->id,
-                            $readmore_label
+                            $readmoreLabel
                         );
                     } else {
-                        error_log('This article not contain url', 3, plugin_dir_path(__FILE__).'logs/error.log');
+                        Logger::alert('This article not contain url');
                     }
                 }
 
@@ -489,27 +505,15 @@ class SociallymapPlugin
                 $canBePublish = true;
                 $messageId = $value->guid;
                 if ($published->isPublished($messageId)) {
-                    // throw new Exception('Message of sociallymap existing, so he is not publish (id message='.$messageId.')', 1);
-                    error_log(
-                        'Message of sociallymap existing, so he is not publish (id message='.$messageId.')'.PHP_EOL,
-                        3,
-                        plugin_dir_path(__FILE__).'logs/error.log'
-                    );
+                    $contextMessageId = '(id message='.$messageId.')';
+                    Logger::alert('Message of sociallymap existing, so he is not publish', $contextMessageId);
                     $canBePublish = false;
                     continue;
                 }
 
-
                 // Check if Media object exist
                 if (isset($value->media) && $value->media->type == "photo") {
-                    // $value->media->url = urldecode($value->media->url);
-                    // $value->media->url = preg_replace("/\\u0026/", "&", $value->media->url);
-                    // error_log(
-                    //     'rienbof',
-                    //     3,
-                    //     plugin_dir_path(__FILE__).'logs/error.log'
-                    // );
-                    $imageSrc = $uploader->uploadCurl($value->media->url, $value->guid);
+                    $imageSrc = $downloader->download($value->media->url, $value->guid);
 
                     // WHEN NO ERROR : FORMAT
                     if (gettype($imageSrc) == "string") {
@@ -519,7 +523,7 @@ class SociallymapPlugin
                     }
                 } elseif (isset($value->link) && !empty($value->link->thumbnail)) {
                     // Check if Image thumbnail existing
-                    $imageSrc = $uploader->uploadCurl($value->link->thumbnail, $value->guid);
+                    $imageSrc = $downloader->download($value->link->thumbnail, $value->guid);
 
                     // Create the img tag
                     if (gettype($imageSrc) == "string") {
@@ -531,10 +535,10 @@ class SociallymapPlugin
                 }
 
                 // check if video exist
-                $uploadVideo = false;
+                $downloadVideo = false;
                 if (isset($value->media) && $value->media->type == "video") {
-                    $videoUploader = new VideoUploader();
-                    $mediaVideo = $videoUploader->upload($value->media->url);
+                    $videoDownloader = new VideoDownloader();
+                    $mediaVideo = $videoDownloader->downloadCurl($value->media->url);
                     $mediaVideo = '<video width="320" height="240" controls>
                     <source src="'.$mediaVideo.'" type="video/mp4">
                     <div class="sm-video-nosupport"></div>
@@ -542,22 +546,22 @@ class SociallymapPlugin
 
                     if ($mediaVideo != false) {
                         $contentArticle .= $mediaVideo;
-                        error_log("UPLOAD VIDEO : ".$mediaVideo, 3, plugin_dir_path(__FILE__).'logs/error.log');
+                        Logger::info("download VIDEO", $mediaVideo);
                     }
                 }
 
-                // If imageTag is '' so is false else isUpload is true
-                $isUploaded = ! ($imageTag === '');
+                // If imageTag is '' so is false else $isDownload is true
+                $isDownloaded = ($imageTag !== '');
 
                 // Attach image accordingly to options
                 $imageAttachment = '';
-                if ($isUploaded) {
+                if ($isDownloaded) {
                     // Add image in the post content
-                    if (in_array($entity_image, ['content', 'both'])) {
+                    if (in_array($entityImage, ['content', 'both'])) {
                         $contentArticle = $imageTag . $contentArticle;
                     }
                     // Add image as featured image
-                    if (in_array($entity_image, ['thumbnail', 'both'])) {
+                    if (in_array($entityImage, ['thumbnail', 'both'])) {
                         $imageAttachment = $imageSrc;
                     }
                 }
@@ -570,13 +574,13 @@ class SociallymapPlugin
                             $contentArticle,
                             $author,
                             $imageAttachment,
-                            $entity_list_category,
-                            $entity_publish_type
+                            $entityListCategory,
+                            $entityPublishType
                         );
 
                         if (!$articlePublished) {
                             // throw new Exception('Error from post publish', 1);
-                            error_log('Error from post publish', 3, plugin_dir_path(__FILE__).'logs/error.log');
+                            Logger::error("Error from post publish");
                         } else {
                             $entityObject->updateHistoryPublisher($entity->id, $entity->counter);
                             // save published article
@@ -585,7 +589,7 @@ class SociallymapPlugin
                 }
             }
         } catch (Exception $e) {
-            error_log('Error : '.$e->getMessage(), 3, plugin_dir_path(__FILE__).'logs/error.log');
+            Logger::alert("Error exeption", $e->getMessage());
         }
         return true;
     }
@@ -637,11 +641,11 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_link_canonical'])) {
                 $_POST['sociallymap_link_canonical'] = 0;
             }
-            if (!isset($_POST['sociallymap_noindex'])) {
-                $_POST['sociallymap_noindex'] = 0;
+            if (!isset($_POST['sociallymap_noIndex'])) {
+                $_POST['sociallymap_noIndex'] = 0;
             }
-            if (!isset($_POST['sociallymap_nofolow'])) {
-                $_POST['sociallymap_nofolow'] = 0;
+            if (!isset($_POST['sociallymap_noFollow'])) {
+                $_POST['sociallymap_noFollow'] = 0;
             }
             if (!isset($_POST['sociallymap_readmore'])) {
                 $_POST['sociallymap_readmore'] = "";
@@ -657,8 +661,8 @@ class SociallymapPlugin
                 'display_type'   => $_POST['sociallymap_display_type'],
                 'publish_type'   => $_POST['sociallymap_publish_type'],
                 'link_canonical' => $_POST['sociallymap_link_canonical'],
-                'noindex'        => $_POST['sociallymap_noindex'],
-                'nofolow'        => $_POST['sociallymap_nofolow'],
+                'noIndex'        => $_POST['sociallymap_noIndex'],
+                'noFollow'       => $_POST['sociallymap_noFollow'],
                 'image'          => $_POST['sociallymap_image'],
                 'readmore'       => $_POST['sociallymap_readmore'],
                 'id'             => $_GET['id'],
@@ -694,11 +698,11 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_link_canonical'])) {
                 $_POST['sociallymap_link_canonical'] = 0;
             }
-            if (!isset($_POST['sociallymap_noindex'])) {
-                $_POST['sociallymap_noindex'] = 0;
+            if (!isset($_POST['sociallymap_noIndex'])) {
+                $_POST['sociallymap_noIndex'] = 0;
             }
-            if (!isset($_POST['sociallymap_nofolow'])) {
-                $_POST['sociallymap_nofolow'] = 0;
+            if (!isset($_POST['sociallymap_noFollow'])) {
+                $_POST['sociallymap_noFollow'] = 0;
             }
             if (!isset($_POST['sociallymap_readmore'])) {
                 $_POST['sociallymap_readmore'] = "";
@@ -717,8 +721,8 @@ class SociallymapPlugin
                 'publish_type'   => $_POST['sociallymap_publish_type'],
                 'display_type'   => $_POST['sociallymap_display_type'],
                 'link_canonical' => $_POST['sociallymap_link_canonical'],
-                'noindex'        => $_POST['sociallymap_noindex'],
-                'nofolow'        => $_POST['sociallymap_nofolow'],
+                'noIndex'        => $_POST['sociallymap_noIndex'],
+                'noFollow'        => $_POST['sociallymap_noFollow'],
                 'readmore'       => $_POST['sociallymap_readmore'],
                 'image'          => $_POST['sociallymap_image'],
             ];
@@ -793,3 +797,5 @@ class SociallymapPlugin
 register_activation_hook(__FILE__, ['SociallymapPlugin', 'install']);
 
 new SociallymapPlugin();
+
+

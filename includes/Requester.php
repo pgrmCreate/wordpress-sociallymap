@@ -6,7 +6,7 @@ class Requester
     {
         error_log("Token : # ".$token.PHP_EOL, 3, plugin_dir_path(__FILE__)."../logs/error.log");
         if (!is_callable('curl_init')) {
-            error_log("Curl no exist, request impossible..", 3, plugin_dir_path(__FILE__)."../logs/error.log");
+            Logger::error("Curl no exist, request impossible..");
             header("HTTP/1.0 501 Not Implemented");
             exit("Curl request impossible for wordpress server");
         }
@@ -30,7 +30,7 @@ class Requester
         $targetUrl = $urlCreator['baseUrl'].'/raw-exporter/'.$urlCreator['entityId'].
         '/feed?token='.$urlCreator['token'];
 
-        error_log("Request CURL at ".$targetUrl.PHP_EOL, 3, plugin_dir_path(__FILE__)."../logs/error.log");
+        logger::info("Request CURL at ".$targetUrl);
 
         $options = [
             // Return the transfer, don't display it
@@ -49,10 +49,7 @@ class Requester
         curl_close($curl);
 
         if ($_ENV['environnement'] == "dev") {
-            $logfilename = sprintf('dump-curl-%s.log', time());
-            $logfilenamedecode = sprintf('dump-curl-decode-%s.log', time());
-            error_log("*** ".$result, 3, plugin_dir_path(__FILE__).'../'.$logfilename);
-            error_log("**- ".print_r(json_decode($result), true), 3, plugin_dir_path(__FILE__).'../'.$logfilenamedecode);
+            Logger::info("Result of request : ".$result);
         }
 
         try {
@@ -70,7 +67,7 @@ class Requester
             }
         } catch (Exception $e) {
             header("HTTP/1.0 502 Bad Gateway");
-            error_log('Error: '.$e->getMessage().'\n', 3, plugin_dir_path(__FILE__)."../logs/error.log");
+            Logger::error($e->getMessage().'\n');
             exit;
         }
 
