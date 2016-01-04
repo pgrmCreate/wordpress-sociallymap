@@ -16,7 +16,7 @@ require_once(plugin_dir_path(__FILE__).'includes/Requester.php');
 require_once(plugin_dir_path(__FILE__).'includes/Logger.php');
 require_once(plugin_dir_path(__FILE__).'includes/MockRequester.php');
 require_once(plugin_dir_path(__FILE__).'includes/FileDownloader.php');
-require_once(plugin_dir_path(__FILE__).'includes/VideoDownloader.php');
+require_once(plugin_dir_path(__FILE__).'includes/MediaWordpressManager.php');
 require_once(plugin_dir_path(__FILE__).'includes/GithubUpdater.php');
 require_once(plugin_dir_path(__FILE__).'includes/SociallymapController.php');
 require_once(plugin_dir_path(__FILE__).'models/EntityCollection.php');
@@ -39,7 +39,7 @@ class SociallymapPlugin
         global $wpdb;
         $this->wpdb = $wpdb;
         $environment = '';
-        $_ENV['URL_SOCIALLYMAP'] =
+
         $_ENV["URL_SOCIALLYMAP"] = [
             "prod"    => "http://app.sociallymap.com",
             "staging" => "http://app.sociallymap-staging.com",
@@ -160,6 +160,7 @@ class SociallymapPlugin
         global $wp_query;
 
         if ($wp_query->get('sociallymap-plugin')) {
+            Logger::info('Intercept message in plugin');
 
             // We don't have the right parameters
             if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
@@ -513,7 +514,12 @@ class SociallymapPlugin
 
                 // Check if Media object exist
                 if (isset($value->media) && $value->media->type == "photo") {
-                    $imageSrc = $downloader->download($value->media->url, $value->guid);
+                    $pathTempory = plugin_dir_path(__FILE__).'tmp/d5ezd8z';
+                    $fileExtension = $downloader->download($value->media->url, $pathTempory);
+
+                    $mediaManager = new MediaWordpressManager();
+                    $imageSrc = $mediaManager->integrateMediaToWordpress($pathTempory, $fileExtension);
+
 
                     // WHEN NO ERROR : FORMAT
                     if (gettype($imageSrc) == "string") {
@@ -523,7 +529,10 @@ class SociallymapPlugin
                     }
                 } elseif (isset($value->link) && !empty($value->link->thumbnail)) {
                     // Check if Image thumbnail existing
-                    $imageSrc = $downloader->download($value->link->thumbnail, $value->guid);
+                    $pathTempory = plugin_dir_path(__FILE__).'tmp/d5ezd8z';
+                    $fileExtension = $downloader->download($value->link->thumbnail, $pathTempory);
+                    $mediaManager = new MediaWordpressManager();
+                    $imageSrc = $mediaManager->integrateMediaToWordpress($pathTempory, $fileExtension);
 
                     // Create the img tag
                     if (gettype($imageSrc) == "string") {
@@ -552,6 +561,7 @@ class SociallymapPlugin
 
                 // If imageTag is '' so is false else $isDownload is true
                 $isDownloaded = ($imageTag !== '');
+
 
                 // Attach image accordingly to options
                 $imageAttachment = '';

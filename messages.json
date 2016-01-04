@@ -1,6 +1,6 @@
 [
     {
-        "guid":"1e1571det45dr7dt4d38_1kjh0464agdd0353",
+        "guid":"1e1571det45dr7dt4dgdfgfgyrd38_1fsdfjh04ed4dz64agh89fg87k4odd0353",
         "date":"2015-12-17T13:07:03+01:00",
         "content":"C'est un article qui cause beaucoup de soucis..",
         "link":{
@@ -12,6 +12,36 @@
         "media":{
             "type":"photo",
             "url":"http://blog.sociallymap.com/app/uploads/2015/11/Rediffuser-une-publication-en-différé1.png"
+        }
+    },
+    {
+        "guid":"1e157894fre8laml8sn87p45a4ed4dz64agh89fg87k4odd0353",
+        "date":"2015-12-17T13:07:03+01:00",
+        "content":"Article de rugby qui traite de beaucoup de choses",
+        "link":{
+            "url":"http://www.courseaularge.com/actual-le-recit-du-chavirage.html",
+            "title":"L'équipe, superbe article",
+            "summary":"Un texte en intro",
+            "thumbnail":"http://blog.sociallymap.com/app/uploads/2015/11/Rediffuser-une-publication-en-différé1.png"
+            },
+        "media":{
+            "type":"photo",
+            "url":"http://medias.lequipe.fr/img-photo-jpg/delpoux-marc/1500000000564526/155:357,1984:1279-665-335-70/5b39b.jpg"
+        }
+    },
+    {
+        "guid":"1e157894fre8lam45a44trer4f6er489sfz64agh89fg87k4odd0353",
+        "date":"2015-12-17T13:07:03+01:00",
+        "content":"James Bond : après Spectre, deux nouveaux films 007 pour Christoph Waltz ?",
+        "link":{
+            "url":"http://www.courseaularge.com/actual-le-recit-du-chavirage.html",
+            "title":"James Bond : après Spectre, deux nouveaux films 007 pour Christoph Waltz ?",
+            "summary":"Rumeur à prendre avec des pincettes : Christoph Waltz, le méchant de Spectre, pourrait être de retour pour deux autres films de la saga 007. Mais à une seule condition...",
+            "thumbnail":"http://blog.sociallymap.com/app/uploads/2015/11/Rediffuser-une-publication-en-différé1.png"
+            },
+        "media":{
+            "type":"photo",
+            "url":"http://fr.web.img4.acsta.net/newsv7/16/01/04/09/33/512358.jpg"
         }
     }
 ]

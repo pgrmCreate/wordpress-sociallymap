@@ -24,11 +24,12 @@ class Entity
     {
         global $wpdb;
 
-        $entityRequest = $wpdb->prepare('SELECT * FROM '.$this->table.' WHERE id=%d', $id);
+        // $entityRequest = $wpdb->prepare('SELECT * FROM '.$this->table.' WHERE id=%d', $id);
+        $entityRequest = 'SELECT * FROM '.$this->table.' WHERE id='.$id;
         $entity = $wpdb->get_row($entityRequest);
 
         if (!isset($entity) || empty($entity)) {
-            Logger::alert('Entity : Not found row for request', $entityRequest);
+            Logger::alert('Entity : Not found row for request', [$entityRequest, $entity]);
             return 0;
         }
 

@@ -8,25 +8,14 @@ class FileDownloader
         $watcher = $this->watchUrlLocation($url);
         $response = $watcher['url'];
         $responseCurl = $watcher['responseCurl'];
-        $isEncoded = false;
 
         $pathEncoded = "";
         $urlbase   = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST);
         // encode and add slash (excepte first part)
-        if ($isEncoded) {
-            $pathEncoded = $url;
-        } else {
-            $fileUrlSplit = explode('/', parse_url($url, PHP_URL_PATH));
-            for ($i=0; $i<count($fileUrlSplit); $i++) {
-                ($i!=0) ? $slash = '/' : $slash = '';
-                $pathEncoded .= $slash.urlencode($fileUrlSplit[$i]);
-            }
-        }
 
         // check for facebook
         if ($urlbase == 'https://external.xx.fbcdn.net') {
             $url = $query['url'];
-            Logger::alert("Download facebook (try get url from GETVAR)", $query['url']);
         }
 
         // check header
@@ -34,37 +23,16 @@ class FileDownloader
             throw new fileDownloadException("Error Processing Request for ".$url, 1);
         }
 
-        $fileCuted = explode('.', $url);
-        $filename = $destinationFilename[count(explode('/', $destinationFilename))];
-        $currentExtension = $filename.'.'.$fileCuted[count($fileCuted)-1];
-        // SET NAME OF FILE
-        $currentFileName = $destinationFilename.$currentExtension;
-        // set local location
-        $currentLinkLocation = plugin_dir_path(__FILE__).$destinationFilename;
-
         //CREATE FILE
         $fp = fopen($destinationFilename, 'w+');
-        fwrite($fp, $this->getBodyFromCurl($responseCurl));
+        $bodyReponseCurl = $this->getBodyFromCurl($responseCurl);
+        fwrite($fp, $bodyReponseCurl);
         fclose($fp);
 
-        $file_array = [];
-        $file_array['name'] = $currentFileName;
+        // Get extension for return
+        $fileExtension = '.'.pathinfo($response, PATHINFO_EXTENSION);
 
-        // Download file to temp location.
-        $file_array['tmp_name'] = $currentLinkLocation;
-
-        // Do the validation and storage stuff.
-        $id = media_handle_sideload($file_array, 0, null);
-
-        $src = wp_get_attachment_url($id);
-
-        // @todo throw
-        if (gettype($src) != "string") {
-            Logger::error("ERROR DOWNLOAD", $src);
-            return $src;
-        }
-
-        return $src;
+        return $fileExtension;
     }
 
     private function curlRequestWithHeader($url)
@@ -105,8 +73,10 @@ class FileDownloader
         if (isset($headers['Content-Type'])) {
             $contentType = $headers['Content-Type'];
 
-            if (substr($contentType, 0, 6) == "image/") {
+            if (substr($contentType, 0, 6) == "image/" || substr($contentType, 0, 6) == "video/") {
                 $acceptHeader = true;
+            } else {
+                throw new fileDownloadException("ERROR DOWNLOAD : Header is not correct (not image or video)".$contentType, 1);
             }
         }
 
@@ -146,22 +116,39 @@ class FileDownloader
      */
     private function watchUrlLocation($url)
     {
+        $isEncoded = false;
+        $pathEncoded = "";
         while (true) {
             $responseCurl = $this->curlRequestWithHeader($url);
             $relocationUrl = $this->urlResponseRelocation($responseCurl);
             if ($relocationUrl) {
                 $url = $relocationUrl;
-                // $url = urldecode($url);
-                var_dump($url);
+                $url = urldecode($url);
+                // var_dump($url);
                 // die();
-                // $isEncoded = true;
+                $isEncoded = false;
             } else {
                 break;
             }
         }
 
+        $urlbase = $url;
+        if ($isEncoded) {
+            $pathEncoded = $url;
+        } else {
+            $fileUrlSplit = explode('/', parse_url($url, PHP_URL_PATH));
+            for ($i=0; $i<count($fileUrlSplit); $i++) {
+                ($i!=0) ? $slash = '/' : $slash = '';
+                $pathEncoded .= $slash.urlencode($fileUrlSplit[$i]);
+            }
+        }
+
+        $urlSend = parse_url($urlbase, PHP_URL_SCHEME).'://'.parse_url($urlbase, PHP_URL_HOST).$pathEncoded;
+        $responseCurl = $this->curlRequestWithHeader($urlSend);
+        $relocationUrl = $this->urlResponseRelocation($responseCurl);
+
         return [
-            'url' => $url,
+            'url' => $urlSend,
             'responseCurl' => $responseCurl,
         ];
     }

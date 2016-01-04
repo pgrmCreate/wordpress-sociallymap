@@ -2,15 +2,10 @@
 
 class FileDownloaderTest extends PHPUnit_Framework_TestCase
 {
-    protected function tearDown()
-    {
-        var_dump('toto');
-    }
-
     public function testDownload()
     {
-        $urlMedia = 'http://blog.sociallymap.com/app/uploads/2015/11/Rediffuser-une-publication-en-différé1.png';
-        $destination = "tmp/destination.png";
+        $urlMedia = 'http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4';
+        $destination = "tmp/fichier";
 
         $fileDownloader = new FileDownloader();
 
@@ -25,7 +20,7 @@ class FileDownloaderTest extends PHPUnit_Framework_TestCase
     public function testIfFileDontExistsResultInException()
     {
         $urlMedia = 'http://blog.sociallymap.com/inexistent-file.jpg';
-        $destination = 'tmp/file.jpg';
+        $destination = 'tmp/file';
 
         $fileDownloader = new FileDownloader();
 
@@ -35,7 +30,7 @@ class FileDownloaderTest extends PHPUnit_Framework_TestCase
     public function testRedirectionsAreFollowed()
     {
         $urlMedia = 'http://bit.ly/1m6zdSp';
-        $destination = "tmp/redirection_destination.png";
+        $destination = "tmp/redirection_destination";
 
         $fileDownloader = new FileDownloader();
 
