@@ -27,7 +27,7 @@
         } else {
         ?>
              <a href="?page=sociallymap-rss-add">
-                Ajouter une entités
+                Ajouter une entité
              </a>
         <?php
         }

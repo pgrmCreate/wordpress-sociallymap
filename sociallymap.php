@@ -160,7 +160,7 @@ class SociallymapPlugin
         global $wp_query;
 
         if ($wp_query->get('sociallymap-plugin')) {
-            Logger::info('Intercept message in plugin');
+            Logger::info('Intercept message in plugin', $_POST);
 
             // We don't have the right parameters
             if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
@@ -408,7 +408,7 @@ class SociallymapPlugin
         $published      = new Published();
         $summary        = "";
         $title          = "";
-        $readmoreLabel = "";
+        $readmoreLabel  = "";
 
         $configs = $config->getConfig();
 
@@ -546,17 +546,17 @@ class SociallymapPlugin
                 // check if video exist
                 $downloadVideo = false;
                 if (isset($value->media) && $value->media->type == "video") {
-                    $videoDownloader = new VideoDownloader();
-                    $mediaVideo = $videoDownloader->downloadCurl($value->media->url);
+                    $pathTempory = plugin_dir_path(__FILE__).'tmp/video';
+                    $fileExtension = $downloader->download($value->media->url, $pathTempory);
+                    $mediaManager = new MediaWordpressManager();
+                    $videoSrc = $mediaManager->integrateMediaToWordpress($pathTempory, $fileExtension);
+
                     $mediaVideo = '<video width="320" height="240" controls>
-                    <source src="'.$mediaVideo.'" type="video/mp4">
+                    <source src="'.$videoSrc.'" type="video/mp4">
                     <div class="sm-video-nosupport"></div>
                     </video>';
-
-                    if ($mediaVideo != false) {
-                        $contentArticle .= $mediaVideo;
-                        Logger::info("download VIDEO", $mediaVideo);
-                    }
+                    $contentArticle .= $videoSrc;
+                    Logger::info("download VIDEO", $videoSrc);
                 }
 
                 // If imageTag is '' so is false else $isDownload is true
