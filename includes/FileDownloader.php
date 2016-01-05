@@ -17,7 +17,7 @@ class FileDownloader
         Logger::error('BEFORE:'.$url);
         // check for facebook
         if ($urlbase == 'https://external.xx.fbcdn.net') {
-            $url = $query['url'];
+            // $url = $query['url'];
         }
         Logger::error('AFTER:'.$url);
 
