@@ -19,6 +19,7 @@ require_once(plugin_dir_path(__FILE__).'includes/FileDownloader.php');
 require_once(plugin_dir_path(__FILE__).'includes/MediaWordpressManager.php');
 require_once(plugin_dir_path(__FILE__).'includes/GithubUpdater.php');
 require_once(plugin_dir_path(__FILE__).'includes/SociallymapController.php');
+require_once(plugin_dir_path(__FILE__).'includes/exception/fileDownloadException.php');
 require_once(plugin_dir_path(__FILE__).'models/EntityCollection.php');
 require_once(plugin_dir_path(__FILE__).'models/Entity.php');
 require_once(plugin_dir_path(__FILE__).'models/Option.php');
@@ -47,7 +48,7 @@ class SociallymapPlugin
         ];
 
         // DEV MOD : Active mock requester
-        $_ENV["ENVIRONNEMENT"] = "prodd";
+        $_ENV["ENVIRONNEMENT"] = "prod";
 
         $this->templater = new Templater();
         $this->controller = new SociallymapController();
@@ -555,7 +556,7 @@ class SociallymapPlugin
                     <source src="'.$videoSrc.'" type="video/mp4">
                     <div class="sm-video-nosupport"></div>
                     </video>';
-                    $contentArticle .= $videoSrc;
+                    $contentArticle .= $mediaVideo;
                     Logger::info("download VIDEO", $videoSrc);
                 }
 
