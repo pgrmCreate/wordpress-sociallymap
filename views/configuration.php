@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$configOption = new ConfigOption();
 	$default_options = $configOption->getConfig();
 
@@ -10,7 +10,7 @@
 		} else  {
 			$isSaved = false;
 		}
-	
+
 ?>
 
 <?php
@@ -23,17 +23,17 @@
 			<button type="button" class="notice-dismiss">
 				<span class="screen-reader-text">Cacher l'information</span>
 			</button>
-		</div>	
+		</div>
 		<?php
 	}
 ?>
 
-<h1>Configuration du plugin sociallymap </h1>
+<h1>Configuration du Plugin</h1>
 
 <div class="wrap">
 	<form method="post" class="sociallymap_formRSS">
 		<input type="hidden" name="sociallymap_updateConfig" value="1">
-		
+
 		<table class="form-table">
 			<tbody>
 				<tr class="form-field form-required">
@@ -42,7 +42,7 @@
 					</th>
 					<td>
 						<select name="sociallymap_category">
-							<?php foreach (get_categories() as $key => $value) { ?>	
+							<?php foreach (get_categories() as $key => $value) { ?>
 							<option value="<?php echo $value->cat_ID;?>"
 								<?php if($value->cat_ID == $default_options[0]->default_value) echo "selected" ?> >
 								<?php echo $value->name;?></option>
@@ -61,7 +61,7 @@
 							</option>
 							<option value="tab" <?php if($default_options[1]->default_value == 'tab') echo ('selected');?> >
 								Nouvel onglet
-							</option>	
+							</option>
 						</select>
 					</td>
 				</tr>
@@ -78,7 +78,7 @@
 							<option value="future" <?php if($default_options[2]->default_value == 'future') echo ('selected');?>>En attente de publication</option>
 						</select>
 					</td>
-				</tr>				
+				</tr>
 			</tbody>
 		</table>
 

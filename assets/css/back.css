@@ -17,7 +17,7 @@ label.sociallymap_label > [type="checkbox"] {
 }
 
 .sm-categories-option > label > input {
-	float: right;
+	float: left;
 	clear: both;
 }
 

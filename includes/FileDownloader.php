@@ -5,6 +5,7 @@ class FileDownloader
     public function download($url, $destinationFilename)
     {
         // check relocation
+        Logger::error('INIT:'.$url);
         $watcher = $this->watchUrlLocation($url);
         $response = $watcher['url'];
         $responseCurl = $watcher['responseCurl'];
@@ -13,10 +14,12 @@ class FileDownloader
         $urlbase   = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST);
         // encode and add slash (excepte first part)
 
+        Logger::error('BEFORE:'.$url);
         // check for facebook
         if ($urlbase == 'https://external.xx.fbcdn.net') {
             $url = $query['url'];
         }
+        Logger::error('AFTER:'.$url);
 
         // check header
         if (!$this->checkResponseContentType($responseCurl)) {
@@ -76,7 +79,8 @@ class FileDownloader
             if (substr($contentType, 0, 6) == "image/" || substr($contentType, 0, 6) == "video/") {
                 $acceptHeader = true;
             } else {
-                throw new fileDownloadException("ERROR DOWNLOAD : Header is not correct (not image or video)".$contentType, 1);
+                $messageException = "ERROR DOWNLOAD : Header is not correct (not image or video)".$contentType.' | url: '.$response;
+                throw new fileDownloadException($messageException, 1);
             }
         }
 

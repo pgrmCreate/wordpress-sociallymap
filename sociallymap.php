@@ -48,7 +48,7 @@ class SociallymapPlugin
         ];
 
         // DEV MOD : Active mock requester
-        $_ENV["ENVIRONNEMENT"] = "prod";
+        $_ENV["ENVIRONNEMENT"] = "debug";
 
         $this->templater = new Templater();
         $this->controller = new SociallymapController();
@@ -516,7 +516,12 @@ class SociallymapPlugin
                 // Check if Media object exist
                 if (isset($value->media) && $value->media->type == "photo") {
                     $pathTempory = plugin_dir_path(__FILE__).'tmp/d5ezd8z';
-                    $fileExtension = $downloader->download($value->media->url, $pathTempory);
+
+                    try {
+                        $fileExtension = $downloader->download($value->media->url, $pathTempory);
+                    } catch (fileDownloadException $e) {
+                        Logger::error($e);
+                    }
 
                     $mediaManager = new MediaWordpressManager();
                     $imageSrc = $mediaManager->integrateMediaToWordpress($pathTempory, $fileExtension);
@@ -531,7 +536,13 @@ class SociallymapPlugin
                 } elseif (isset($value->link) && !empty($value->link->thumbnail)) {
                     // Check if Image thumbnail existing
                     $pathTempory = plugin_dir_path(__FILE__).'tmp/d5ezd8z';
-                    $fileExtension = $downloader->download($value->link->thumbnail, $pathTempory);
+
+                    try {
+                        $fileExtension = $downloader->download($value->link->thumbnail, $pathTempory);
+                    } catch (fileDownloadException $e) {
+                        Logger::error($e);
+                    }
+
                     $mediaManager = new MediaWordpressManager();
                     $imageSrc = $mediaManager->integrateMediaToWordpress($pathTempory, $fileExtension);
 
@@ -552,7 +563,7 @@ class SociallymapPlugin
                     $mediaManager = new MediaWordpressManager();
                     $videoSrc = $mediaManager->integrateMediaToWordpress($pathTempory, $fileExtension);
 
-                    $mediaVideo = '<video width="320" height="240" controls>
+                    $mediaVideo = '<video class="sm-video-display" controls>
                     <source src="'.$videoSrc.'" type="video/mp4">
                     <div class="sm-video-nosupport"></div>
                     </video>';

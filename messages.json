@@ -1,6 +1,36 @@
 [
     {
-        "guid":"1e1571det45dr7dt4dgdfgfgyrd38_1fsdfjh04ed4dz64agh89fg87k4odd0353",
+                "guid" : "684327408338599fsdf936458",
+                "date" : "2016-01-05T11:56:02+01:00",
+                "content" : "texte + link + vidz https://t.co/QEu1SoLXt6",
+                "link" : {
+                        "url" : "http://www.wpbeginner.com/beginners-guide/why-you-should-never-upload-a-video-to-wordpress/",
+                        "title" : "Why You Should Never Upload a Video to WordPress",
+                        "summary" : "Looking to add videos to your site? Instead of uploading it to WordPress, we recommend that you upload it to Youtube and then embed the video in WordPress.",
+                        "thumbnail" : "http://cdn.wpbeginner.com/wp-content/uploads/2010/08/embedvideos.gif"
+                    },
+                "media" : {
+                        "type":"video",
+                        "url":"http://media.sociallymap-staging.com/00/medias/Twitter/5/6/8/b/568b79bd7c5a003973ea1aca/5/6/8/b/568ba143039bd-2q-JH3wfS80NAA9N.mp4"
+                    }
+    },
+    {
+        "guid":"1e157894fre8ro5u4ysdfsfagh89fg87k454s54dfsdfsdfodd0353",
+        "date":"2015-12-17T13:07:03+01:00",
+        "content":"VIDEO ARTICLE BENOIT",
+        "link":{
+            "url":"http://www.courseaularge.com/actual-le-recit-du-chavirage.html",
+            "title":"Un article avec une vidéo",
+            "summary":"Un article avec une vidéo intégrer",
+            "thumbnail":"http://www.online-image-editor.com//styles/2014/images/example_image.png"
+            },
+        "media":{
+            "type":"video",
+            "url":"http://techslides.com/demos/sample-videos/small.mp4"
+        }
+    },
+    {
+        "guid":"1e1571det45dr7dt4dggdfgdfgdfgfgyrd38_1fsdfjh04gh5d4dz64agh89fg87k4odd0353",
         "date":"2015-12-17T13:07:03+01:00",
         "content":"C'est un article qui cause beaucoup de soucis..",
         "link":{

@@ -21,7 +21,7 @@ class MediaWordpressManager
         $src = wp_get_attachment_url($id);
         // @todo throw
         if (gettype($src) != "string") {
-            throw new fileDownloadException("ERROR DOWNLOAD FOR ".$src, 1);
+            throw new fileDownloadException("ERROR DOWNLOAD FOR ".$src." | url: ".$temporyFile, 1);
             return $src;
         } else {
             return $src;

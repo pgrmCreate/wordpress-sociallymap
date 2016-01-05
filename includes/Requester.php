@@ -48,7 +48,7 @@ class Requester
         // Close the curl session and free allocated memory
         curl_close($curl);
 
-        if ($_ENV['environnement'] == "dev") {
+        if ($_ENV['environnement'] == "dev" || $_ENV['environnement'] == "debug") {
             Logger::info("Result of request : ".$result);
         }
 

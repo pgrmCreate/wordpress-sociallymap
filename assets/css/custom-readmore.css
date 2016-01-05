@@ -1,6 +1,11 @@
+.sm-video-display {
+	width: 100%;
+}
+
 .sm-video-nosupport:before {
 	content: "Votre naviguateur ne supporte pas le format vidéo";
 	position: relative;
+	visibility: hidden;
 }
 
 .sm-modal-container {
