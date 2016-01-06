@@ -117,8 +117,8 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <label>Ne pas indexer les articles publiés via Sociallymap dans les moteurs de recherche</label>
                     </th>
                     <td>
-                        <input type="checkbox" name="sociallymap_noindex" class="sociallymap_formRSS_newFlux" value="1"
-                        <?php if ($editingEntity->options->noindex == "1") echo("checked"); ?> >
+                        <input type="checkbox" name="sociallymap_noIndex" class="sociallymap_formRSS_newFlux" value="1"
+                        <?php if ($editingEntity->options->noIndex == "1") echo("checked"); ?> >
                     </td>
                 </tr>
                 <tr class="form-field form-required">
@@ -126,8 +126,8 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <label>Ne pas suivre les liens (moteur de recherche)</label>
                     </th>
                     <td>
-                        <input type="checkbox" name="sociallymap_nofolow" class="sociallymap_formRSS_newFlux" value="1"
-                        <?php if ($editingEntity->options->nofolow == "1") echo("checked"); ?> >
+                        <input type="checkbox" name="sociallymap_noFollow" class="sociallymap_formRSS_newFlux" value="1"
+                        <?php if ($editingEntity->options->noFollow == "1") echo("checked"); ?> >
                     </td>
                 </tr>
                 <tr class="form-field form-required">

@@ -2,40 +2,49 @@
 
 class FileDownloader
 {
+    private $currentExtension;
     public function download($url, $destinationFilename)
     {
+        // check facebook
+        $urlbase   = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST);
+
+        // check for facebook
+        if ($urlbase == 'https://external.xx.fbcdn.net') {
+            $query = parse_url($url, PHP_URL_QUERY);
+            parse_str($query, $params);
+            $url = $params['url'];
+        }
+
         // check relocation
-        Logger::error('INIT:'.$url);
         $watcher = $this->watchUrlLocation($url);
         $response = $watcher['url'];
         $responseCurl = $watcher['responseCurl'];
 
         $pathEncoded = "";
-        $urlbase   = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST);
         // encode and add slash (excepte first part)
 
-        Logger::error('BEFORE:'.$url);
-        // check for facebook
-        if ($urlbase == 'https://external.xx.fbcdn.net') {
-            // $url = $query['url'];
-        }
-        Logger::error('AFTER:'.$url);
+
 
         // check header
         if (!$this->checkResponseContentType($responseCurl)) {
             throw new fileDownloadException("Error Processing Request for ".$url, 1);
         }
 
-        //CREATE FILE
-        $fp = fopen($destinationFilename, 'w+');
-        $bodyReponseCurl = $this->getBodyFromCurl($responseCurl);
-        fwrite($fp, $bodyReponseCurl);
-        fclose($fp);
-
         // Get extension for return
         $fileExtension = '.'.pathinfo($response, PATHINFO_EXTENSION);
 
-        return $fileExtension;
+        //CREATE FILE
+        $fp = tempnam($destinationFilename, '');
+        chmod($fp, 0766);
+        $handle = fopen($fp.$this->currentExtension, 'w+');
+        $bodyReponseCurl = $this->getBodyFromCurl($responseCurl);
+        fwrite($handle, $bodyReponseCurl);
+        fclose($handle);
+
+        return [
+            'filename' => $fp,
+            'extension' => $this->currentExtension,
+        ];
     }
 
     private function curlRequestWithHeader($url)
@@ -78,6 +87,7 @@ class FileDownloader
 
             if (substr($contentType, 0, 6) == "image/" || substr($contentType, 0, 6) == "video/") {
                 $acceptHeader = true;
+                $this->currentExtension = '.'.substr($contentType, 6);
             } else {
                 $messageException = "ERROR DOWNLOAD : Header is not correct (not image or video)".$contentType.' | url: '.$response;
                 throw new fileDownloadException($messageException, 1);

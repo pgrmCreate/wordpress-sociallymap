@@ -51,10 +51,10 @@ class Option
 
         // UPDATE CATEGORY
         if (isset($data['category'])) {
-            $currentCatsRequest = "
-                SELECT value FROM $this->table
-                WHERE entity_id = $data[idSource]
-                AND options_id = 1";
+            $currentCatsRequest = '
+                SELECT value FROM '.$this->table.'
+                WHERE entity_id = '.$data[idSource].'
+                AND options_id = 1';
             $options = $wpdb->get_results($currentCatsRequest);
 
             $optCats = [];
@@ -135,7 +135,7 @@ class Option
         }
 
         // UPDATE IMAGE ATTACHMENT
-        if (isset($data['image'])) {
+        if (isset($data['readmore'])) {
             $wpdb->update(
                 $this->table,
                 [
@@ -149,11 +149,11 @@ class Option
         }
 
         // UPDATE LINK CANONICAL
-        if (isset($data['noindex'])) {
+        if (isset($data['noIndex'])) {
             $wpdb->update(
                 $this->table,
                 [
-                    'value' => $data['noindex'],    // string
+                    'value' => $data['noIndex'],    // string
                 ],
                 [
                     'entity_id' => $data['idSource'],
@@ -163,11 +163,11 @@ class Option
         }
 
         // UPDATE LINK NOFOLOW
-        if (isset($data['noindex'])) {
+        if (isset($data['noFollow'])) {
             $wpdb->update(
                 $this->table,
                 [
-                    'value' => $data['nofolow'],    // string
+                    'value' => $data['noFollow'],    // string
                 ],
                 [
                     'entity_id' => $data['idSource'],

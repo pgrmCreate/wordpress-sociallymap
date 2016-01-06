@@ -30,7 +30,7 @@ class SociallymapController
 
     public function editEntity()
     {
-        $entity = new Entity;
+        $entity = new Entity();
         $editingEntity = $entity->getById($_GET['id']);
 
         $categoryList = [];
@@ -38,41 +38,55 @@ class SociallymapController
         $display_type = "modal";
         $link_canonical = "1";
         foreach ($editingEntity->options as $key => $value) {
-            if ($value->options_id == '1') {
-                $categoryList[] = $value->value;
-            }
-            if ($value->options_id == '2') {
-                $display_type = $value->value;
-            }
-            if ($value->options_id == '3') {
-                $publish_type = $value->value;
-            }
-            if ($value->options_id == '4') {
-                $link_canonical = $value->value;
-            }
-            if ($value->options_id == '5') {
-                $image = $value->value;
-            }
-            if ($value->options_id == '6') {
-                $readmore = stripslashes($value->value);
-            }
-            if ($value->options_id == '7') {
-                $noindex = $value->value;
-            }
-            if ($value->options_id == '8') {
-                $nofolow = $value->value;
+            switch ($value->options_id) {
+                case '1':
+                    $categoryList[] = $value->value;
+                    break;
+
+                case '2':
+                    $display_type = $value->value;
+                    break;
+
+                case '3':
+                    $publish_type = $value->value;
+                    break;
+
+                case '4':
+                    $link_canonical = $value->value;
+                    break;
+
+                case '5':
+                    $image = $value->value;
+                    break;
+
+                case '6':
+                    $readmore = stripslashes($value->value);
+                    break;
+
+                case '7':
+                    $noIndex = $value->value;
+                    break;
+
+                case '8':
+                    $noFollow = $value->value;
+                    break;
+
+                default:
+                    # code...
+                    break;
             }
         }
 
-        $editingEntity->options = new stdClass;
+        $editingEntity->options = new stdClass();
         $editingEntity->options->category = $categoryList;
         $editingEntity->options->publish_type = $publish_type;
         $editingEntity->options->display_type = $display_type;
         $editingEntity->options->link_canonical = $link_canonical;
         $editingEntity->options->image = $image;
-        $editingEntity->options->noindex = $noindex;
-        $editingEntity->options->nofolow = $nofolow;
+        $editingEntity->options->noIndex = $noIndex;
+        $editingEntity->options->noFollow = $noFollow;
         $editingEntity->options->readmore = $readmore;
+
 
         $sendItem['editingEntity'] = $editingEntity;
 

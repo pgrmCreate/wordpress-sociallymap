@@ -73,13 +73,13 @@ class EntityCollection
 
         $dataOption = [
             'option_id' => 7,
-            'value'     => $data['noindex']
+            'value'     => $data['noIndex']
         ];
         $option->save($dataOption, $entityID);
 
         $dataOption = [
             'option_id' => 8,
-            'value'     => $data['nofolow']
+            'value'     => $data['noFollow']
         ];
         $option->save($dataOption, $entityID);
     }
@@ -106,8 +106,8 @@ class EntityCollection
             'display_type'   =>  $data['display_type'],
             'link_canonical' =>  $data['link_canonical'],
             'image'          =>  $data['image'],
-            'noindex'        =>  $data['noindex'],
-            'nofolow'        =>  $data['nofolow'],
+            'noIndex'        =>  $data['noIndex'],
+            'noFollow'        =>  $data['noFollow'],
             'readmore'        =>  $data['readmore'],
         ];
         $option->update($optionsEntity);

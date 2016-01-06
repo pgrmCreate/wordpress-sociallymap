@@ -25,6 +25,7 @@ require_once(plugin_dir_path(__FILE__).'models/Entity.php');
 require_once(plugin_dir_path(__FILE__).'models/Option.php');
 require_once(plugin_dir_path(__FILE__).'models/ConfigOption.php');
 require_once(plugin_dir_path(__FILE__).'models/Published.php');
+require_once(ABSPATH . 'wp-admin/includes/image.php');
 
 
 class SociallymapPlugin
@@ -48,7 +49,7 @@ class SociallymapPlugin
         ];
 
         // DEV MOD : Active mock requester
-        $_ENV["ENVIRONNEMENT"] = "debug";
+        $_ENV["ENVIRONNEMENT"] = "prodpor";
 
         $this->templater = new Templater();
         $this->controller = new SociallymapController();
@@ -78,6 +79,15 @@ class SociallymapPlugin
         add_filter('the_content', [$this, "prePosting"]);
 
         add_filter('init', [$this, "initialization"]);
+        // add_action('plugins_loaded', [$this, 'surcharge']);
+    }
+
+    public function surcharge()
+    {
+        Logger::error('TEST MAIL');
+        $resultEmail = wp_mail('jean-baptiste@alhena-conseil.com', 'Wordpress plugin : Erreur critique', 'test mail');
+        echo("mail result : ".$resultEmail);
+        die();
     }
 
     public function rewriteCanonical($content)
@@ -252,27 +262,29 @@ class SociallymapPlugin
         $noIndex = 0;
         $follow = 1;
 
-        foreach ($entityPicked->options as $key => $value) {
-            if ($value->options_id == '7') {
-                $noIndex = $value->value;
+        if ($entityPicked) {
+
+            foreach ($entityPicked->options as $key => $value) {
+                if ($value->options_id == '7') {
+                    $noIndex = $value->value;
+                }
+                if ($value->options_id == '8') {
+                    $follow = !$value->value;
+                }
             }
-            if ($value->options_id == '8') {
-                $follow = !$value->value;
+
+            // @todo manage conditions
+            $contentArr = [];
+            if ($noIndex) {
+                $contentArr[] = 'noIndex';
             }
+            if ($follow) {
+                $contentArr[] = 'follow';
+            }
+
+            echo '<meta name="robots" content="' . implode(', ', $contentArr) . '">';
+
         }
-
-        // @todo manage conditions
-        $contentArr = [];
-        if ($noIndex) {
-            $contentArr[] = 'noIndex';
-        }
-        if ($follow) {
-            $contentArr[] = 'follow';
-        }
-
-        echo '<meta name="robots" content="' . implode(', ', $contentArr) . '">';
-
-
 
         // if ($noIndex == 1 && $noFollow == 1) {
         //     echo ('<meta name="robots" content="noIndex,follow">');
@@ -513,18 +525,20 @@ class SociallymapPlugin
                     continue;
                 }
 
+                $pathTempory = plugin_dir_path(__FILE__).'tmp/';
                 // Check if Media object exist
                 if (isset($value->media) && $value->media->type == "photo") {
-                    $pathTempory = plugin_dir_path(__FILE__).'tmp/d5ezd8z';
-
                     try {
-                        $fileExtension = $downloader->download($value->media->url, $pathTempory);
+                        $returnDownload = $downloader->download($value->media->url, $pathTempory);
+                        $filename = $returnDownload['filename'];
+                        $fileExtension = $returnDownload['extension'];
+
                     } catch (fileDownloadException $e) {
-                        Logger::error($e);
+                        Logger::error('error download'.$e);
                     }
 
                     $mediaManager = new MediaWordpressManager();
-                    $imageSrc = $mediaManager->integrateMediaToWordpress($pathTempory, $fileExtension);
+                    $imageSrc = $mediaManager->integrateMediaToWordpress($filename, $fileExtension);
 
 
                     // WHEN NO ERROR : FORMAT
@@ -533,18 +547,18 @@ class SociallymapPlugin
                     } else {
                         $imageTag = '';
                     }
-                } elseif (isset($value->link) && !empty($value->link->thumbnail)) {
+                } elseif (isset($value->link) && !empty($value->link->thumbnail) && $value->link->thumbnail != " ") {
                     // Check if Image thumbnail existing
-                    $pathTempory = plugin_dir_path(__FILE__).'tmp/d5ezd8z';
-
                     try {
-                        $fileExtension = $downloader->download($value->link->thumbnail, $pathTempory);
+                        $returnDownload = $downloader->download($value->link->thumbnail, $pathTempory);
+                        $filename = $returnDownload['filename'];
+                        $fileExtension = $returnDownload['extension'];
                     } catch (fileDownloadException $e) {
-                        Logger::error($e);
+                        Logger::error('error download'.$e);
                     }
 
                     $mediaManager = new MediaWordpressManager();
-                    $imageSrc = $mediaManager->integrateMediaToWordpress($pathTempory, $fileExtension);
+                    $imageSrc = $mediaManager->integrateMediaToWordpress($filename, $fileExtension);
 
                     // Create the img tag
                     if (gettype($imageSrc) == "string") {
@@ -558,10 +572,11 @@ class SociallymapPlugin
                 // check if video exist
                 $downloadVideo = false;
                 if (isset($value->media) && $value->media->type == "video") {
-                    $pathTempory = plugin_dir_path(__FILE__).'tmp/video';
-                    $fileExtension = $downloader->download($value->media->url, $pathTempory);
+                    $returnDownload = $downloader->download($value->media->url, $pathTempory);
+                    $filename = $returnDownload['filename'];
+                    $fileExtension = $returnDownload['extension'];
                     $mediaManager = new MediaWordpressManager();
-                    $videoSrc = $mediaManager->integrateMediaToWordpress($pathTempory, $fileExtension);
+                    $videoSrc = $mediaManager->integrateMediaToWordpress($filename, $fileExtension);
 
                     $mediaVideo = '<video class="sm-video-display" controls>
                     <source src="'.$videoSrc.'" type="video/mp4">
