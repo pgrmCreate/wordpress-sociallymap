@@ -49,7 +49,7 @@ class SociallymapPlugin
         ];
 
         // DEV MOD : Active mock requester
-        $_ENV["ENVIRONNEMENT"] = "prod";
+        $_ENV["ENVIRONNEMENT"] = "dev";
 
         $this->templater = new Templater();
         $this->controller = new SociallymapController();

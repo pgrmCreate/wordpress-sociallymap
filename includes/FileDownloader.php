@@ -40,6 +40,7 @@ class FileDownloader
         $bodyReponseCurl = $this->getBodyFromCurl($responseCurl);
         fwrite($handle, $bodyReponseCurl);
         fclose($handle);
+        unlink($fp);
 
         return [
             'filename' => $fp,
