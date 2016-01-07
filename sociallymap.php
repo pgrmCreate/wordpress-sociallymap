@@ -25,7 +25,7 @@ require_once(plugin_dir_path(__FILE__).'models/Entity.php');
 require_once(plugin_dir_path(__FILE__).'models/Option.php');
 require_once(plugin_dir_path(__FILE__).'models/ConfigOption.php');
 require_once(plugin_dir_path(__FILE__).'models/Published.php');
-require_once(ABSPATH . 'wp-admin/includes/image.php');
+
 
 
 class SociallymapPlugin
@@ -67,7 +67,7 @@ class SociallymapPlugin
         }
 
         // todo comment routing system on all code
-        // add_action('init', [$this, 'rewriteInit']);
+        add_action('init', [$this, 'rewriteInit']);
         add_action('template_redirect', [$this, 'redirectIntercept']);
 
         add_action('admin_menu', [$this, 'addAdminMenu']);
@@ -483,7 +483,7 @@ class SociallymapPlugin
                 exit();
             }
 
-            Logger::info('See return data', $jsonData);
+            Logger::messageReceive('See return data', $jsonData);
 
             foreach ($jsonData as $key => $value) {
                 $summary = "";
@@ -550,7 +550,6 @@ class SociallymapPlugin
                     $mediaManager = new MediaWordpressManager();
                     $imageSrc = $mediaManager->integrateMediaToWordpress($filename, $fileExtension);
 
-
                     // WHEN NO ERROR : FORMAT
                     if (gettype($imageSrc) == "string") {
                         $imageTag = '<img class="aligncenter" src="'.$imageSrc.'" alt="">';
@@ -616,6 +615,16 @@ class SociallymapPlugin
                 // Publish the post
                 $title = $value->content;
                 if ($canBePublish == true) {
+                        $dataPublish = [
+                            $title,
+                            $contentArticle,
+                            $author,
+                            $imageAttachment,
+                            $entityListCategory,
+                            $entityPublishType];
+
+                        Logger::info("Try publish : ", $dataPublish);
+
                         $articlePublished = $publisher->publish(
                             $title,
                             $contentArticle,

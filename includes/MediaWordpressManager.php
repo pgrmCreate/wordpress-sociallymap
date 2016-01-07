@@ -1,5 +1,11 @@
 <?php
 
+if (!function_exists('media_handle_upload')) {
+        require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+        require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+        require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+}
+
 class MediaWordpressManager
 {
     public function integrateMediaToWordpress($temporyFile, $fileExtension)

@@ -5,6 +5,7 @@ class Logger
     const ERROR = 1;
     const ALERT = 2;
     const INFO  = 3;
+    const MESSAGE_RECEIVE  = 4;
 
     public static function alert($message, $context = [])
     {
@@ -19,6 +20,11 @@ class Logger
     public static function info($message, $context = [])
     {
         self::log(self::INFO, $message, $context);
+    }
+
+    public static function messageReceive($message, $context = [])
+    {
+        self::log(self::MESSAGE_RECEIVE, $message, $context);
     }
 
     private static function log($level, $message, $context = [])
@@ -37,6 +43,14 @@ class Logger
             case self::ERROR:
                 $label    = "ERROR";
                 $filename = "error";
+                $mailMessage = 'Une erreur critique est survenu: '.$message;
+                // wp_mail('jean-baptiste@alhena-conseil.com', 'Wordpress plugin : Erreur critique', $mailMessage);
+                break;
+
+            case self::MESSAGE_RECEIVE:
+                $label    = "MESSAGE RECEIVE";
+                $filename = "messageReceive";
+                $mailMessage = 'Une erreur critique est survenu: '.$message;
                 break;
 
             default:
