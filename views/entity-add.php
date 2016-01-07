@@ -120,7 +120,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <label>Ne pas indexer les articles publiés via Sociallymap dans les moteurs de recherche</label>
                     </th>
                     <td>
-                        <input type="checkbox" name="sociallymap_noindex" value="1">
+                        <input type="checkbox" name="sociallymap_noIndex" value="1">
                     </td>
                 </tr>
                 <tr class="form-field form-required">
@@ -128,7 +128,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <label>Ne pas suivre les liens (nofollow)</label>
                     </th>
                     <td>
-                        <input type="checkbox" name="sociallymap_nofolow" value="1">
+                        <input type="checkbox" name="sociallymap_noFollow" value="1">
                     </td>
                 </tr>
                 <tr class="form-field">

@@ -1,12 +1,12 @@
 <?php
 /*
 Plugin Name: Sociallymap
-Plugin URI: https://github.com/alhenaconseil/wordpress-sociallymap
+Plugin URI: http://www.sociallymap.com/
 Description: A plugin that let the sociallymap users post on their blog from their mapping
 Version: 1.0
 Author: Sociallymap
 Author URI: http://www.sociallymap.com/
-License: MIT
+License: Alhena © 2016
 */
 
 require_once(plugin_dir_path(__FILE__).'includes/Templater.php');
@@ -49,7 +49,7 @@ class SociallymapPlugin
         ];
 
         // DEV MOD : Active mock requester
-        $_ENV["ENVIRONNEMENT"] = "prodpor";
+        $_ENV["ENVIRONNEMENT"] = "prod";
 
         $this->templater = new Templater();
         $this->controller = new SociallymapController();
@@ -59,9 +59,6 @@ class SociallymapPlugin
 
         $this->link_canononical = "";
 
-        $builder = new DbBuilder();
-        $builder->dbInitialisation();
-
         if (array_key_exists('sociallymap_postRSS', $_POST)    ||
             array_key_exists('sociallymap_deleteRSS', $_POST)  ||
             array_key_exists('sociallymap_updateRSS', $_POST)  ||
@@ -70,16 +67,25 @@ class SociallymapPlugin
         }
 
         // todo comment routing system on all code
-        add_action('init', [$this, 'rewriteInit']);
+        // add_action('init', [$this, 'rewriteInit']);
         add_action('template_redirect', [$this, 'redirectIntercept']);
 
         add_action('admin_menu', [$this, 'addAdminMenu']);
         add_action('admin_menu', [$this, 'githubConfiguration']);
+
         // add_action('the_post', [$this, "rewriteCanonical"]);
         add_filter('the_content', [$this, "prePosting"]);
 
         add_filter('init', [$this, "initialization"]);
         // add_action('plugins_loaded', [$this, 'surcharge']);
+
+        register_activation_hook(__FILE__, [$this, 'activatePlugin']);
+    }
+
+    public function activatePlugin()
+    {
+        $builder = new DbBuilder();
+        $builder->dbInitialisation();
     }
 
     public function surcharge()
@@ -151,9 +157,13 @@ class SociallymapPlugin
 
         if ($_ENV['ENVIRONNEMENT'] == "dev") {
             $collector = new EntityCollection();
-            $entity = $collector->getByEntityId('56571e787c5a008811840ff4');
+            $entity = $collector->getByEntityId('568ccccd7c5a00c6629e884f');
 
-            $this->manageMessages($entity);
+            if (!$entity) {
+                Logger::error('DEV MODE : Entity cann\'t be load!');
+            } else {
+                $this->manageMessages($entity);
+            }
         }
     }
 
@@ -423,7 +433,7 @@ class SociallymapPlugin
         $title          = "";
         $readmoreLabel  = "";
 
-        $configs = $config->getConfig();
+        // $configs = $config->getConfig();
 
         // get author id
         $author = $entity->author_id;
