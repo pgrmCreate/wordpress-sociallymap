@@ -277,7 +277,7 @@ class SociallymapPlugin
                     $noIndex = $value->value;
                 }
                 if ($value->options_id == '8') {
-                    $follow = !$value->value;
+                    $follow = $value->value;
                 }
             }
 
@@ -287,7 +287,7 @@ class SociallymapPlugin
                 $contentArr[] = 'noIndex';
             }
             if ($follow) {
-                $contentArr[] = 'follow';
+                $contentArr[] = 'noFollow';
             }
 
             echo '<meta name="robots" content="' . implode(', ', $contentArr) . '">';
@@ -351,6 +351,10 @@ class SociallymapPlugin
             }
 
             if ($value->options_id == '4') {
+                $link_canonical = $value->value;
+            }
+
+            if ($value->options_id == '8') {
                 $link_canonical = $value->value;
             }
         }
