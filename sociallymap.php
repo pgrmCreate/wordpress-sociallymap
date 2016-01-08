@@ -72,7 +72,7 @@ class SociallymapPlugin
         add_action('admin_menu', [$this, 'githubConfiguration']);
 
         // add_action('the_post', [$this, "rewriteCanonical"]);
-        add_filter('the_content', [$this, "prePosting"]);
+        // add_filter('the_content', [$this, "prePosting"]);
 
         add_filter('init', [$this, "initialization"]);
         // add_action('plugins_loaded', [$this, 'surcharge']);
@@ -659,6 +659,40 @@ class SociallymapPlugin
         $this->controller->$params();
     }
 
+    public function updatePosts()
+    {
+        $args = [
+        'posts_per_page'   => -1,
+        'offset'           => 0,
+        'category'         => '',
+        'category_name'    => '',
+        'orderby'          => 'date',
+        'order'            => 'DESC',
+        'include'          => '',
+        'exclude'          => '',
+        'meta_key'         => '',
+        'meta_value'       => '',
+        'post_type'        => 'post',
+        'post_mime_type'   => '',
+        'post_parent'      => '',
+        'author'           => '',
+        'post_status'      => 'publish',
+        'suppress_filters' => true,
+        ];
+
+        $posts_array = get_posts($args);
+
+        foreach ($posts_array as $key => $value) {
+            $newContent = $this->prePosting($value->post_content);
+            $postUpdate = [
+                'ID' => $value->ID,
+                'post_content' => $newContent,
+            ];
+
+            wp_update_post($postUpdate);
+        }
+    }
+
     public function entityManager()
     {
         $entityCollection = new EntityCollection();
@@ -727,6 +761,7 @@ class SociallymapPlugin
             ];
 
             $entityCollection->update($data);
+            $this->updatePosts();
             wp_redirect($linkToList, 301);
             exit;
         }
