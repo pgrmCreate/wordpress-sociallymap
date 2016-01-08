@@ -26,8 +26,6 @@ require_once(plugin_dir_path(__FILE__).'models/Option.php');
 require_once(plugin_dir_path(__FILE__).'models/ConfigOption.php');
 require_once(plugin_dir_path(__FILE__).'models/Published.php');
 
-
-
 class SociallymapPlugin
 {
     private $wpdb;
@@ -54,7 +52,7 @@ class SociallymapPlugin
         $this->templater = new Templater();
         $this->controller = new SociallymapController();
 
-        $configsOption = new ConfigOption();
+        // $configsOption = new ConfigOption();
         // $this->config_default_value = $configsOption->getConfig();
 
         $this->link_canononical = "";
