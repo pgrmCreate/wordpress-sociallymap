@@ -544,13 +544,12 @@ class SociallymapPlugin
                         $returnDownload = $downloader->download($value->media->url, $pathTempory);
                         $filename = $returnDownload['filename'];
                         $fileExtension = $returnDownload['extension'];
+                        $mediaManager = new MediaWordpressManager();
+                        $imageSrc = $mediaManager->integrateMediaToWordpress($filename, $fileExtension);
 
                     } catch (fileDownloadException $e) {
                         Logger::error('error download'.$e);
                     }
-
-                    $mediaManager = new MediaWordpressManager();
-                    $imageSrc = $mediaManager->integrateMediaToWordpress($filename, $fileExtension);
 
                     // WHEN NO ERROR : FORMAT
                     if (gettype($imageSrc) == "string") {
@@ -627,6 +626,8 @@ class SociallymapPlugin
 
                         Logger::info("Try publish : ", $dataPublish);
 
+                        $contentArticle = $this->prePosting($contentArticle);
+
                         $articlePublished = $publisher->publish(
                             $title,
                             $contentArticle,
@@ -638,7 +639,7 @@ class SociallymapPlugin
 
                         if (!$articlePublished) {
                             // throw new Exception('Error from post publish', 1);
-                            Logger::error("Error from post publish");
+                            Logger::error("Error from post publish", [$title]);
                         } else {
                             $entityObject->updateHistoryPublisher($entity->id, $entity->counter);
                             // save published article
