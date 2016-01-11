@@ -1,5 +1,5 @@
 === Plugin Name ===
-Plugin Name: Sociallymap
+Plugin Name: Sociallymap Connect
 Contributors: Alhena Conseil
 Plugin URI: http://www.sociallymap.com/
 Description: A plugin that let the sociallymap users post on their blog from their mapping
