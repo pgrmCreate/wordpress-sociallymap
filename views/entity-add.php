@@ -55,6 +55,14 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <input type="text" placeholder="Identifiant de l'entité sociallymap" name="sociallymap_entityId" >
                     </td>
                 </tr>
+                <tr class="form-field form-required">
+                    <th>
+                        <label>Ajout de la balise 'more'</label>
+                    </th>
+                    <td>
+                        <input type="checkbox" name="sociallymap_morebalise" value="1" checked>
+                    </td>
+                </tr>
 
                 <tr>
                     <th><label>Catégorie cible de la publication :</label></th>

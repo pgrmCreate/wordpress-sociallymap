@@ -175,5 +175,19 @@ class Option
                 ]
             );
         }
+
+        // UPDATE BALISE READMORE
+        if (isset($data['morebalise'])) {
+            $wpdb->update(
+                $this->table,
+                [
+                    'value' => $data['morebalise'],    // string
+                ],
+                [
+                    'entity_id' => $data['idSource'],
+                    'options_id' => 9
+                ]
+            );
+        }
     }
 }

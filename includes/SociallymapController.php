@@ -71,6 +71,10 @@ class SociallymapController
                     $noFollow = $value->value;
                     break;
 
+                case '9':
+                    $morebalise = $value->value;
+                    break;
+
                 default:
                     # code...
                     break;
@@ -86,6 +90,7 @@ class SociallymapController
         $editingEntity->options->noIndex = $noIndex;
         $editingEntity->options->noFollow = $noFollow;
         $editingEntity->options->readmore = $readmore;
+        $editingEntity->options->morebalise = $morebalise;
 
 
         $sendItem['editingEntity'] = $editingEntity;

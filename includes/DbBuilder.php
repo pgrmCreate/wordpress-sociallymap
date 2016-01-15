@@ -102,6 +102,11 @@ class DbBuilder
             'label' => 'no folow',
             'default_value' => 0,
             ], ['%s', '%d']);
+
+            $this->wpdb->insert($this->tableOptions, [
+            'label' => 'balise more',
+            'default_value' => 1,
+            ], ['%s', '%d']);
         }
 
         if ($this->wpdb->get_var("SHOW TABLES LIKE '$this->tableEntityOptions'") != $this->tableEntityOptions) {

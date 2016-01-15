@@ -357,8 +357,17 @@ class SociallymapPlugin
             if ($value->options_id == '8') {
                 $link_canonical = $value->value;
             }
+
+            if ($value->options_id == '9') {
+                $morebalise = $value->value;
+            }
         }
 
+        if (isset($morebalise) && $morebalise == "1") {
+            $content = preg_replace("#<p><a class='sm-readmore#", '<!--more--><p><a class=\'sm-readmore', $content);
+        } else {
+            $content = preg_replace("#<!--more-->#", '', $content);
+        }
 
         $content = preg_replace("#data-display-type#", 'data-display-type="'.$display_type.'"', $content);
 
@@ -740,6 +749,10 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_noFollow'])) {
                 $_POST['sociallymap_noFollow'] = 0;
             }
+
+            if (!isset($_POST['sociallymap_morebalise'])) {
+                $_POST['sociallymap_morebalise'] = 0;
+            }
             if (!isset($_POST['sociallymap_readmore'])) {
                 $_POST['sociallymap_readmore'] = "";
             } else {
@@ -758,6 +771,7 @@ class SociallymapPlugin
                 'noFollow'       => $_POST['sociallymap_noFollow'],
                 'image'          => $_POST['sociallymap_image'],
                 'readmore'       => $_POST['sociallymap_readmore'],
+                'morebalise'     => $_POST['sociallymap_morebalise'],
                 'id'             => $_GET['id'],
             ];
 
@@ -801,6 +815,9 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_readmore'])) {
                 $_POST['sociallymap_readmore'] = "";
             }
+            if (!isset($_POST['sociallymap_morebalise'])) {
+                $_POST['sociallymap_morebalise'] = "";
+            }
 
             if ($isValid == false) {
                 $_POST['sociallymap_isNotValid'] = true;
@@ -816,9 +833,10 @@ class SociallymapPlugin
                 'display_type'   => $_POST['sociallymap_display_type'],
                 'link_canonical' => $_POST['sociallymap_link_canonical'],
                 'noIndex'        => $_POST['sociallymap_noIndex'],
-                'noFollow'        => $_POST['sociallymap_noFollow'],
+                'noFollow'       => $_POST['sociallymap_noFollow'],
                 'readmore'       => $_POST['sociallymap_readmore'],
                 'image'          => $_POST['sociallymap_image'],
+                'morebalise'     => $_POST['sociallymap_morebalise'],
             ];
 
             $entityCollection->add($data);
