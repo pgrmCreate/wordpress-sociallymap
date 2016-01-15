@@ -82,6 +82,12 @@ class EntityCollection
             'value'     => $data['noFollow']
         ];
         $option->save($dataOption, $entityID);
+
+        $dataOption = [
+            'option_id' => 9,
+            'value'     => $data['morebalise']
+        ];
+        $option->save($dataOption, $entityID);
     }
 
     public function update($data)
@@ -107,8 +113,9 @@ class EntityCollection
             'link_canonical' =>  $data['link_canonical'],
             'image'          =>  $data['image'],
             'noIndex'        =>  $data['noIndex'],
-            'noFollow'        =>  $data['noFollow'],
-            'readmore'        =>  $data['readmore'],
+            'noFollow'       =>  $data['noFollow'],
+            'readmore'       =>  $data['readmore'],
+            'morebalise'     =>  $data['morebalise'],
         ];
         $option->update($optionsEntity);
     }

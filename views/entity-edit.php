@@ -56,7 +56,15 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         class="sociallymap_formRSS_newFlux" placeholder="Mon entité">
                     </td>
                 </tr>
-
+                <tr class="form-field form-required">
+                    <th>
+                        <label>Ajout de la balise more</label>
+                    </th>
+                    <td>
+                        <input name="sociallymap_morebalise" class="sociallymap_formRSS_newFlux" type="checkbox" value="1"
+                        <?php if ($editingEntity->options->morebalise == '1') echo ('checked');?> >
+                    </td>
+                </tr>
                 <tr>
                     <th><label>Catégorie cible de la publication :</label></th>
                 </tr>
