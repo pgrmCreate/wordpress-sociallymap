@@ -31,32 +31,32 @@ class Logger
     {
         switch ($level) {
             case self::INFO:
-                $label    = "INFO";
-                $filename = "info";
+                $label    = 'INFO';
+                $filename = 'info';
                 break;
 
             case self::ALERT:
-                $label    = "ALERT";
-                $filename = "alert";
+                $label    = 'ALERT';
+                $filename = 'alert';
                 break;
 
             case self::ERROR:
-                $label    = "ERROR";
-                $filename = "error";
+                $label    = 'ERROR';
+                $filename = 'error';
                 $mailMessage = 'Une erreur critique est survenu: '.$message;
                 // wp_mail('jean-baptiste@alhena-conseil.com', 'Wordpress plugin : Erreur critique', $mailMessage);
                 break;
 
             case self::MESSAGE_RECEIVE:
-                $label    = "MESSAGE RECEIVE";
-                $filename = "messageReceive";
+                $label    = 'MESSAGE RECEIVE';
+                $filename = 'messageReceive';
                 $mailMessage = 'Une erreur critique est survenu: '.$message;
                 break;
 
             default:
-                $label    = "UNDEFINED";
-                $filename = "error";
-                self::error("##! NO LEVEL INDICATED ACCORDING STANDARD !##");
+                $label    = 'UNDEFINED';
+                $filename = 'error';
+                self::error('##! NO LEVEL INDICATED ACCORDING STANDARD !##');
                 break;
         }
 
@@ -65,7 +65,7 @@ class Logger
         error_log($logContent.PHP_EOL, 3, $fileLocation);
 
         if ($context !== []) {
-            error_log("CONTEXT : ".print_r($context, true).PHP_EOL, 3, $fileLocation);
+            error_log('CONTEXT : '.print_r($context, true).PHP_EOL, 3, $fileLocation);
         }
     }
 }

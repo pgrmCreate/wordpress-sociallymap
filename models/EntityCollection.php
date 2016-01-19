@@ -124,7 +124,6 @@ class EntityCollection
     {
         global $wpdb;
         $entity = new Entity();
-        $listRSS = [];
 
         $entitiesRequest = 'SELECT * FROM '.$this->table_entity;
         $entities = $wpdb->get_results($entitiesRequest);

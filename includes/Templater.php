@@ -26,7 +26,7 @@ class Templater
 
     public function loadReadMore($url, $display_type, $entityId, $readmore)
     {
-        load_plugin_textdomain('sociallymap', false, "../".basename(dirname(__FILE__)));
+        load_plugin_textdomain('sociallymap', false, '../'.basename(dirname(__FILE__)));
 
         set_query_var('data', [
             'url'          => $url,

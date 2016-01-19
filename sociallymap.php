@@ -17,7 +17,6 @@ require_once(plugin_dir_path(__FILE__).'includes/Logger.php');
 require_once(plugin_dir_path(__FILE__).'includes/MockRequester.php');
 require_once(plugin_dir_path(__FILE__).'includes/FileDownloader.php');
 require_once(plugin_dir_path(__FILE__).'includes/MediaWordpressManager.php');
-require_once(plugin_dir_path(__FILE__).'includes/GithubUpdater.php');
 require_once(plugin_dir_path(__FILE__).'includes/SociallymapController.php');
 require_once(plugin_dir_path(__FILE__).'includes/exception/fileDownloadException.php');
 require_once(plugin_dir_path(__FILE__).'models/EntityCollection.php');
@@ -52,13 +51,10 @@ class SociallymapPlugin
         ];
 
         // DEV MOD : Active mock requester
-        $_ENV['ENVIRONNEMENT'] = 'dev';
+        $_ENV['ENVIRONNEMENT'] = 'prod';
 
         $this->templater = new Templater();
         $this->controller = new SociallymapController();
-
-        // $configsOption = new ConfigOption();
-        // $this->config_default_value = $configsOption->getConfig();
 
         $this->link_canononical = '';
 
@@ -74,7 +70,6 @@ class SociallymapPlugin
         add_action('template_redirect', [$this, 'redirectIntercept']);
 
         add_action('admin_menu', [$this, 'addAdminMenu']);
-        add_action('admin_menu', [$this, 'githubConfiguration']);
 
         add_filter('init', [$this, 'initialization']);
 
@@ -173,7 +168,7 @@ class SociallymapPlugin
 
         if ($wp_query->get('sociallymap-plugin')) {
 
-            Logger::info('Intercept message in plugin', $_POST);
+            Logger::info('Intercept message in plugin', esc_html(print_r($_POST, true)) );
 
             // We don't have the right parameters
             if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
@@ -182,10 +177,12 @@ class SociallymapPlugin
             }
 
             $collector = new EntityCollection();
+            $_POST['entityId'] = esc_html($_POST['entityId']);
             $entity = $collector->getByEntityId($_POST['entityId']);
 
 
             // Context : Testing connection between sociallymap and wordpress plugin
+            $_POST['token'] = esc_html($_POST['token']);
             if ($_POST['token'] == 'connection-test') {
                 header('Content-Type: application/json');
                 if (empty($entity)) {
@@ -303,6 +300,7 @@ class SociallymapPlugin
     {
         global $post;
 
+
         $entityObject = new Entity();
         $link_canonical = false;
 
@@ -349,13 +347,25 @@ class SociallymapPlugin
             }
         }
 
-        if (isset($morebalise) && $morebalise == '1') {
-            $content = preg_replace('#<p><a class="sm-readmore#', '<!--more--><p><a class=\'sm-readmore', $content);
-        } else {
-            $content = preg_replace("#<!--more-->#", '', $content);
+        if ($display_type == "tab") {
+            $content = preg_replace('#data-fancybox-type="iframe"#', '', $content);
+        } elseif ($display_type == "modal") {
+            if (preg_match('#data-fancybox-type="iframe"#', $content) == 0) {
+                $content = preg_replace(
+                    '#<p><a class="sm-readmore#',
+                    '<p><a data-fancybox-type="iframe" class="sm-readmore',
+                    $content
+                );
+            }
         }
 
-        $content = preg_replace('#data-display-type#', 'data-display-type="'.$display_type.'"', $content);
+        if (isset($morebalise) && $morebalise == '1') {
+            $content = preg_replace('#<p><a class="sm-readmore#', '<!--more--><p><a class="sm-readmore', $content);
+        } else {
+            $content = preg_replace('#<p><a class="sm-readmore#"', '<p><a class="sm-readmore', $content);
+        }
+
+        // $content = preg_replace('#data-display-type#', 'data-display-type="'.$display_type.'"', $content);
 
         return $content;
     }
@@ -469,6 +479,10 @@ class SociallymapPlugin
                 $requester = new MockRequester();
                 $jsonData  = $requester->getMessages();
             } else {
+                $_POST['entityId'] = esc_html($_POST['entityId']);
+                $_POST['token'] = esc_html($_POST['token']);
+                $_POST['environment'] = esc_html($_POST['environment']);
+
                 $jsonData = $requester->launch($_POST['entityId'], $_POST['token'], $_POST['environment']);
             }
 
@@ -689,8 +703,6 @@ class SociallymapPlugin
     public function entityManager()
     {
         $entityCollection = new EntityCollection();
-        $entityOption = new ConfigOption();
-        $config = $entityOption->getConfig();
 
         // check http or https
         if (isset($_SERVER['HTTPS'])) {
@@ -701,6 +713,7 @@ class SociallymapPlugin
 
         // ACTION ENTITY : delete
         if (array_key_exists('sociallymap_deleteEntity', $_POST) && $_POST['sociallymap_deleteEntity']) {
+            $_POST['submit'] = esc_html($_POST['submit']);
             $idRemoving = $_POST['submit'];
             $entityCollection->deleteRowsByID($idRemoving);
         }
@@ -743,19 +756,19 @@ class SociallymapPlugin
             }
 
             $data = [
-                'name'           => $_POST['sociallymap_label'],
+                'name'           => esc_html($_POST['sociallymap_label']),
                 'category'       => $_POST['sociallymap_category'],
-                'activate'       => $_POST['sociallymap_activate'],
-                'sm_entity_id'   => $_POST['sociallymap_entityId'],
-                'display_type'   => $_POST['sociallymap_display_type'],
-                'publish_type'   => $_POST['sociallymap_publish_type'],
-                'link_canonical' => $_POST['sociallymap_link_canonical'],
-                'noIndex'        => $_POST['sociallymap_noIndex'],
-                'noFollow'       => $_POST['sociallymap_noFollow'],
-                'image'          => $_POST['sociallymap_image'],
-                'readmore'       => $_POST['sociallymap_readmore'],
-                'morebalise'     => $_POST['sociallymap_morebalise'],
-                'id'             => $_GET['id'],
+                'activate'       => esc_html($_POST['sociallymap_activate']),
+                'sm_entity_id'   => esc_html($_POST['sociallymap_entityId']),
+                'display_type'   => esc_html($_POST['sociallymap_display_type']),
+                'publish_type'   => esc_html($_POST['sociallymap_publish_type']),
+                'link_canonical' => esc_html($_POST['sociallymap_link_canonical']),
+                'noIndex'        => esc_html($_POST['sociallymap_noIndex']),
+                'noFollow'       => esc_html($_POST['sociallymap_noFollow']),
+                'image'          => esc_html($_POST['sociallymap_image']),
+                'readmore'       => esc_html($_POST['sociallymap_readmore']),
+                'morebalise'     => esc_html($_POST['sociallymap_morebalise']),
+                'id'             => esc_html($_GET['id']),
             ];
 
             $entityCollection->update($data);
@@ -808,35 +821,23 @@ class SociallymapPlugin
             }
 
             $data = [
-                'name'           => $_POST['sociallymap_name'],
-                'category'       => $_POST['sociallymap_category'],
-                'activate'       => $_POST['sociallymap_activate'],
-                'sm_entity_id'   => $_POST['sociallymap_entityId'],
-                'publish_type'   => $_POST['sociallymap_publish_type'],
-                'display_type'   => $_POST['sociallymap_display_type'],
-                'link_canonical' => $_POST['sociallymap_link_canonical'],
-                'noIndex'        => $_POST['sociallymap_noIndex'],
-                'noFollow'       => $_POST['sociallymap_noFollow'],
-                'readmore'       => $_POST['sociallymap_readmore'],
-                'image'          => $_POST['sociallymap_image'],
-                'morebalise'     => $_POST['sociallymap_morebalise'],
+                'name'           => esc_html($_POST['sociallymap_name']),
+                'category'       => esc_html($_POST['sociallymap_category']),
+                'activate'       => esc_html($_POST['sociallymap_activate']),
+                'sm_entity_id'   => esc_html($_POST['sociallymap_entityId']),
+                'publish_type'   => esc_html($_POST['sociallymap_publish_type']),
+                'display_type'   => esc_html($_POST['sociallymap_display_type']),
+                'link_canonical' => esc_html($_POST['sociallymap_link_canonical']),
+                'noIndex'        => esc_html($_POST['sociallymap_noIndex']),
+                'noFollow'       => esc_html($_POST['sociallymap_noFollow']),
+                'readmore'       => esc_html($_POST['sociallymap_readmore']),
+                'image'          => esc_html($_POST['sociallymap_image']),
+                'morebalise'     => esc_html($_POST['sociallymap_morebalise']),
             ];
 
             $entityCollection->add($data);
             wp_redirect($linkToList, 301);
             exit;
-        }
-
-        // ACTION CONFIG : update
-        if (array_key_exists('sociallymap_updateConfig', $_POST) && $_POST['sociallymap_updateConfig']) {
-            $data = [
-                1 => $_POST['sociallymap_category'],
-                2 => $_POST['sociallymap_display_type'],
-                3 => $_POST['sociallymap_publish_type'],
-            ];
-
-            $currentConfig = new ConfigOption;
-            $currentConfig->save($data);
         }
     }
 
@@ -845,54 +846,16 @@ class SociallymapPlugin
         // MODAL DISPLAY TYPE IS ON
         if ($isFront) {
             wp_enqueue_style('readmore', plugin_dir_url(__FILE__).'assets/css/custom-readmore.css');
-            // wp_enqueue_style('fancybox', plugin_dir_url(__FILE__).'assets/css/fancybox.css');
             wp_enqueue_style('modalw-style', plugin_dir_url(__FILE__).'assets/modalw/modalw-style.css');
 
             wp_enqueue_script('jquery');
-            // wp_enqueue_script('fancy', plugin_dir_url(__FILE__).'assets/js/fancybox.js');
-            wp_enqueue_script('modal-manager', plugin_dir_url(__FILE__).'assets/js/modal-manager.js');
             wp_enqueue_script('modalw-script', plugin_dir_url(__FILE__).'assets/modalw/modal-windows.js');
         } else {
             wp_enqueue_style('back', plugin_dir_url(__FILE__).'assets/css/back.css');
         }
-    }
-
-    public function githubConfiguration()
-    {
-        $config = [
-            // this is the slug of your plugin
-            'slug'               => plugin_basename(__FILE__),
-            // this is the name of the folder your plugin lives in
-            'proper_folder_name' => 'wordpress-sociallymap',
-            // the GitHub API url of your GitHub repo
-            'api_url'            => 'https://api.github.com/repos/pgrmCreate/wordpress-sociallymap',
-            // the GitHub raw url of your GitHub repo
-            'raw_url'            => 'https://raw.github.com/pgrmCreate/wordpress-sociallymap/github',
-            // the GitHub url of your GitHub repo
-            'github_url'         => 'https://github.com/pgrmCreate/wordpress-sociallymap',
-            // the zip url of the GitHub repo
-            'zip_url'            => 'https://github.com/pgrmCreate/wordpress-sociallymap/zipball/github',
-            // whether WP should check the validity of the SSL cert when getting an update,
-            // see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and
-            // https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
-            'sslverify'          => true,
-            // which version of WordPress does your plugin require?
-            'requires'           => '4.3.1',
-            // which version of WordPress is your plugin tested up to?
-            'tested'             => '4.3.1',
-            // which file to use as the readme for the version number
-            'readme'             => 'README.md',
-            // Access private repositories by authorizing under Appearance > GitHub Updates
-            // when this example plugin is installed
-            'access_token'       => '',
-        ];
-
-        new githubUpdater($config);
     }
 }
 
 register_activation_hook(__FILE__, ['SociallymapPlugin', 'install']);
 
 new SociallymapPlugin();
-
-

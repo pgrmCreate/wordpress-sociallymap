@@ -13,7 +13,7 @@ class MediaWordpressManager
         $file_array = [];
 
         // Extract folder & filename
-        $tabUrl = explode("/", $temporyFile);
+        $tabUrl = explode('/', $temporyFile);
         $filename = $tabUrl[count($tabUrl)-1];
 
         $file_array['name'] = $filename.$fileExtension;

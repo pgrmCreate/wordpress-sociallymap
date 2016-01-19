@@ -12,7 +12,7 @@ label.sociallymap_label > * {
 	width: calc(50%);
 }
 
-label.sociallymap_label > [type="checkbox"] {
+label.sociallymap_label > [type='checkbox'] {
 	max-width: 15px;
 }
 
@@ -85,7 +85,7 @@ label.sociallymap_label > [type="checkbox"] {
 }
 
 .listCats + .listCats:before {
-		content: "|";
+		content: '|';
 		color: #ccc;
 }
 

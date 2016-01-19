@@ -28,9 +28,6 @@ class FileDownloader
         // check header
         $checkerResponse = $this->checkResponseContentType($responseCurl);
         if (!$checkerResponse) {
-            echo($url);
-            echo("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            die();
             throw new fileDownloadException('Error Processing Request for '.$url, 1);
         }
 

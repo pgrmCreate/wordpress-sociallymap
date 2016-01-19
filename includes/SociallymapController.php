@@ -41,39 +41,39 @@ class SociallymapController
         foreach ($editingEntity->options as $key => $value) {
             switch ($value->options_id) {
                 case '1':
-                    $categoryList[] = $value->value;
+                    $categoryList[] = esc_html($value->value);
                     break;
 
                 case '2':
-                    $display_type = $value->value;
+                    $display_type = esc_html($value->value);
                     break;
 
                 case '3':
-                    $publish_type = $value->value;
+                    $publish_type = esc_html($value->value);
                     break;
 
                 case '4':
-                    $link_canonical = $value->value;
+                    $link_canonical = esc_html($value->value);
                     break;
 
                 case '5':
-                    $image = $value->value;
+                    $image = esc_html($value->value);
                     break;
 
                 case '6':
-                    $readmore = stripslashes($value->value);
+                    $readmore = esc_html($value->value);
                     break;
 
                 case '7':
-                    $noIndex = $value->value;
+                    $noIndex = esc_html($value->value);
                     break;
 
                 case '8':
-                    $noFollow = $value->value;
+                    $noFollow = esc_html($value->value);
                     break;
 
                 case '9':
-                    $morebalise = $value->value;
+                    $morebalise = esc_html($value->value);
                     break;
 
                 default:
