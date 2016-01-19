@@ -102,27 +102,7 @@ class SociallymapController
 
     public function addEntity()
     {
-        $config = new ConfigOption();
-        $configs = $config->getConfig();
         $data = new stdClass();
-
-        foreach ($configs as $key => $value) {
-            if ($value->id == 1) {
-                $data->category = $value->default_value;
-            } elseif ($value->id == 3) {
-                $data->publish_type =  $value->default_value;
-            } elseif ($value->id == 2) {
-                $data->activate =  $value->default_value;
-            } elseif ($value->id == 5) {
-                $data->image =  $value->default_value;
-            } elseif ($value->id == 6) {
-                $data->readmore =  $value->default_value;
-            } elseif ($value->id == 7) {
-                $data->noindex =  $value->default_value;
-            } elseif ($value->id == 8) {
-                $data->nofolow =  $value->default_value;
-            }
-        }
 
         echo $this->templater->loadAdminPage('entity-add.php', $data);
     }
