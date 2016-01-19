@@ -51,7 +51,7 @@ class SociallymapPlugin
         ];
 
         // DEV MOD : Active mock requester
-        $_ENV['ENVIRONNEMENT'] = 'prod';
+        $_ENV['ENVIRONNEMENT'] = 'dev';
 
         $this->templater = new Templater();
         $this->controller = new SociallymapController();
@@ -348,12 +348,12 @@ class SociallymapPlugin
         }
 
         if ($display_type == 'tab') {
-            $content = preg_replace('#data-fancybox-type="iframe"#', '', $content);
+            $content = preg_replace('#class="sm-readmore-link #', 'class="', $content);
         } elseif ($display_type == 'modal') {
-            if (preg_match('#data-fancybox-type="iframe"#', $content) == 0) {
+            if (preg_match('#class="sm-readmore-link#', $content) == 0) {
                 $content = preg_replace(
-                    '#<p><a class="sm-readmore#',
-                    '<p><a data-fancybox-type="iframe" class="sm-readmore',
+                    '#sm-display-modal#',
+                    'sm-readmore-link sm-display-modal',
                     $content
                 );
             }

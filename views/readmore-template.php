@@ -12,7 +12,6 @@ if ($readmore == '') {
 ?>
 
 <!--more-->
-<p><a class="sm-readmore-link sm-display-modal" data-entity-id="<?php echo ($entityId); ?>"
- data-fancybox-type="iframe" href="<?php echo ($url); ?>" data-article-url="<?php echo ($url); ?>" target="_blank"><?php echo $readmore; ?></a><p>
+<p><a class="sm-readmore-link sm-display-modal" data-entity-id="<?php echo ($entityId); ?>" href="<?php echo ($url); ?>" data-article-url="<?php echo ($url); ?>" target="_blank"><?php echo $readmore; ?></a><p>
 
 

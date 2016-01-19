@@ -132,9 +132,8 @@ class EntityCollection
         // LOAD ENTITIES
         $optionManager = new Option();
         foreach ($entities as &$data) {
-            $data->options = $optionManager->getById($data->id);
+            $data->options = $optionManager->getByEntityId($data->id);
         }
-
 
         return $entities;
     }

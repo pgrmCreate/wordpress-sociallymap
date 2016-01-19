@@ -21,6 +21,16 @@ class Option
         return $options;
     }
 
+    public function getByEntityId($id)
+    {
+        global $wpdb;
+
+        $entityRequest = $wpdb->prepare('SELECT * FROM '.$this->table.' WHERE entity_id=%s', $id);
+        $options = $wpdb->get_results($entityRequest);
+
+        return $options;
+    }
+
     public function deleteById($id)
     {
         global $wpdb;
