@@ -3,7 +3,7 @@
 }
 
 .sm-video-nosupport:before {
-	content: "Votre naviguateur ne supporte pas le format vidéo";
+	content: 'Votre naviguateur ne supporte pas le format vidéo';
 	position: relative;
 	visibility: hidden;
 }

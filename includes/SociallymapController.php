@@ -34,9 +34,9 @@ class SociallymapController
         $editingEntity = $entity->getById($_GET['id']);
 
         $categoryList = [];
-        $publish_type = "draft";
-        $display_type = "modal";
-        $link_canonical = "1";
+        $publish_type = 'draft';
+        $display_type = 'modal';
+        $link_canonical = '1';
 
         foreach ($editingEntity->options as $key => $value) {
             switch ($value->options_id) {

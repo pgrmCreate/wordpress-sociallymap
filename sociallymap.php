@@ -347,9 +347,9 @@ class SociallymapPlugin
             }
         }
 
-        if ($display_type == "tab") {
+        if ($display_type == 'tab') {
             $content = preg_replace('#data-fancybox-type="iframe"#', '', $content);
-        } elseif ($display_type == "modal") {
+        } elseif ($display_type == 'modal') {
             if (preg_match('#data-fancybox-type="iframe"#', $content) == 0) {
                 $content = preg_replace(
                     '#<p><a class="sm-readmore#',
