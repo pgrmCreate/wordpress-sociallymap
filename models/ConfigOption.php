@@ -1,35 +1,41 @@
 <?php
-	
-class ConfigOption {
-	private $table;
-	private $currentConfig;
 
-	public function __construct () {
-		global $wpdb;
+class ConfigOption
+{
+    private $table;
+    private $currentConfig;
 
-		$this->table = $wpdb->prefix.'sm_options';
-	}
+    public function __construct()
+    {
+        global $wpdb;
 
-	public function getConfig() {
-		global $wpdb;
+        $this->table = $wpdb->prefix.'sm_options';
+    }
 
-		$this->currentConfig = $wpdb->get_results("SELECT * FROM $this->table");
+    public function getConfig()
+    {
+        global $wpdb;
 
-		return $this->currentConfig;
-	}
+        $this->currentConfig = $wpdb->get_results('SELECT * FROM '.$this->table);
 
-	public function save($data) {
-		global $wpdb;
+        return $this->currentConfig;
+    }
 
-		foreach ($data as $key => $value) {
-			$wpdb->update( 
-				$this->table, [ 
-					'default_value' => $value,	// string
-				], [ 
-					'id' => $key
-				]
-			);
-		}
-		
-	}
+    public function save($data)
+    {
+        global $wpdb;
+
+        foreach ($data as $key => $value) {
+            $wpdb->update(
+                $this->table,
+                [
+                    'default_value' => $value,  // string
+                ],
+                [
+                    'id' => $key
+                ]
+            );
+        }
+
+    }
 }

@@ -1,24 +1,24 @@
 <?php
 	$data = get_query_var('data');
-	$listRss = $data['data'];
+	$listEntities = $data['data'];
 ?>
 
 <div class="wrap">
 	<h1>
 		Mes entités
-		<a href="?page=sociallymap-rss-add" class="page-title-action">
+		<a href="?page=sociallymap-entity-add" class="page-title-action">
 			<i class="dashicons-before dashicons-plus-alt sociallymap-icon-link"></i>
 			Ajouter une entité
 		</a>
 	</h1>
 
-	<div class="sociallymap_containRSS">
+	<div class="sociallymap_containEntity">
 		<table class="wp-list-table widefat fixed striped users">
 			<form method="post">
-				<input type="hidden" name="sociallymap_deleteRSS" value="1"/>
+				<input type="hidden" name="sociallymap_deleteEntity" value="1"/>
 				<thead>
 					<tr>
-						<th scope="col" id="RSS" class="manage-column column-username"
+						<th scope="col" id="Entity" class="manage-column column-username"
 						colspan="2">
 							Nom de l'entité
 						</th>
@@ -51,14 +51,14 @@
 				</thead>
 				<tbody id="the-list" data-wp-lists="list:user">
 					<?php
-						foreach ($listRss as $key => $value) {
+						foreach ($listEntities as $key => $value) {
 						?>
 							<tr>
 								<td colspan="2">
 									<?php echo $value->name; ?>
 									<div class="row-actions">
 										<span class="edit">
-											<a href="?page=sociallymap-rss-edit&id=<?php echo $value->id; ?>">
+											<a href="?page=sociallymap-entity-edit&id=<?php echo $value->id; ?>">
 												Editer
 											</a>
 										</span>
@@ -110,10 +110,10 @@
 						}
 						?>
 				</tbody>
-				<?php if ((int)count((array)$listRss) > 3) : ?>
+				<?php if ((int)count((array)$listEntities) > 3) : ?>
 				<tfoot>
 					<tr>
-						<th scope="col" id="RSS" class="manage-column column-username"
+						<th scope="col" id="Entity" class="manage-column column-username"
 						colspan="2">
 							Nom de l'entité
 						</th>

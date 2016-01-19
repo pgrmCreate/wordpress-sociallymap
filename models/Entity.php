@@ -20,12 +20,11 @@ class Entity
         return $wpdb->insert_id;
     }
 
-    public function getById($id, $orderKey = "", $orderSense = "")
+    public function getById($id, $orderKey = '', $orderSense = '')
     {
         global $wpdb;
 
-        // $entityRequest = $wpdb->prepare('SELECT * FROM '.$this->table.' WHERE id=%d', $id);
-        $entityRequest = 'SELECT * FROM '.$this->table.' WHERE id='.$id;
+        $entityRequest = $wpdb->prepare('SELECT * FROM '.$this->table.' WHERE id=%s', $id);
         $entity = $wpdb->get_row($entityRequest);
 
         if (!isset($entity) || empty($entity)) {
@@ -33,11 +32,13 @@ class Entity
             return 0;
         }
 
-        $optionsRequest = 'SELECT options_id, value FROM '.$wpdb->prefix.'sm_entity_options WHERE entity_id = '.$id;
+        $optionsRequest = $wpdb->prepare('SELECT options_id, value FROM '.$wpdb->prefix.
+            'sm_entity_options WHERE entity_id = %s', $entity->id);
         $options = $wpdb->get_results($optionsRequest);
 
-        if (!isset($options) || empty($options)) {
-            return 0;
+        $options = json_decode(json_encode($options), true);
+        foreach ($options as $key => &$value) {
+            $value = (object)$value;
         }
 
         $entity->options = $options;
@@ -56,8 +57,13 @@ class Entity
             return false;
         }
 
-        $optionsRequest = $wpdb->prepare('SELECT options_id, value FROM '.$wpdb->prefix.'sm_entity_options WHERE entity_id = %d', $entity->id);
+        $optionsRequest = $wpdb->prepare('SELECT options_id, value FROM '.$wpdb->prefix.'sm_entity_options WHERE entity_id=%s', $entity->id);
         $options = $wpdb->get_results($optionsRequest);
+
+        $options = json_decode(json_encode($options), true);
+        foreach ($options as $key => &$value) {
+            $value = (object)$value;
+        }
 
         $entity->options = $options;
 

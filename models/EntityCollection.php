@@ -120,7 +120,7 @@ class EntityCollection
         $option->update($optionsEntity);
     }
 
-    public function all($orderKey = "", $orderSense = "")
+    public function all($orderKey = '', $orderSense = '')
     {
         global $wpdb;
         $entity = new Entity();
@@ -131,11 +131,13 @@ class EntityCollection
 
 
         // LOAD ENTITIES
-        foreach ($entities as $data) {
-            $listRSS[] = $entity->getById($data->id, $orderKey, $orderSense);
+        $optionManager = new Option();
+        foreach ($entities as &$data) {
+            $data->options = $optionManager->getById($data->id);
         }
 
-        return $listRSS;
+
+        return $entities;
     }
 
     public function deleteRowsByID($id)

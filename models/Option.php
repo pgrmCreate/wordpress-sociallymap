@@ -16,6 +16,9 @@ class Option
         global $wpdb;
 
         $entityRequest = 'SELECT * FROM '.$this->table.' WHERE id='.$id;
+        $options = $wpdb->get_results($entityRequest);
+
+        return $options;
     }
 
     public function deleteById($id)
@@ -51,10 +54,10 @@ class Option
 
         // UPDATE CATEGORY
         if (isset($data['category'])) {
-            $currentCatsRequest = '
+            $currentCatsRequest = $wpdb->prepare('
                 SELECT value FROM '.$this->table.'
-                WHERE entity_id = '.$data['idSource'].'
-                AND options_id = 1';
+                WHERE entity_id = %s
+                AND options_id = 1', $data['idSource']);
             $options = $wpdb->get_results($currentCatsRequest);
 
             $optCats = [];

@@ -31,14 +31,14 @@ label.sociallymap_label > [type="checkbox"] {
 	float: none;
 }
 
-.sociallymap_formRSS {
+.sociallymap_formEntity {
 	background: white;
 	border: 1px solid #cdc;
 	padding: 10px;
 	margin-top: 15px;
 }
 
-.sociallymap_formRSS_newFlux {
+.sociallymap_formEntity_newFlux {
 	max-width: 600px;
 	padding: 5px;
 }

@@ -24,8 +24,8 @@ if (isset($_POST['sociallymap_isNotValid'])) {
         Editer une nouvelle entité
     </h1>
 
-    <form method="post" class="sociallymap_formRSS">
-        <input type="hidden" name="sociallymap_updateRSS" value="1">
+    <form method="post" class="sociallymap_formEntity">
+        <input type="hidden" name="sociallymap_updateEntity" value="1">
 
         <table class="form-table">
             <tbody>
@@ -34,7 +34,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <label>Entité active</label>
                     </th>
                     <td>
-                        <input name="sociallymap_activate" class="sociallymap_formRSS_newFlux" type="checkbox" value="1"
+                        <input name="sociallymap_activate" class="sociallymap_formEntity_newFlux" type="checkbox" value="1"
                         <?php if ($editingEntity->activate) echo("checked"); ?> >
                     </td>
                 </tr>
@@ -44,7 +44,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                     </th>
                     <td>
                         <input name="sociallymap_label" value="<?php echo($editingEntity->name); ?>"
-                        class="sociallymap_formRSS_newFlux" placeholder="Mon entité">
+                        class="sociallymap_formEntity_newFlux" placeholder="Mon entité">
                     </td>
                 </tr>
                 <tr class="form-field form-required">
@@ -53,7 +53,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                     </th>
                     <td>
                         <input name="sociallymap_entityId" value="<?php echo($editingEntity->sm_entity_id); ?>"
-                        class="sociallymap_formRSS_newFlux" placeholder="Mon entité">
+                        class="sociallymap_formEntity_newFlux" placeholder="Mon entité">
                     </td>
                 </tr>
                 <tr class="form-field form-required">
@@ -61,7 +61,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <label>Ajout de la balise more</label>
                     </th>
                     <td>
-                        <input name="sociallymap_morebalise" class="sociallymap_formRSS_newFlux" type="checkbox" value="1"
+                        <input name="sociallymap_morebalise" class="sociallymap_formEntity_newFlux" type="checkbox" value="1"
                         <?php if ($editingEntity->options->morebalise == '1') echo ('checked');?> >
                     </td>
                 </tr>
@@ -107,7 +107,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <label>Afficher les articles dans une fenêtre modale</label>
                     </th>
                     <td>
-                        <input type="checkbox" name="sociallymap_display_type" class="sociallymap_formRSS_newFlux" value="modal"
+                        <input type="checkbox" name="sociallymap_display_type" class="sociallymap_formEntity_newFlux" value="modal"
                          <?php if ($editingEntity->options->display_type == "modal") echo("checked"); ?> >
                     </td>
                 </tr>
@@ -116,7 +116,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <label>Inclure les balises de liens canoniques</label>
                     </th>
                     <td>
-                        <input type="checkbox" name="sociallymap_link_canonical" class="sociallymap_formRSS_newFlux" value="1"
+                        <input type="checkbox" name="sociallymap_link_canonical" class="sociallymap_formEntity_newFlux" value="1"
                          <?php if ($editingEntity->options->link_canonical == "1") echo("checked"); ?> >
                     </td>
                 </tr>
@@ -125,7 +125,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <label>Ne pas indexer les articles publiés via Sociallymap dans les moteurs de recherche</label>
                     </th>
                     <td>
-                        <input type="checkbox" name="sociallymap_noIndex" class="sociallymap_formRSS_newFlux" value="1"
+                        <input type="checkbox" name="sociallymap_noIndex" class="sociallymap_formEntity_newFlux" value="1"
                         <?php if ($editingEntity->options->noIndex == "1") echo("checked"); ?> >
                     </td>
                 </tr>
@@ -134,7 +134,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <label>Ne pas suivre les liens (moteur de recherche)</label>
                     </th>
                     <td>
-                        <input type="checkbox" name="sociallymap_noFollow" class="sociallymap_formRSS_newFlux" value="1"
+                        <input type="checkbox" name="sociallymap_noFollow" class="sociallymap_formEntity_newFlux" value="1"
                         <?php if ($editingEntity->options->noFollow == "1") echo("checked"); ?> >
                     </td>
                 </tr>
@@ -169,7 +169,7 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                     </th>
                     <td>
                         <input name="sociallymap_readmore" value="<?php echo($editingEntity->options->readmore); ?>"
-                        class="sociallymap_formRSS_newFlux" placeholder="Lire la suite">
+                        class="sociallymap_formEntity_newFlux" placeholder="Lire la suite">
                     </td>
                 </tr>
             </tbody>

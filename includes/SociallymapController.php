@@ -37,6 +37,7 @@ class SociallymapController
         $publish_type = "draft";
         $display_type = "modal";
         $link_canonical = "1";
+
         foreach ($editingEntity->options as $key => $value) {
             switch ($value->options_id) {
                 case '1':
@@ -95,6 +96,7 @@ class SociallymapController
 
         $sendItem['editingEntity'] = $editingEntity;
 
+
         echo $this->templater->loadAdminPage('entity-edit.php', $sendItem);
     }
 
@@ -133,11 +135,11 @@ class SociallymapController
         $orderKey = "";
         if (isset($_GET['orderSense']) && isset($_GET['orderKey'])) {
             $orderSense = $_GET['orderSense'];
-            $orderKey = $_GET['orderKey'];
+            $orderKey   = $_GET['orderKey'];
         }
 
-        $listRSS = $entitiesCollection->all($orderKey, $orderSense);
+        $listEntities = $entitiesCollection->all($orderKey, $orderSense);
 
-        echo $this->templater->loadAdminPage('entity-list.php', $listRSS);
+        echo $this->templater->loadAdminPage('entity-list.php', $listEntities);
     }
 }

@@ -21,13 +21,13 @@ if (isset($_POST['sociallymap_isNotValid'])) {
 <div class="wrap">
     <h1>
         Ajouter une nouvelle entité
-        <a href="?page=sociallymap-rss-list" class="page-title-action">
+        <a href="?page=sociallymap-entity-list" class="page-title-action">
             <i class="dashicons-before dashicons-list-view sociallymap-icon-link"></i>
             Voir la liste des entités
         </a>
     </h1>
     <form method="post">
-        <input type="hidden" name="sociallymap_postRSS" value="1"/>
+        <input type="hidden" name="sociallymap_postEntity" value="1"/>
 
         <table class="form-table">
             <tbody>
@@ -74,8 +74,8 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                         <i><?php echo $value->name;?></i>
                     </th>
                     <td class="sm-categories-option">
-                                <input name="sociallymap_category[]" type="checkbox" value="<?php echo get_cat_ID($value->name);?>"
-                                <?php if($value->cat_ID === $default_value->category) echo "checked" ?> >
+                            <input name="sociallymap_category[]" type="checkbox"
+                            value="<?php echo get_cat_ID($value->name);?>">
                     </td>
                 </tr>
                 <?php } ?>
@@ -86,10 +86,10 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                     </th>
                     <td>
                         <select name="sociallymap_publish_type">
-                            <option value="publish" <?php if ($default_value->publish_type == 'publish') echo ('selected');?> >Publier</option>
-                            <option value="draft" <?php if ($default_value->publish_type == 'draft') echo ('selected');?>>Brouillon</option>
-                            <option value="pending" <?php if ($default_value->publish_type == 'pending') echo ('selected');?>>En attente de relecture</option>
-                            <option value="private" <?php if ($default_value->publish_type == 'private') echo ('selected');?>>Privée</option>
+                            <option value="publish">Publier</option>
+                            <option value="draft">Brouillon</option>
+                            <option value="pending">En attente de relecture</option>
+                            <option value="private">Privée</option>
                         </select>
                     </td>
                 </tr>
@@ -99,9 +99,9 @@ if (isset($_POST['sociallymap_isNotValid'])) {
                     </th>
                     <td>
                         <select name="sociallymap_image">
-                            <option value="content" <?php if ($default_value->image == 'content') echo ('selected');?> >Inserer dans le contenu</option>
-                            <option value="thumbnail" <?php if ($default_value->image == 'thumbnail') echo ('selected');?>>Inserer en tant qu'image à la une</option>
-                            <option value="both" <?php if ($default_value->image == 'both') echo ('selected');?>>Inserer en tant que contenu et image à la une</option>
+                            <option value="content">Inserer dans le contenu</option>
+                            <option value="thumbnail">Inserer en tant qu'image à la une</option>
+                            <option value="both">Inserer en tant que contenu et image à la une</option>
                         </select>
                     </td>
                 </tr>

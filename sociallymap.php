@@ -37,17 +37,22 @@ class SociallymapPlugin
     public function __construct()
     {
         global $wpdb;
+
+        if (version_compare(phpversion(), '5.4', '<')) {
+            echo('La version de PHP de votre hébergeur ne permet pas l\'utilisation de ce plugin');
+        }
+
         $this->wpdb = $wpdb;
         $environment = '';
 
-        $_ENV["URL_SOCIALLYMAP"] = [
-            "prod"    => "http://app.sociallymap.com",
-            "staging" => "http://app.sociallymap-staging.com",
-            "dev"     => "http://app.sociallymap.local",
+        $_ENV['URL_SOCIALLYMAP'] = [
+            'prod'    => 'http://app.sociallymap.com',
+            'staging' => 'http://app.sociallymap-staging.com',
+            'dev'     => 'http://app.sociallymap.local',
         ];
 
         // DEV MOD : Active mock requester
-        $_ENV["ENVIRONNEMENT"] = "prod";
+        $_ENV['ENVIRONNEMENT'] = 'dev';
 
         $this->templater = new Templater();
         $this->controller = new SociallymapController();
@@ -55,11 +60,11 @@ class SociallymapPlugin
         // $configsOption = new ConfigOption();
         // $this->config_default_value = $configsOption->getConfig();
 
-        $this->link_canononical = "";
+        $this->link_canononical = '';
 
-        if (array_key_exists('sociallymap_postRSS', $_POST)    ||
-            array_key_exists('sociallymap_deleteRSS', $_POST)  ||
-            array_key_exists('sociallymap_updateRSS', $_POST)  ||
+        if (array_key_exists('sociallymap_postEntity', $_POST)    ||
+            array_key_exists('sociallymap_deleteEntity', $_POST)  ||
+            array_key_exists('sociallymap_updateEntity', $_POST)  ||
             array_key_exists('sociallymap_updateConfig', $_POST) ) {
                 add_action('admin_menu', [$this, 'entityManager']);
         }
@@ -71,11 +76,7 @@ class SociallymapPlugin
         add_action('admin_menu', [$this, 'addAdminMenu']);
         add_action('admin_menu', [$this, 'githubConfiguration']);
 
-        // add_action('the_post', [$this, "rewriteCanonical"]);
-        // add_filter('the_content', [$this, "prePosting"]);
-
-        add_filter('init', [$this, "initialization"]);
-        // add_action('plugins_loaded', [$this, 'surcharge']);
+        add_filter('init', [$this, 'initialization']);
 
         register_activation_hook(__FILE__, [$this, 'activatePlugin']);
     }
@@ -84,14 +85,6 @@ class SociallymapPlugin
     {
         $builder = new DbBuilder();
         $builder->dbInitialisation();
-    }
-
-    public function surcharge()
-    {
-        Logger::error('TEST MAIL');
-        $resultEmail = wp_mail('jean-baptiste@alhena-conseil.com', 'Wordpress plugin : Erreur critique', 'test mail');
-        echo("mail result : ".$resultEmail);
-        die();
     }
 
     public function rewriteCanonical($content)
@@ -104,7 +97,7 @@ class SociallymapPlugin
         }
 
         // Search entity and look canonical option
-        $patternEntityId = "#data-entity-id='([0-9]+)'#";
+        $patternEntityId = '#data-entity-id="([0-9]+)"#';
         preg_match($patternEntityId, $content, $matches);
         if (isset($matches[1])) {
             $idSelect = $matches[1];
@@ -114,7 +107,7 @@ class SociallymapPlugin
         }
 
 
-        $patternUrl = "#data-article-url='(.+)'#";
+        $patternUrl = '#data-article-url="(.+)"#';
         preg_match($patternUrl, $content, $matches);
         if (isset($matches[1])) {
             $entityUrl = $matches[1];
@@ -153,7 +146,7 @@ class SociallymapPlugin
         add_action('wp_head', [$this, 'customRelCanonical']);
         add_action('wp_head', [$this, 'noIndexRef']);
 
-        if ($_ENV['ENVIRONNEMENT'] == "dev") {
+        if ($_ENV['ENVIRONNEMENT'] == 'dev') {
             $collector = new EntityCollection();
             $entity = $collector->getByEntityId('568ccccd7c5a00c6629e884f');
 
@@ -179,11 +172,12 @@ class SociallymapPlugin
         global $wp_query;
 
         if ($wp_query->get('sociallymap-plugin')) {
+
             Logger::info('Intercept message in plugin', $_POST);
 
             // We don't have the right parameters
             if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
-                header("HTTP/1.0 400 Bad Request");
+                header('HTTP/1.0 400 Bad Request');
                 exit;
             }
 
@@ -192,36 +186,36 @@ class SociallymapPlugin
 
 
             // Context : Testing connection between sociallymap and wordpress plugin
-            if ($_POST['token'] == "connection-test") {
+            if ($_POST['token'] == 'connection-test') {
                 header('Content-Type: application/json');
                 if (empty($entity)) {
-                    header("HTTP/1.0 404 Not Found");
+                    header('HTTP/1.0 404 Not Found');
                     exit(json_encode([
-                        'error' => "entityId inconnu"
+                        'error' => 'entityId inconnu'
                     ]));
                 } else {
-                    header("HTTP/1.0 200 OK");
+                    // header('Content-Type: application/json');
+                    header('HTTP/1.0 200 OK');
                     exit(json_encode([
-                        'message' => "ok"
+                        'message' => 'ok'
                     ]));
                 }
             }
 
             // This entity not exists
             if (empty($entity)) {
-                header("HTTP/1.0 404 Not Found");
+                header('HTTP/1.0 404 Not Found');
                 exit;
             }
 
             // Try to retrieve the pending messages
             if ($this->manageMessages($entity) == false) {
-                header("HTTP/1.0 502 Bad gateway");
-                // print_r($_POST);
-                Logger::error("The plugin can't ping to sociallymap");
+                header('HTTP/1.0 502 Bad gateway');
+                Logger::error('The plugin can\'t ping to sociallymap');
             } else {
-                header("HTTP/1.0 200 OK");
+                header('HTTP/1.0 200 OK');
                 exit(json_encode([
-                    'message' => "ok"
+                    'message' => 'ok'
                 ]));
             }
 
@@ -250,7 +244,7 @@ class SociallymapPlugin
         $entityObject = new Entity();
 
         // get entity ID
-        $pattern = "#data-entity-id='([0-9]+)'#";
+        $pattern = '#data-entity-id="([0-9]+)"#';
         preg_match($pattern, $post->post_content, $matches);
         if (isset($matches[1])) {
             $idSelect = $matches[1];
@@ -293,21 +287,13 @@ class SociallymapPlugin
             echo '<meta name="robots" content="' . implode(', ', $contentArr) . '">';
 
         }
-
-        // if ($noIndex == 1 && $noFollow == 1) {
-        //     echo ('<meta name="robots" content="noIndex,follow">');
-        // } elseif ($noIndex == 0 && $noFollow == 1) {
-        //     echo ('<meta name="robots" content="follow">');
-        // } elseif ($noIndex == 1 && $noFollow == 0) {
-        //     echo ('<meta name="robots" content="noIndex">');
-        // }
     }
 
     public function customRelCanonical()
     {
         global $post;
 
-        if (is_single() && $this->link_canononical != "") {
+        if (is_single() && $this->link_canononical != '') {
             $this->rewriteCanonical($post->post_content);
             echo '<link rel="canonical" href="'.$this->link_canononical.'" />';
         }
@@ -320,7 +306,7 @@ class SociallymapPlugin
         $entityObject = new Entity();
         $link_canonical = false;
 
-        $pattern = "#data-entity-id='([0-9]+)'#";
+        $pattern = '#data-entity-id="([0-9]+)"#';
         $returnSearch = preg_match($pattern, $content, $matches);
 
         if ($returnSearch != 1) {
@@ -363,13 +349,13 @@ class SociallymapPlugin
             }
         }
 
-        if (isset($morebalise) && $morebalise == "1") {
-            $content = preg_replace("#<p><a class='sm-readmore#", '<!--more--><p><a class=\'sm-readmore', $content);
+        if (isset($morebalise) && $morebalise == '1') {
+            $content = preg_replace('#<p><a class="sm-readmore#', '<!--more--><p><a class=\'sm-readmore', $content);
         } else {
             $content = preg_replace("#<!--more-->#", '', $content);
         }
 
-        $content = preg_replace("#data-display-type#", 'data-display-type="'.$display_type.'"', $content);
+        $content = preg_replace('#data-display-type#', 'data-display-type="'.$display_type.'"', $content);
 
         return $content;
     }
@@ -382,7 +368,7 @@ class SociallymapPlugin
             'manage',
             'sociallymap-publisher',
             function () {
-                $this->loadTemplate("documentation");
+                $this->loadTemplate('documentation');
             },
             plugin_dir_url(__FILE__).'assets/images/icon.png'
         );
@@ -392,9 +378,9 @@ class SociallymapPlugin
             'Mes entités',
             'Mes entités',
             'manage_options',
-            'sociallymap-rss-list',
+            'sociallymap-entity-list',
             function () {
-                $this->loadTemplate("listEntities");
+                $this->loadTemplate('listEntities');
             }
         );
 
@@ -403,9 +389,9 @@ class SociallymapPlugin
             'Ajouter une entité',
             'Ajouter une entité',
             'manage_options',
-            'sociallymap-rss-add',
+            'sociallymap-entity-add',
             function () {
-                $this->loadTemplate("addEntity");
+                $this->loadTemplate('addEntity');
             }
         );
 
@@ -416,7 +402,7 @@ class SociallymapPlugin
             'manage_options',
             'sociallymap-documentation',
             function () {
-                $this->loadTemplate("documentation");
+                $this->loadTemplate('documentation');
             }
         );
 
@@ -425,9 +411,9 @@ class SociallymapPlugin
             'edit entity',
             'Editer lien',
             'manage_options',
-            'sociallymap-rss-edit',
+            'sociallymap-entity-edit',
             function () {
-                $this->loadTemplate("editEntity");
+                $this->loadTemplate('editEntity');
             }
         );
     }
@@ -436,27 +422,24 @@ class SociallymapPlugin
     {
         $requester      = new Requester();
         $publisher      = new Publisher();
-        $config         = new ConfigOption();
         $entityObject   = new Entity();
         $downloader     = new FileDownloader();
         $published      = new Published();
-        $summary        = "";
-        $title          = "";
-        $readmoreLabel  = "";
-
-        // $configs = $config->getConfig();
+        $summary        = '';
+        $title          = '';
+        $readmoreLabel  = '';
 
         // get author id
         $author = $entity->author_id;
 
         // The entity is not active
         if (!$entity->activate) {
-            exit;
+            return 0;
         }
 
         // Retrieve the entity categories
         $entityListCategory = [];
-        $readmoreLabel = "";
+        $readmoreLabel = '';
 
         foreach ($entity->options as $key => $value) {
             if ($value->options_id == 1) {
@@ -482,9 +465,9 @@ class SociallymapPlugin
 
         // Try request to sociallymap on response
         try {
-            if ($_ENV["ENVIRONNEMENT"] === 'dev') {
-                $requester    = new MockRequester();
-                $jsonData = $requester->getMessages();
+            if ($_ENV['ENVIRONNEMENT'] === 'dev') {
+                $requester = new MockRequester();
+                $jsonData  = $requester->getMessages();
             } else {
                 $jsonData = $requester->launch($_POST['entityId'], $_POST['token'], $_POST['environment']);
             }
@@ -497,8 +480,8 @@ class SociallymapPlugin
             Logger::messageReceive('See return data', $jsonData);
 
             foreach ($jsonData as $key => $value) {
-                $summary = "";
-                $contentArticle = "";
+                $summary = '';
+                $contentArticle = '';
                 $readmore = '';
 
                 // Check Link object existing
@@ -548,7 +531,7 @@ class SociallymapPlugin
 
                 $pathTempory = plugin_dir_path(__FILE__).'tmp/';
                 // Check if Media object exist
-                if (isset($value->media) && $value->media->type == "photo") {
+                if (isset($value->media) && $value->media->type == 'photo') {
                     try {
                         $returnDownload = $downloader->download($value->media->url, $pathTempory);
                         $filename = $returnDownload['filename'];
@@ -561,12 +544,12 @@ class SociallymapPlugin
                     }
 
                     // WHEN NO ERROR : FORMAT
-                    if (gettype($imageSrc) == "string") {
+                    if (gettype($imageSrc) == 'string') {
                         $imageTag = '<img class="aligncenter" src="'.$imageSrc.'" alt="">';
                     } else {
                         $imageTag = '';
                     }
-                } elseif (isset($value->link) && !empty($value->link->thumbnail) && $value->link->thumbnail != " ") {
+                } elseif (isset($value->link) && !empty($value->link->thumbnail) && $value->link->thumbnail != ' ') {
                     // Check if Image thumbnail existing
                     try {
                         $returnDownload = $downloader->download($value->link->thumbnail, $pathTempory);
@@ -580,7 +563,7 @@ class SociallymapPlugin
                     $imageSrc = $mediaManager->integrateMediaToWordpress($filename, $fileExtension);
 
                     // Create the img tag
-                    if (gettype($imageSrc) == "string") {
+                    if (gettype($imageSrc) == 'string') {
                         $imageTag = '<img class="aligncenter" src="'.$imageSrc.'" alt="">';
 
                     } else {
@@ -590,7 +573,7 @@ class SociallymapPlugin
 
                 // check if video exist
                 $downloadVideo = false;
-                if (isset($value->media) && $value->media->type == "video") {
+                if (isset($value->media) && $value->media->type == 'video') {
                     $returnDownload = $downloader->download($value->media->url, $pathTempory);
                     $filename = $returnDownload['filename'];
                     $fileExtension = $returnDownload['extension'];
@@ -602,7 +585,7 @@ class SociallymapPlugin
                     <div class="sm-video-nosupport"></div>
                     </video>';
                     $contentArticle .= $mediaVideo;
-                    Logger::info("download VIDEO", $videoSrc);
+                    Logger::info('download VIDEO', $videoSrc);
                 }
 
                 // If imageTag is '' so is false else $isDownload is true
@@ -633,7 +616,7 @@ class SociallymapPlugin
                             $entityListCategory,
                             $entityPublishType];
 
-                        Logger::info("Try publish : ", $dataPublish);
+                        Logger::info('Try publish : ', $dataPublish);
 
                         $contentArticle = $this->prePosting($contentArticle);
 
@@ -648,7 +631,7 @@ class SociallymapPlugin
 
                         if (!$articlePublished) {
                             // throw new Exception('Error from post publish', 1);
-                            Logger::error("Error from post publish", [$title]);
+                            Logger::error('Error from post publish', [$title]);
                         } else {
                             $entityObject->updateHistoryPublisher($entity->id, $entity->counter);
                             // save published article
@@ -657,7 +640,7 @@ class SociallymapPlugin
                 }
             }
         } catch (Exception $e) {
-            Logger::alert("Error exeption", $e->getMessage());
+            Logger::alert('Error exeption', $e->getMessage());
         }
         return true;
     }
@@ -711,19 +694,19 @@ class SociallymapPlugin
 
         // check http or https
         if (isset($_SERVER['HTTPS'])) {
-            $linkToList = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';
+            $linkToList = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-entity-list';
         } else {
-            $linkToList = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-rss-list';
+            $linkToList = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?page=sociallymap-entity-list';
         }
 
         // ACTION ENTITY : delete
-        if (array_key_exists('sociallymap_deleteRSS', $_POST) && $_POST['sociallymap_deleteRSS']) {
+        if (array_key_exists('sociallymap_deleteEntity', $_POST) && $_POST['sociallymap_deleteEntity']) {
             $idRemoving = $_POST['submit'];
             $entityCollection->deleteRowsByID($idRemoving);
         }
 
         // ACTION ENTITY : update
-        if (array_key_exists('sociallymap_updateRSS', $_POST) && $_POST['sociallymap_updateRSS']) {
+        if (array_key_exists('sociallymap_updateEntity', $_POST) && $_POST['sociallymap_updateEntity']) {
             if (isset($_POST['sociallymap_name']) && empty($_POST['sociallymap_name'])) {
                 $isValid = false;
             }
@@ -738,7 +721,7 @@ class SociallymapPlugin
                 $_POST['sociallymap_category'] = [];
             }
             if (!isset($_POST['sociallymap_display_type'])) {
-                $_POST['sociallymap_display_type'] = "tab";
+                $_POST['sociallymap_display_type'] = 'tab';
             }
             if (!isset($_POST['sociallymap_link_canonical'])) {
                 $_POST['sociallymap_link_canonical'] = 0;
@@ -754,7 +737,7 @@ class SociallymapPlugin
                 $_POST['sociallymap_morebalise'] = 0;
             }
             if (!isset($_POST['sociallymap_readmore'])) {
-                $_POST['sociallymap_readmore'] = "";
+                $_POST['sociallymap_readmore'] = '';
             } else {
                 $_POST['sociallymap_readmore'] = stripslashes($_POST['sociallymap_readmore']);
             }
@@ -783,7 +766,7 @@ class SociallymapPlugin
 
 
         // ACTION ENTITY : post
-        if (array_key_exists('sociallymap_postRSS', $_POST) && $_POST['sociallymap_postRSS']) {
+        if (array_key_exists('sociallymap_postEntity', $_POST) && $_POST['sociallymap_postEntity']) {
             $isValid = true;
 
             if (isset($_POST['sociallymap_name']) && empty($_POST['sociallymap_name'])) {
@@ -801,7 +784,7 @@ class SociallymapPlugin
                 $_POST['sociallymap_category'] = '';
             }
             if (!isset($_POST['sociallymap_display_type'])) {
-                $_POST['sociallymap_display_type'] = "tab";
+                $_POST['sociallymap_display_type'] = 'tab';
             }
             if (!isset($_POST['sociallymap_link_canonical'])) {
                 $_POST['sociallymap_link_canonical'] = 0;
@@ -813,10 +796,10 @@ class SociallymapPlugin
                 $_POST['sociallymap_noFollow'] = 0;
             }
             if (!isset($_POST['sociallymap_readmore'])) {
-                $_POST['sociallymap_readmore'] = "";
+                $_POST['sociallymap_readmore'] = '';
             }
             if (!isset($_POST['sociallymap_morebalise'])) {
-                $_POST['sociallymap_morebalise'] = "";
+                $_POST['sociallymap_morebalise'] = '';
             }
 
             if ($isValid == false) {
@@ -862,11 +845,13 @@ class SociallymapPlugin
         // MODAL DISPLAY TYPE IS ON
         if ($isFront) {
             wp_enqueue_style('readmore', plugin_dir_url(__FILE__).'assets/css/custom-readmore.css');
-            wp_enqueue_style('fancybox', plugin_dir_url(__FILE__).'assets/css/fancybox.css');
+            // wp_enqueue_style('fancybox', plugin_dir_url(__FILE__).'assets/css/fancybox.css');
+            wp_enqueue_style('modalw-style', plugin_dir_url(__FILE__).'assets/modalw/modalw-style.css');
 
             wp_enqueue_script('jquery');
-            wp_enqueue_script('fancy', plugin_dir_url(__FILE__).'assets/js/fancybox.js');
+            // wp_enqueue_script('fancy', plugin_dir_url(__FILE__).'assets/js/fancybox.js');
             wp_enqueue_script('modal-manager', plugin_dir_url(__FILE__).'assets/js/modal-manager.js');
+            wp_enqueue_script('modalw-script', plugin_dir_url(__FILE__).'assets/modalw/modal-windows.js');
         } else {
             wp_enqueue_style('back', plugin_dir_url(__FILE__).'assets/css/back.css');
         }
