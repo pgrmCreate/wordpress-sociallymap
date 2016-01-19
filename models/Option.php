@@ -15,7 +15,7 @@ class Option
     {
         global $wpdb;
 
-        $entityRequest = 'SELECT * FROM '.$this->table.' WHERE id='.$id;
+        $entityRequest = $wpdb->prepare('SELECT * FROM '.$this->table.' WHERE id=%s', $id);
         $options = $wpdb->get_results($entityRequest);
 
         return $options;
