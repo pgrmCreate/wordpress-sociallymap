@@ -28,7 +28,7 @@
                 });
             });
 
-            e.preventDefault();
+            e.cancelBubble = true;
             return false;
         });
 
@@ -41,7 +41,7 @@
             });
             $('html').css('overflow', saveStyle);
 
-            e.preventDefault();
+            e.cancelBubble = true;
             return false;
         });
 
