@@ -1,13 +1,4 @@
-.sm-iframe-wrapper {
-	overflow: scroll;
-	height: 100%;
-	width: 100%;
-}
 
-.modalw-iframe {
-	height: 100%;
-	width: 100%;
-}
 
 .sm-video-display {
 	width: 100%;
@@ -42,7 +33,7 @@
 }
 
 .sm-modal-content {
-	position: absolute;
+	position: relative;
 	height: 100vh;
 	width: 80vw;
 	background: white;

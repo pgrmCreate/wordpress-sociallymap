@@ -82,6 +82,22 @@
     animation: load6 1.7s infinite ease;
 }
 
+.sm-iframe-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+}
+
+
+.modalw-iframe {
+    width: 100%;
+    height: 99%;
+    border: none;
+    overflow-y: hidden;
+}
+
 @-webkit-keyframes load6 {
     0% {
         -webkit-transform: rotate(0deg);
@@ -134,5 +150,6 @@
         box-shadow: 0 -0.83em 0 -0.4em #ffffff, 0 -0.83em 0 -0.42em #ffffff, 0 -0.83em 0 -0.44em #ffffff, 0 -0.83em 0 -0.46em #ffffff, 0 -0.83em 0 -0.477em #ffffff;
     }
 }
+
 
 
