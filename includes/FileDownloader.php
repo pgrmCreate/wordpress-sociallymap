@@ -3,6 +3,7 @@
 class FileDownloader
 {
     private $currentExtension;
+
     public function download($url, $destinationFilename)
     {
         // check facebook
@@ -20,18 +21,19 @@ class FileDownloader
         $response = $watcher['url'];
         $responseCurl = $watcher['responseCurl'];
 
-        $pathEncoded = "";
+        $pathEncoded = '';
         // encode and add slash (excepte first part)
 
 
-
         // check header
-        if (!$this->checkResponseContentType($responseCurl)) {
-            throw new fileDownloadException("Error Processing Request for ".$url, 1);
+        $checkerResponse = $this->checkResponseContentType($responseCurl);
+        if (!$checkerResponse) {
+            throw new fileDownloadException('Error Processing Request for '.$url, 1);
         }
 
         // Get extension for return
         $fileExtension = '.'.pathinfo($response, PATHINFO_EXTENSION);
+
 
         //CREATE FILE
         $fp = tempnam($destinationFilename, '');
@@ -86,11 +88,11 @@ class FileDownloader
         if (isset($headers['Content-Type'])) {
             $contentType = $headers['Content-Type'];
 
-            if (substr($contentType, 0, 6) == "image/" || substr($contentType, 0, 6) == "video/") {
+            if (substr($contentType, 0, 6) == 'image/' || substr($contentType, 0, 6) == 'video/') {
                 $acceptHeader = true;
                 $this->currentExtension = '.'.substr($contentType, 6);
             } else {
-                $messageException = "ERROR DOWNLOAD : Header is not correct (not image or video)".$contentType.' | url: '.$response;
+                $messageException = 'ERROR DOWNLOAD : Header is not correct (not image or video)'.$contentType.' | url: '.$response;
                 throw new fileDownloadException($messageException, 1);
             }
         }
@@ -132,7 +134,7 @@ class FileDownloader
     private function watchUrlLocation($url)
     {
         $isEncoded = false;
-        $pathEncoded = "";
+        $pathEncoded = '';
         while (true) {
             $responseCurl = $this->curlRequestWithHeader($url);
             $relocationUrl = $this->urlResponseRelocation($responseCurl);

@@ -120,22 +120,22 @@ class EntityCollection
         $option->update($optionsEntity);
     }
 
-    public function all($orderKey = "", $orderSense = "")
+    public function all($orderKey = '', $orderSense = '')
     {
         global $wpdb;
         $entity = new Entity();
-        $listRSS = [];
 
         $entitiesRequest = 'SELECT * FROM '.$this->table_entity;
         $entities = $wpdb->get_results($entitiesRequest);
 
 
         // LOAD ENTITIES
-        foreach ($entities as $data) {
-            $listRSS[] = $entity->getById($data->id, $orderKey, $orderSense);
+        $optionManager = new Option();
+        foreach ($entities as &$data) {
+            $data->options = $optionManager->getByEntityId($data->id);
         }
 
-        return $listRSS;
+        return $entities;
     }
 
     public function deleteRowsByID($id)

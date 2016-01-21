@@ -34,45 +34,46 @@ class SociallymapController
         $editingEntity = $entity->getById($_GET['id']);
 
         $categoryList = [];
-        $publish_type = "draft";
-        $display_type = "modal";
-        $link_canonical = "1";
+        $publish_type = 'draft';
+        $display_type = 'modal';
+        $link_canonical = '1';
+
         foreach ($editingEntity->options as $key => $value) {
             switch ($value->options_id) {
                 case '1':
-                    $categoryList[] = $value->value;
+                    $categoryList[] = esc_html($value->value);
                     break;
 
                 case '2':
-                    $display_type = $value->value;
+                    $display_type = esc_html($value->value);
                     break;
 
                 case '3':
-                    $publish_type = $value->value;
+                    $publish_type = esc_html($value->value);
                     break;
 
                 case '4':
-                    $link_canonical = $value->value;
+                    $link_canonical = esc_html($value->value);
                     break;
 
                 case '5':
-                    $image = $value->value;
+                    $image = esc_html($value->value);
                     break;
 
                 case '6':
-                    $readmore = stripslashes($value->value);
+                    $readmore = esc_html($value->value);
                     break;
 
                 case '7':
-                    $noIndex = $value->value;
+                    $noIndex = esc_html($value->value);
                     break;
 
                 case '8':
-                    $noFollow = $value->value;
+                    $noFollow = esc_html($value->value);
                     break;
 
                 case '9':
-                    $morebalise = $value->value;
+                    $morebalise = esc_html($value->value);
                     break;
 
                 default:
@@ -95,32 +96,13 @@ class SociallymapController
 
         $sendItem['editingEntity'] = $editingEntity;
 
+
         echo $this->templater->loadAdminPage('entity-edit.php', $sendItem);
     }
 
     public function addEntity()
     {
-        $config = new ConfigOption();
-        $configs = $config->getConfig();
         $data = new stdClass();
-
-        foreach ($configs as $key => $value) {
-            if ($value->id == 1) {
-                $data->category = $value->default_value;
-            } elseif ($value->id == 3) {
-                $data->publish_type =  $value->default_value;
-            } elseif ($value->id == 2) {
-                $data->activate =  $value->default_value;
-            } elseif ($value->id == 5) {
-                $data->image =  $value->default_value;
-            } elseif ($value->id == 6) {
-                $data->readmore =  $value->default_value;
-            } elseif ($value->id == 7) {
-                $data->noindex =  $value->default_value;
-            } elseif ($value->id == 8) {
-                $data->nofolow =  $value->default_value;
-            }
-        }
 
         echo $this->templater->loadAdminPage('entity-add.php', $data);
     }
@@ -133,11 +115,11 @@ class SociallymapController
         $orderKey = "";
         if (isset($_GET['orderSense']) && isset($_GET['orderKey'])) {
             $orderSense = $_GET['orderSense'];
-            $orderKey = $_GET['orderKey'];
+            $orderKey   = $_GET['orderKey'];
         }
 
-        $listRSS = $entitiesCollection->all($orderKey, $orderSense);
+        $listEntities = $entitiesCollection->all($orderKey, $orderSense);
 
-        echo $this->templater->loadAdminPage('entity-list.php', $listRSS);
+        echo $this->templater->loadAdminPage('entity-list.php', $listEntities);
     }
 }

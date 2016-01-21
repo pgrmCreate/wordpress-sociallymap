@@ -14,10 +14,10 @@ class DbBuilder
         global $wpdb;
         $this->wpdb = $wpdb;
 
-        $this->tableOptions = $this->wpdb->prefix ."sm_options";
-        $this->tableEntityOptions = $this->wpdb->prefix ."sm_entity_options";
-        $this->tableEntity = $this->wpdb->prefix ."sm_entities";
-        $this->tablePublished = $this->wpdb->prefix ."sm_published";
+        $this->tableOptions = $this->wpdb->prefix .'sm_options';
+        $this->tableEntityOptions = $this->wpdb->prefix .'sm_entity_options';
+        $this->tableEntity = $this->wpdb->prefix .'sm_entities';
+        $this->tablePublished = $this->wpdb->prefix .'sm_published';
     }
 
     public function dbInitialisation()
@@ -64,48 +64,48 @@ class DbBuilder
             dbDelta($sql);
 
             $this->wpdb->insert($this->tableOptions, [
-            'label' => 'category',
-            'default_value' => 0,
+                'label' => 'category',
+                'default_value' => 0,
             ], ['%s', '%d']);
 
             $this->wpdb->insert($this->tableOptions, [
-            'label' => 'display_type',
-            'default_value' => 'tab',
+                'label' => 'display_type',
+                'default_value' => 'tab',
             ], ['%s', '%s']);
 
             $this->wpdb->insert($this->tableOptions, [
-            'label' => 'publish_type',
-            'default_value' => 'draft',
+                'label' => 'publish_type',
+                'default_value' => 'draft',
             ], ['%s', '%s']);
 
             $this->wpdb->insert($this->tableOptions, [
-            'label' => 'link_canonical',
-            'default_value' => '1',
+                'label' => 'link_canonical',
+                'default_value' => '1',
             ], ['%s', '%d']);
 
             $this->wpdb->insert($this->tableOptions, [
-            'label' => 'image',
-            'default_value' => 'content',
+                'label' => 'image',
+                'default_value' => 'content',
             ], ['%s', '%s']);
 
             $this->wpdb->insert($this->tableOptions, [
-            'label' => 'readmore_label',
-            'default_value' => 'lire la suite',
+                'label' => 'readmore_label',
+                'default_value' => 'lire la suite',
             ], ['%s', '%s']);
 
             $this->wpdb->insert($this->tableOptions, [
-            'label' => 'no index article',
-            'default_value' => 0,
+                'label' => 'no index article',
+                'default_value' => 0,
             ], ['%s', '%d']);
 
             $this->wpdb->insert($this->tableOptions, [
-            'label' => 'no folow',
-            'default_value' => 0,
+                'label' => 'no folow',
+                'default_value' => 0,
             ], ['%s', '%d']);
 
             $this->wpdb->insert($this->tableOptions, [
-            'label' => 'balise more',
-            'default_value' => 1,
+                'label' => 'balise more',
+                'default_value' => 1,
             ], ['%s', '%d']);
         }
 
@@ -126,9 +126,9 @@ class DbBuilder
     {
         global $wpdb;
 
-        $wpdb->query("DROP TABLE IF EXISTS $this->tableOptions");
-        $wpdb->query("DROP TABLE IF EXISTS $this->tableEntityOptions");
-        $wpdb->query("DROP TABLE IF EXISTS $this->tableEntity");
-        $wpdb->query("DROP TABLE IF EXISTS $this->tablePublished");
+        $wpdb->query('DROP TABLE IF EXISTS '.$this->tableOptions);
+        $wpdb->query('DROP TABLE IF EXISTS '.$this->tableEntityOptions);
+        $wpdb->query('DROP TABLE IF EXISTS '.$this->tableEntity);
+        $wpdb->query('DROP TABLE IF EXISTS '.$this->tablePublished);
     }
 }
