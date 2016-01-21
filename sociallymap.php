@@ -736,7 +736,12 @@ class SociallymapPlugin
             }
             if (!isset($_POST['sociallymap_category'])) {
                 $_POST['sociallymap_category'] = [];
+            } else {
+                foreach ($_POST['sociallymap_category'] as $key => &$value) {
+                    $value = esc_html($value);
+                }
             }
+
             if (!isset($_POST['sociallymap_display_type'])) {
                 $_POST['sociallymap_display_type'] = 'tab';
             }
@@ -799,7 +804,12 @@ class SociallymapPlugin
 
             if (!isset($_POST['sociallymap_category'])) {
                 $_POST['sociallymap_category'] = '';
+            } else {
+                foreach ($_POST['sociallymap_category'] as $key => &$value) {
+                    $value = esc_html($value);
+                }
             }
+
             if (!isset($_POST['sociallymap_display_type'])) {
                 $_POST['sociallymap_display_type'] = 'tab';
             }
@@ -829,7 +839,7 @@ class SociallymapPlugin
 
             $data = [
                 'name'           => esc_html($_POST['sociallymap_name']),
-                'category'       => esc_html($_POST['sociallymap_category']),
+                'category'       => $_POST['sociallymap_category'],
                 'activate'       => esc_html($_POST['sociallymap_activate']),
                 'sm_entity_id'   => esc_html($_POST['sociallymap_entityId']),
                 'publish_type'   => esc_html($_POST['sociallymap_publish_type']),

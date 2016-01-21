@@ -46,7 +46,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 50000;
+    z-index: 101;
     top: 0;
     left: 0;
     overflow: hidden;
@@ -78,8 +78,8 @@
     -webkit-transform: translateZ(0);
     -ms-transform: translateZ(0);
     transform: translateZ(0);
-    -webkit-animation: load6 1.7s infinite ease;
-    animation: load6 1.7s infinite ease;
+    -webkit-animation: sm-loading 1.7s infinite ease;
+    animation: sm-loading 1.7s infinite ease;
 }
 
 .sm-iframe-wrapper {
@@ -98,7 +98,7 @@
     overflow-y: hidden;
 }
 
-@-webkit-keyframes load6 {
+@-webkit-keyframes sm-loading {
     0% {
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
@@ -124,7 +124,7 @@
         box-shadow: 0 -0.83em 0 -0.4em #ffffff, 0 -0.83em 0 -0.42em #ffffff, 0 -0.83em 0 -0.44em #ffffff, 0 -0.83em 0 -0.46em #ffffff, 0 -0.83em 0 -0.477em #ffffff;
     }
 }
-@keyframes load6 {
+@keyframes sm-loading {
     0% {
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);

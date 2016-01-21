@@ -1,5 +1,3 @@
-
-
 .sm-video-display {
 	width: 100%;
 }
@@ -10,58 +8,8 @@
 	visibility: hidden;
 }
 
-.sm-modal-container {
-	position: fixed;
-	top: 0;
-	left: 0;
-	float: left;
-	height: 100vh;
-	width: 100vw;
-	z-index: 50000;
-	display: none;
-}
-
-.sm-modal-overlay {
-	position: fixed;
-	background: rgba(0,0,0,0.5);
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	z-index: 99;
-	cursor: pointer;
-}
 
 .sm-readmore-link {
 	cursor: pointer;
 }
 
-.target-site-iframe {
-	min-height: 500px;
-	width: 100%;
-}
-
-.iframe-container {
-	display: inherit;
-}
-
-.sm-modal-close {
-	float: right;
-	font-size: 30px;
-	color: #c00;
-	cursor: pointer;
-	width: 50px;
-	background: #eee;
-	padding: 12px 20px 10px 10px;
-	height: 50px;
-	border-radius: 10px
-}
-
-.sm-modal-close:hover {
-	color: #f00;
-	background: #ddd;
-}
-
-.sm-modal-close > .dashicons-before:before  {
-	font-size: 30px;
-}
