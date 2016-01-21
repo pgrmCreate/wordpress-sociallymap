@@ -1,6 +1,6 @@
 (function($) {
     $(document).ready(function(){
-        $(document).on('click', '.sm-readmore-link', function(e) {
+        $(document).on('click tap', '.sm-readmore-link', function(e) {
             if ($(window).width() < 500) {
                return true;
             }
@@ -28,10 +28,11 @@
                 });
             });
 
+            e.preventDefault();
             return false;
         });
 
-        $(document).on('click', '.modalw-close, .modalw-wrapper', function (e) {
+        $(document).on('click tap', '.modalw-close, .modalw-wrapper', function (e) {
             $('.modalw-container').fadeOut('slow', function() {
                 $(this).remove();
             });
@@ -40,6 +41,7 @@
             });
             $('html').css('overflow', saveStyle);
 
+            e.preventDefault();
             return false;
         });
 
