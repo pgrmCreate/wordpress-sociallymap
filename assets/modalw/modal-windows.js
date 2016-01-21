@@ -17,7 +17,7 @@
 
             $('body').append(wrapper+'<div class="modalw-container"><p class="modalw-close">X</p>'+iframe+'</div>');
 
-            $('#modalw-sm-iframe').on('load', function(){
+            $('#modalw-sm-iframe').on('ready', function(){
                 $('.modalw-container').css('display', 'block');
                 $('.modalw-load-wrapper').remove();
 
