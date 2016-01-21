@@ -1,15 +1,12 @@
 (function($) {
     $(document).ready(function(){
-        $(document).on('click tap', '.sm-readmore-link', function(e) {
-            if ($(window).width() < 500) {
-               return true;
-            }
+        var saveStyle = $('html').css('overflow');
 
+        $(document).on('click tap', '.sm-readmore-link', function(e) {
             var self = $(this);
 
             var href = self.attr('href');
 
-            saveStyle = $('html').css('overflow');
             $('html').css('overflow', 'hidden');
 
             var iframe = '<iframe class="modalw-iframe" src="'+href+'" id="modalw-sm-iframe"></iframe>';
@@ -28,7 +25,7 @@
                 });
             });
 
-            e.cancelBubble = true;
+            e.returnValue = false;
             return false;
         });
 
@@ -41,7 +38,7 @@
             });
             $('html').css('overflow', saveStyle);
 
-            e.cancelBubble = true;
+            e.returnValue = false;
             return false;
         });
 
