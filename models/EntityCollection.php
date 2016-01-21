@@ -12,9 +12,6 @@ class EntityCollection
         global $wpdb;
         $this->table_entity       = $wpdb->prefix.'sm_entities';
         $this->table_options      = $wpdb->prefix.'sm_entity_options';
-
-        $config = new ConfigOption();
-        $this->configOptions = $config->getConfig();
     }
 
     public function add($data)
