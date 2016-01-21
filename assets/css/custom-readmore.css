@@ -1,3 +1,14 @@
+.sm-iframe-wrapper {
+	overflow: scroll;
+	height: 100%;
+	width: 100%;
+}
+
+.modalw-iframe {
+	height: 100%;
+	width: 100%;
+}
+
 .sm-video-display {
 	width: 100%;
 }

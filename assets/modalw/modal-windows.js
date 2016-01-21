@@ -9,7 +9,7 @@
 
             $('html').css('overflow', 'hidden');
 
-            var iframe = '<iframe class="modalw-iframe" src="'+href+'" id="modalw-sm-iframe"></iframe>';
+            var iframe = '<div class="sm-iframe-wrapper"><iframe class="modalw-iframe" src="'+href+'" id="modalw-sm-iframe"></iframe></div>';
             var wrapper = '<div class="modalw-wrapper"><div class="modalw-load-wrapper"><p class="modalw-sm-loader"></div></p></div>';
 
             $('body').append(wrapper+'<div class="modalw-container"><p class="modalw-close">X</p>'+iframe+'</div>');
