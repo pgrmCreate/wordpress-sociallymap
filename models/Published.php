@@ -15,8 +15,8 @@ class Published
     {
         global $wpdb;
 
-        $publishedRequest = 'SELECT * FROM '.$this->table;
-        $articlesPublished = $wpdb->get_results($entitiesRequest);
+        $publishedRequest = 'SELECT `post_id` FROM '.$this->table;
+        $articlesPublished = $wpdb->get_results($publishedRequest);
 
         if (empty($articlesPublished)) {
             return false;

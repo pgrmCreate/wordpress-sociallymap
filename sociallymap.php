@@ -360,9 +360,11 @@ class SociallymapPlugin
         }
 
         if (isset($morebalise) && $morebalise == '1') {
-            $content = preg_replace('#<p><a class="sm-readmore#', '<!--more--><p><a class="sm-readmore', $content);
-        } else {
-            $content = preg_replace('#<p><a class="sm-readmore#"', '<p><a class="sm-readmore', $content);
+            if (preg_match('#<!--more-->#', $content) === 0) {
+                $content = preg_replace('#<p><a class="sm-readmore#', '<!--more--><p><a class="sm-readmore', $content);
+            }
+        } elseif ($morebalise == '0') {
+            $content = preg_replace('#<!--more--><p><a class="sm-readmore#"', '<p><a class="sm-readmore', $content);
         }
 
         // $content = preg_replace('#data-display-type#', 'data-display-type="'.$display_type.'"', $content);
@@ -689,10 +691,13 @@ class SociallymapPlugin
 
         $posts_array = get_posts($args);
 
-        foreach ($posts_array as $key => $value) {
-            $newContent = $this->prePosting($value->post_content);
+        $postPublishedSearch = new Published();
+        $postedArticles = $postPublishedSearch->all();
+        foreach ($postedArticles as $key => $value) {
+            $pickedPost = get_post($value->post_id);
+            $newContent = $this->prePosting($pickedPost->post_content);
             $postUpdate = [
-                'ID' => $value->ID,
+                'ID' => $pickedPost->ID,
                 'post_content' => $newContent,
             ];
 
@@ -813,6 +818,8 @@ class SociallymapPlugin
             }
             if (!isset($_POST['sociallymap_morebalise'])) {
                 $_POST['sociallymap_morebalise'] = '';
+            } else {
+                $_POST['sociallymap_morebalise'] = stripslashes($_POST['sociallymap_morebalise']);
             }
 
             if ($isValid == false) {

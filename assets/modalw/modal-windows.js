@@ -2,6 +2,7 @@
     $(document).ready(function(){
         $(document).on('click', '.sm-readmore-link', function(e) {
             e.preventDefault();
+            e.stopImmediatePropagation()
 
             var self = $(this);
 
@@ -15,7 +16,7 @@
 
             $('body').append(wrapper+'<div class="modalw-container"><p class="modalw-close">X</p>'+iframe+'</div>');
 
-            $('#modalw-sm-iframe').load(function(){
+            $('#modalw-sm-iframe').on('load', function(){
                 $('.modalw-container').css('display', 'block');
                 $('.modalw-load-wrapper').remove();
 
@@ -28,6 +29,7 @@
 
             $(document).on('click', '.modalw-close, .modalw-wrapper', function (e) {
                 e.preventDefault();
+                e.stopImmediatePropagation()
 
                 $('.modalw-container').fadeOut('slow', function() {
                     $(this).remove();
