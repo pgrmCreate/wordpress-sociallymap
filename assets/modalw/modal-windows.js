@@ -2,7 +2,8 @@
     $(document).ready(function(){
         $(document).on('click', '.sm-readmore-link', function(e) {
             e.preventDefault();
-            e.stopImmediatePropagation()
+            e.stopImmediatePropagation();
+            e.stopPropagation();
 
             var self = $(this);
 
@@ -29,7 +30,8 @@
 
             $(document).on('click', '.modalw-close, .modalw-wrapper', function (e) {
                 e.preventDefault();
-                e.stopImmediatePropagation()
+                e.stopImmediatePropagation();
+                e.stopPropagation();
 
                 $('.modalw-container').fadeOut('slow', function() {
                     $(this).remove();

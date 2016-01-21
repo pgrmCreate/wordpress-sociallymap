@@ -813,13 +813,14 @@ class SociallymapPlugin
             if (!isset($_POST['sociallymap_noFollow'])) {
                 $_POST['sociallymap_noFollow'] = 0;
             }
-            if (!isset($_POST['sociallymap_readmore'])) {
+            if (isset($_POST['sociallymap_readmore'])) {
+                $_POST['sociallymap_readmore'] = stripslashes($_POST['sociallymap_readmore']);
+            } else {
                 $_POST['sociallymap_readmore'] = '';
             }
+
             if (!isset($_POST['sociallymap_morebalise'])) {
                 $_POST['sociallymap_morebalise'] = '';
-            } else {
-                $_POST['sociallymap_morebalise'] = stripslashes($_POST['sociallymap_morebalise']);
             }
 
             if ($isValid == false) {
