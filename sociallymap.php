@@ -22,7 +22,6 @@ require_once(plugin_dir_path(__FILE__).'includes/exception/fileDownloadException
 require_once(plugin_dir_path(__FILE__).'models/EntityCollection.php');
 require_once(plugin_dir_path(__FILE__).'models/Entity.php');
 require_once(plugin_dir_path(__FILE__).'models/Option.php');
-require_once(plugin_dir_path(__FILE__).'models/ConfigOption.php');
 require_once(plugin_dir_path(__FILE__).'models/Published.php');
 
 class SociallymapPlugin
