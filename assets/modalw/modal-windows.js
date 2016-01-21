@@ -2,7 +2,7 @@
     $(document).ready(function(){
         var saveStyle = $('html').css('overflow');
 
-        $(document).on('click tap', '.sm-readmore-link', function(e) {
+        $(document).on('click touchstart', '.sm-readmore-link', function(e) {
             var self = $(this);
 
             var href = self.attr('href');
@@ -25,11 +25,11 @@
                 });
             });
 
-            e.returnValue = false;
+            e.preventDefault();
             return false;
         });
 
-        $(document).on('click tap', '.modalw-close, .modalw-wrapper', function (e) {
+        $(document).on('click touchstart', '.modalw-close, .modalw-wrapper', function (e) {
             $('.modalw-container').fadeOut('slow', function() {
                 $(this).remove();
             });
@@ -38,7 +38,7 @@
             });
             $('html').css('overflow', saveStyle);
 
-            e.returnValue = false;
+            e.preventDefault();
             return false;
         });
 
