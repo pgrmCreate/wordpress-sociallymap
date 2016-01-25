@@ -181,7 +181,7 @@ class SociallymapPlugin
             }
 
             $collector = new EntityCollection();
-            $_POST['entityId'] = $_POST['entityId']);
+            $_POST['entityId'] = $_POST['entityId'];
             $entity = $collector->getByEntityId(intval($_POST['entityId']));
 
 
