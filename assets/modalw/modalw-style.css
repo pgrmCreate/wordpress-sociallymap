@@ -66,6 +66,8 @@
     mask-image: url('../images/sm-logo.svg');
     -webkit-mask-size: contain;
     mask-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
 }
 
 .modalw-sm-loader {
