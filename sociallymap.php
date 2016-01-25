@@ -166,8 +166,6 @@ class SociallymapPlugin
         global $wp_query;
 
         if ($wp_query->get('sociallymap-plugin')) {
-
-
             Logger::info('Intercept message in plugin', print_r($_POST, true));
 
             // We don't have the right parameters
@@ -186,7 +184,7 @@ class SociallymapPlugin
 
 
             // Context : Testing connection between sociallymap and wordpress plugin
-            $_POST['token'] = esc_html($_POST['token']);
+            $_POST['token'] = $_POST['token'];
             if ($_POST['token'] == 'connection-test') {
                 header('Content-Type: application/json');
                 if (empty($entity)) {
