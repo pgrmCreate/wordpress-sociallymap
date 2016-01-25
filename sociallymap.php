@@ -166,11 +166,13 @@ class SociallymapPlugin
         global $wp_query;
 
         if ($wp_query->get('sociallymap-plugin')) {
-            Logger::info('Intercept message in plugin', print_r($_POST, true));
-
             // We don't have the right parameters
             if (!isset($_POST['entityId']) || !isset($_POST['token'])) {
                 header('HTTP/1.0 400 Bad Request');
+                Logger::info(
+                    'Message receive but without $_POST[\'entityId\'] or $_POST[\'token\']',
+                    print_r($_POST, true)
+                );
                 exit;
             } else {
                 foreach ($_POST as $key => &$value) {
@@ -178,13 +180,14 @@ class SociallymapPlugin
                 }
             }
 
+            Logger::info('Intercept message in plugin (+sanitize)', print_r($_POST, true));
+
             $collector = new EntityCollection();
             $_POST['entityId'] = $_POST['entityId'];
             $entity = $collector->getByEntityId(intval($_POST['entityId']));
 
 
             // Context : Testing connection between sociallymap and wordpress plugin
-            $_POST['token'] = $_POST['token'];
             if ($_POST['token'] == 'connection-test') {
                 header('Content-Type: application/json');
                 if (empty($entity)) {
