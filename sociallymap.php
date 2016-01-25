@@ -177,7 +177,7 @@ class SociallymapPlugin
 
             $collector = new EntityCollection();
             $_POST['entityId'] = esc_html($_POST['entityId']);
-            $entity = $collector->getByEntityId($_POST['entityId']);
+            $entity = $collector->getByEntityId(intval($_POST['entityId']));
 
 
             // Context : Testing connection between sociallymap and wordpress plugin
@@ -707,6 +707,22 @@ class SociallymapPlugin
     public function entityManager()
     {
         $entityCollection = new EntityCollection();
+
+        // SANITIZE ALL DATA
+        if (isset($_POST)) {
+            foreach ($_POST as $key => &$value) {
+
+                if (is_array($value)) {
+                    // FOR ARRAY OBJECT
+                    foreach ($value as $keyItem => &$valueItem) {
+                        $valueItem = sanitize_text_field($valueItem);
+                    }
+                } else {
+                    // FOR VALUE
+                    $value = sanitize_text_field($value);
+                }
+            }
+        }
 
         // check http or https
         if (isset($_SERVER['HTTPS'])) {

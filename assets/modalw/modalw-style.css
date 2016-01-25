@@ -60,14 +60,18 @@
     display: block;
     padding: 5px;
     margin: auto;
-    background: rgba(0, 0, 0, 0.6);
+    background: #1ABC9C;
     border-radius: 50%;
+    -webkit-mask-image: url('../images/sm-logo.svg');
+    mask-image: url('../images/sm-logo.svg');
+    -webkit-mask-size: contain;
+    mask-size: contain;
 }
 
 .modalw-sm-loader {
-    left: 1px;
-    top: 27px;
-    font-size: 20px;
+    left: -1px;
+    top: 34px;
+    font-size: 10px;
     text-indent: -9999em;
     overflow: hidden;
     width: 1.2em;
