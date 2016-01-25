@@ -176,7 +176,9 @@ class SociallymapPlugin
                 exit;
             } else {
                 foreach ($_POST as $key => &$value) {
-                    $value = sanitize_text_field($value);
+                    if ($key != "entityId") {
+                        $value = sanitize_text_field($value);
+                    }
                 }
             }
 
@@ -184,7 +186,7 @@ class SociallymapPlugin
 
             $collector = new EntityCollection();
             $_POST['entityId'] = $_POST['entityId'];
-            $entity = $collector->getByEntityId(intval($_POST['entityId']));
+            $entity = $collector->getByEntityId(sanitize_key(($_POST['entityId'])));
 
 
             // Context : Testing connection between sociallymap and wordpress plugin
