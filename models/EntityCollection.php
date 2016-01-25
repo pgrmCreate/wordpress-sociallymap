@@ -153,6 +153,11 @@ class EntityCollection
         global $wpdb;
 
         $objectEntity = new Entity();
+
+        if (is_int($entityId)) {
+            $entityId = strval($entityId);
+        }
+
         $entity = $objectEntity->getByEntityId($entityId);
 
         return $entity;
