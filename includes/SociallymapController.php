@@ -111,8 +111,8 @@ class SociallymapController
     {
         $entitiesCollection = new EntityCollection();
 
-        $orderSense = "";
-        $orderKey = "";
+        $orderSense = '';
+        $orderKey = '';
         if (isset($_GET['orderSense']) && isset($_GET['orderKey'])) {
             $orderSense = $_GET['orderSense'];
             $orderKey   = $_GET['orderKey'];

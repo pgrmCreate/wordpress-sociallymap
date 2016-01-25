@@ -1,7 +1,7 @@
 <ul class="subsubsub">
     <li>
         <?php
-        if ($_GET["page"] == "sociallymap-entity-list") {
+        if ($_GET['page'] == 'sociallymap-entity-list') {
         ?>
              <span>
                  Mes entités
@@ -18,7 +18,7 @@
     </li>
     <li>
         <?php
-        if ($_GET["page"] == "sociallymap-entity-add") {
+        if ($_GET['page'] == 'sociallymap-entity-add') {
         ?>
              <span>
                 Ajouter une entité

@@ -176,7 +176,7 @@ class SociallymapPlugin
                 exit;
             } else {
                 foreach ($_POST as $key => &$value) {
-                    if ($key != "entityId") {
+                    if ($key != 'entityId') {
                         $value = sanitize_text_field($value);
                     }
                 }
