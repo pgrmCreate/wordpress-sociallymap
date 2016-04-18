@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: sociallymap\n"
+"POT-Creation-Date: 2015-11-04 16:47+0100\n"
+"PO-Revision-Date: 2015-11-04 16:47+0100\n"
+"Last-Translator: jb <luccioni.jbaptiste@gmail.com>\n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: /home/jb/projets/plugins/wordpress/sociallymap/wp-"
+"content/plugins/sociallymap\n"
+
+#: /home/jb/projets/plugins/wordpress/sociallymap/wp-content/plugins/sociallymap/views/publish.php:21
+#: /home/jb/projets/plugins/wordpress/sociallymap/wp-content/plugins/sociallymap/views/publish.php:22
+msgid "Title:"
+msgstr "Titre"
+
+#~ msgid "Page"
+#~ msgstr "################### RIEN ######################"
